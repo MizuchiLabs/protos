@@ -7,6 +7,7 @@
       "automerge": true
     }
   ],
+  "platformAutomerge": true,
   "separateMinorPatch": true,
   "vulnerabilityAlerts": { "enabled": true },
   "osvVulnerabilityAlerts": true,
