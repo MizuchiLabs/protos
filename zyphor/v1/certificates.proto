@@ -1,0 +1,285 @@
+edition = "2023";
+
+package zyphor.v1;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+service CertificateService {
+  rpc GetRootCA(GetRootCARequest) returns (GetRootCAResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/ca/{id}"};
+  }
+  rpc CreateRootCA(CreateRootCARequest) returns (CreateRootCAResponse) {
+    option (google.api.http) = {
+      post: "/v1/ca"
+      body: "*"
+    };
+  }
+  rpc UpdateRootCA(UpdateRootCARequest) returns (UpdateRootCAResponse) {
+    option (google.api.http) = {
+      patch: "/v1/ca/{id}"
+      body: "*"
+    };
+  }
+  rpc ListRootCAs(ListRootCAsRequest) returns (ListRootCAsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/cas/{workspace_id}"};
+  }
+  rpc DeleteRootCA(DeleteRootCARequest) returns (DeleteRootCAResponse) {
+    option (google.api.http) = {delete: "/v1/ca/{id}"};
+  }
+  rpc RolloverRootCA(RolloverRootCARequest) returns (RolloverRootCAResponse) {
+    option (google.api.http) = {post: "/v1/ca/rollover/{id}"};
+  }
+
+  // SSH Certificate Template management
+  rpc GetSSHCertTemplate(GetSSHCertTemplateRequest) returns (GetSSHCertTemplateResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/template/{id}"};
+  }
+  rpc CreateSSHCertTemplate(CreateSSHCertTemplateRequest) returns (CreateSSHCertTemplateResponse) {
+    option (google.api.http) = {
+      post: "/v1/template"
+      body: "*"
+    };
+  }
+  rpc UpdateSSHCertTemplate(UpdateSSHCertTemplateRequest) returns (UpdateSSHCertTemplateResponse) {
+    option (google.api.http) = {
+      patch: "/v1/template/{id}"
+      body: "*"
+    };
+  }
+  rpc ListSSHCertTemplates(ListSSHCertTemplatesRequest) returns (ListSSHCertTemplatesResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/templates/{workspace_id}"};
+  }
+  rpc DeleteSSHCertTemplate(DeleteSSHCertTemplateRequest) returns (DeleteSSHCertTemplateResponse) {
+    option (google.api.http) = {delete: "/v1/template/{id}"};
+  }
+
+  // Issue certificates
+  rpc SignPublicKeyUser(SignPublicKeyUserRequest) returns (SignPublicKeyUserResponse) {
+    option (google.api.http) = {
+      post: "/v1/user/sign"
+      body: "*"
+    };
+  }
+  rpc SignPublicKeyHost(SignPublicKeyHostRequest) returns (SignPublicKeyHostResponse) {
+    option (google.api.http) = {
+      post: "/v1/host/sign"
+      body: "*"
+    };
+  }
+}
+
+// Root Certificate Authority messages ----------------------------------------
+message RootCA {
+  string id = 1;
+  string workspace_id = 2;
+  string name = 3;
+  string description = 4;
+  string certificate = 5;
+  string public_key = 6;
+  string serial_number = 7;
+  string subject = 8;
+  string issuer = 9;
+  google.protobuf.Timestamp not_before = 10;
+  google.protobuf.Timestamp not_after = 11;
+  bool is_active = 12;
+  bool is_default = 13;
+  bool is_root = 14;
+  CertificateKeyType key_type = 15;
+  int32 key_bits = 16;
+  google.protobuf.Timestamp created_at = 17;
+  google.protobuf.Timestamp updated_at = 18;
+  string created_by = 19;
+}
+
+enum CertificateKeyType {
+  CERTIFICATE_KEY_TYPE_UNSPECIFIED = 0;
+  CERTIFICATE_KEY_TYPE_RSA = 1;
+  CERTIFICATE_KEY_TYPE_ECDSA = 2;
+  CERTIFICATE_KEY_TYPE_ED25519 = 3;
+}
+
+message CreateRootCARequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string name = 2 [(buf.validate.field).string.min_len = 1];
+  string description = 3;
+  CertificateKeyType key_type = 4;
+  int32 key_bits = 5;
+  int32 lifetime_months = 6;
+  bool is_default = 7;
+}
+message CreateRootCAResponse {
+  RootCA root_ca = 1;
+}
+
+message GetRootCARequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
+}
+message GetRootCAResponse {
+  RootCA root_ca = 1;
+}
+
+message ListRootCAsRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+}
+message ListRootCAsResponse {
+  repeated RootCA root_cas = 1;
+}
+
+message UpdateRootCARequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
+  string description = 3;
+  bool is_active = 4;
+  bool is_default = 5;
+}
+message UpdateRootCAResponse {
+  RootCA root_ca = 1;
+}
+
+message DeleteRootCARequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
+}
+message DeleteRootCAResponse {}
+
+message RolloverRootCARequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
+  CertificateKeyType key_type = 3;
+  int32 key_bits = 4;
+  int32 lifetime_months = 5;
+  bool force = 6;
+}
+message RolloverRootCAResponse {
+  RootCA root_ca = 1;
+}
+
+// SSH Certificate Template messages ------------------------------------------
+message SSHCertTemplate {
+  string id = 1;
+  string root_ca_id = 2;
+  string name = 3;
+  string description = 4;
+  bool allow_user_certificates = 5;
+  bool allow_host_certificates = 6;
+  google.protobuf.Duration default_ttl = 7;
+  google.protobuf.Duration max_ttl = 8;
+  bool allow_user_rc = 9;
+  bool allow_agent_forwarding = 10;
+  bool allow_port_forwarding = 11;
+  bool allow_pty = 12;
+  bool allow_x11_forwarding = 13;
+  repeated CertificateKeyType allowed_key_types = 14;
+  bool is_active = 15;
+  google.protobuf.Timestamp created_at = 16;
+  google.protobuf.Timestamp updated_at = 17;
+  string created_by = 18;
+}
+
+message CreateSSHCertTemplateRequest {
+  string root_ca_id = 1 [(buf.validate.field).string.uuid = true];
+  string name = 2 [(buf.validate.field).string.min_len = 1];
+  string workspace_id = 3 [(buf.validate.field).string.uuid = true];
+  string description = 4;
+  bool allow_user_certificates = 5;
+  bool allow_host_certificates = 6;
+  google.protobuf.Duration default_ttl = 7;
+  google.protobuf.Duration max_ttl = 8;
+  bool allow_user_rc = 9;
+  bool allow_agent_forwarding = 10;
+  bool allow_port_forwarding = 11;
+  bool allow_pty = 12;
+  bool allow_x11_forwarding = 13;
+  repeated CertificateKeyType allowed_key_types = 14;
+  google.protobuf.Struct custom_extensions = 15;
+}
+message CreateSSHCertTemplateResponse {
+  SSHCertTemplate template = 1;
+}
+
+message GetSSHCertTemplateRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
+}
+message GetSSHCertTemplateResponse {
+  SSHCertTemplate template = 1;
+}
+
+message ListSSHCertTemplatesRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string root_ca_id = 2 [(buf.validate.field).string.uuid = true];
+}
+message ListSSHCertTemplatesResponse {
+  repeated SSHCertTemplate templates = 1;
+}
+
+message UpdateSSHCertTemplateRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
+  string root_ca_id = 3 [(buf.validate.field).string.uuid = true];
+  string description = 4;
+  bool allow_user_certificates = 5;
+  bool allow_host_certificates = 6;
+  google.protobuf.Duration default_ttl = 7;
+  google.protobuf.Duration max_ttl = 8;
+  bool allow_user_rc = 9;
+  bool allow_agent_forwarding = 10;
+  bool allow_port_forwarding = 11;
+  bool allow_pty = 12;
+  bool allow_x11_forwarding = 13;
+  bool is_active = 14;
+  repeated CertificateKeyType allowed_key_types = 15;
+}
+message UpdateSSHCertTemplateResponse {
+  SSHCertTemplate template = 1;
+}
+
+message DeleteSSHCertTemplateRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
+}
+message DeleteSSHCertTemplateResponse {}
+
+// Certificate messages -------------------------------------------------------
+message Certificate {
+  string id = 1;
+  string name = 2;
+  string pem = 3;
+  google.protobuf.Timestamp expires_at = 4;
+}
+message SSHConfigOptions {
+  string key_name = 1; // custom private key name (default: zyphor)
+  string strict_host_key_checking = 2; // "yes", "no", "accept-new"
+  int32 keep_alive_interval = 3; // interval in seconds
+  bool add_hash_known_hosts = 4; // add HashKnownHosts yes
+  string user_known_hosts_file = 5; // custom known_hosts file
+  int32 connect_timeout = 6; // timeout in seconds
+  bool compression = 7; // enable compression
+}
+
+message SignPublicKeyUserRequest {
+  string public_key = 1;
+  google.protobuf.Duration ttl = 2; // Optional, will use template default
+  SSHConfigOptions options = 3;
+}
+message SignPublicKeyUserResponse {
+  repeated Certificate certificates = 1;
+  string ssh_config = 2;
+}
+
+// Meant for agents
+message SignPublicKeyHostRequest {
+  repeated bytes public_keys = 1;
+}
+message SignPublicKeyHostResponse {
+  repeated Certificate certificates = 1;
+}

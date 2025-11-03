@@ -1,0 +1,90 @@
+edition = "2023";
+
+package zyphor.v1;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service WorkspaceDomainService {
+  rpc GetWorkspaceDomain(GetWorkspaceDomainRequest) returns (GetWorkspaceDomainResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/workspace/{workspace_id}/domain/{id}"};
+  }
+  rpc ListWorkspaceDomains(ListWorkspaceDomainsRequest) returns (ListWorkspaceDomainsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/workspace/{workspace_id}/domains"};
+  }
+  rpc CreateWorkspaceDomain(CreateWorkspaceDomainRequest) returns (CreateWorkspaceDomainResponse) {
+    option (google.api.http) = {
+      post: "/v1/workspace/{workspace_id}/domain"
+      body: "*"
+    };
+  }
+  rpc DeleteWorkspaceDomain(DeleteWorkspaceDomainRequest) returns (DeleteWorkspaceDomainResponse) {
+    option (google.api.http) = {delete: "/v1/workspace/{workspace_id}/domain/{id}"};
+  }
+  rpc VerifyWorkspaceDomain(VerifyWorkspaceDomainRequest) returns (VerifyWorkspaceDomainResponse) {
+    option (google.api.http) = {post: "/v1/workspace/{workspace_id}/domain/{id}/verify"};
+  }
+  rpc RegenerateWorkspaceDomainToken(RegenerateWorkspaceDomainTokenRequest) returns (RegenerateWorkspaceDomainTokenResponse) {
+    option (google.api.http) = {post: "/v1/workspace/{workspace_id}/domain/{id}/token"};
+  }
+}
+
+message WorkspaceDomain {
+  string id = 1;
+  string workspace_id = 2;
+  string domain = 3;
+  string verification_token = 4;
+  google.protobuf.Timestamp verified_at = 5;
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp updated_at = 7;
+}
+
+message GetWorkspaceDomainRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
+}
+message GetWorkspaceDomainResponse {
+  WorkspaceDomain workspace_domain = 1;
+}
+message CreateWorkspaceDomainRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string domain = 2 [
+    (buf.validate.field).string.hostname = true,
+    (buf.validate.field).string.pattern = "^[^.]+\\.[^.]+$"
+  ];
+}
+message CreateWorkspaceDomainResponse {
+  WorkspaceDomain workspace_domain = 1;
+}
+
+message ListWorkspaceDomainsRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+}
+message ListWorkspaceDomainsResponse {
+  repeated WorkspaceDomain workspace_domains = 1;
+}
+
+message DeleteWorkspaceDomainRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
+}
+message DeleteWorkspaceDomainResponse {}
+
+message VerifyWorkspaceDomainRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
+}
+message VerifyWorkspaceDomainResponse {
+  WorkspaceDomain workspace_domain = 1;
+}
+
+message RegenerateWorkspaceDomainTokenRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
+}
+message RegenerateWorkspaceDomainTokenResponse {
+  WorkspaceDomain workspace_domain = 1;
+}

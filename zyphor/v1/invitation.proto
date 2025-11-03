@@ -1,0 +1,42 @@
+edition = "2023";
+
+package zyphor.v1;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/duration.proto";
+
+service InvitationService {
+  rpc GetInvitation(GetInvitationRequest) returns (GetInvitationResponse) {
+    option (google.api.http) = {get: "/v1/invite/{token}"};
+  }
+  rpc CreateInvitation(CreateInvitationRequest) returns (CreateInvitationResponse) {
+    option (google.api.http) = {post: "/v1/invite/{workspace_id}/{expiry}"};
+  }
+  rpc ClaimInvitation(ClaimInvitationRequest) returns (ClaimInvitationResponse) {
+    option (google.api.http) = {post: "/v1/invite/claim/{token}"};
+  }
+}
+
+message GetInvitationRequest {
+  string token = 1 [(buf.validate.field).string.min_len = 1];
+}
+message GetInvitationResponse {
+  string invited_by = 1;
+  string workspace_name = 2;
+}
+
+message CreateInvitationRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  google.protobuf.Duration expiry = 2; // default: 24 hours
+}
+message CreateInvitationResponse {
+  string link = 1;
+}
+
+message ClaimInvitationRequest {
+  string token = 1 [(buf.validate.field).string.min_len = 1];
+}
+message ClaimInvitationResponse {
+  string workspace_id = 1;
+}

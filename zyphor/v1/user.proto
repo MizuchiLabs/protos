@@ -1,0 +1,248 @@
+edition = "2023";
+
+package zyphor.v1;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service UserService {
+  // Public endpoints
+  rpc Register(RegisterRequest) returns (RegisterResponse) {
+    option (google.api.http) = {
+      post: "/v1/register"
+      body: "*"
+    };
+  }
+  rpc Login(LoginRequest) returns (LoginResponse) {
+    option (google.api.http) = {
+      post: "/v1/login"
+      body: "*"
+    };
+  }
+  rpc Logout(LogoutRequest) returns (LogoutResponse) {
+    option (google.api.http) = {post: "/v1/logout"};
+  }
+  rpc CheckSSO(CheckSSORequest) returns (CheckSSOResponse) {
+    option (google.api.http) = {get: "/v1/sso"};
+  }
+  rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse) {
+    option (google.api.http) = {post: "/v1/refresh"};
+  }
+  rpc ForgotPassword(ForgotPasswordRequest) returns (ForgotPasswordResponse) {
+    option (google.api.http) = {
+      post: "/v1/forgot"
+      body: "*"
+    };
+  }
+  rpc ResendVerification(ResendVerificationRequest) returns (ResendVerificationResponse) {
+    option (google.api.http) = {post: "/v1/resend-verification"};
+  }
+  rpc VerifyEmail(VerifyEmailRequest) returns (VerifyEmailResponse) {
+    option (google.api.http) = {post: "/v1/verify-email"};
+  }
+  rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse) {
+    option (google.api.http) = {
+      post: "/v1/reset-password"
+      body: "*"
+    };
+  }
+  rpc StartCliLogin(StartCliLoginRequest) returns (StartCliLoginResponse) {
+    option (google.api.http) = {
+      post: "/v1/cli-login"
+      body: "*"
+    };
+  }
+  rpc PollCliLogin(PollCliLoginRequest) returns (PollCliLoginResponse) {
+    option (google.api.http) = {post: "/v1/cli-login/poll"};
+  }
+
+  // Authenticated endpoints
+  rpc Whoami(WhoamiRequest) returns (WhoamiResponse) {
+    option (google.api.http) = {get: "/v1/whoami"};
+  }
+  rpc UpdateProfile(UpdateProfileRequest) returns (UpdateProfileResponse) {
+    option (google.api.http) = {
+      patch: "/v1/profile"
+      body: "*"
+    };
+  }
+  rpc ChangePassword(ChangePasswordRequest) returns (ChangePasswordResponse) {
+    option (google.api.http) = {
+      patch: "/v1/password"
+      body: "*"
+    };
+  }
+  rpc DeletePassword(DeletePasswordRequest) returns (DeletePasswordResponse) {
+    option (google.api.http) = {delete: "/v1/password"};
+  }
+  rpc UpdatePasskey(UpdatePasskeyRequest) returns (UpdatePasskeyResponse) {
+    option (google.api.http) = {
+      patch: "/v1/passkeys/{id}"
+      body: "*"
+    };
+  }
+  rpc ListPasskeys(ListPasskeysRequest) returns (ListPasskeysResponse) {
+    option (google.api.http) = {get: "/v1/passkeys"};
+  }
+  rpc DeletePasskey(DeletePasskeyRequest) returns (DeletePasskeyResponse) {
+    option (google.api.http) = {delete: "/v1/passkeys/{id}"};
+  }
+  rpc VerifyCliLogin(VerifyCliLoginRequest) returns (VerifyCliLoginResponse) {
+    option (google.api.http) = {post: "/v1/cli-login/verify"};
+  }
+}
+
+message User {
+  string id = 1;
+  string name = 2;
+  string username = 3;
+  string email = 4;
+  bool email_verified = 5;
+  string picture = 6;
+  repeated string roles = 7;
+  google.protobuf.Timestamp created_at = 8;
+  google.protobuf.Timestamp updated_at = 9;
+}
+
+// Authentication requests/responses
+message RegisterRequest {
+  string name = 1 [(buf.validate.field).string.min_len = 3];
+  string email = 2 [(buf.validate.field).string.email = true];
+  string username = 3 [(buf.validate.field).string.min_len = 3];
+  string password = 4 [(buf.validate.field).string.min_len = 8];
+}
+message RegisterResponse {}
+
+message LoginRequest {
+  string email = 1 [(buf.validate.field).string.email = true];
+  string password = 2 [(buf.validate.field).string.min_len = 1];
+}
+message LoginResponse {
+  string access_token = 1;
+  string refresh_token = 2;
+}
+
+message RefreshTokenRequest {
+  string refresh_token = 1;
+}
+message RefreshTokenResponse {
+  string access_token = 1;
+}
+
+message LogoutRequest {}
+message LogoutResponse {}
+
+message CheckSSORequest {
+  string email = 1 [(buf.validate.field).string.email = true];
+}
+message CheckSSOResponse {
+  bool has_sso = 1;
+  bool enforce_sso = 2;
+  string provider_id = 3;
+  string provider_name = 4;
+}
+
+message ForgotPasswordRequest {
+  string email = 1 [(buf.validate.field).string.email = true];
+}
+message ForgotPasswordResponse {}
+
+message ResetPasswordRequest {
+  string token = 1 [(buf.validate.field).string.min_len = 1];
+  string new_password = 2 [(buf.validate.field).string.min_len = 8];
+}
+message ResetPasswordResponse {}
+
+message VerifyEmailRequest {
+  string token = 1;
+}
+message VerifyEmailResponse {}
+
+message ResendVerificationRequest {
+  string email = 1 [(buf.validate.field).string.email = true];
+}
+message ResendVerificationResponse {}
+
+message WhoamiRequest {}
+message WhoamiResponse {
+  User user = 1;
+}
+
+message UpdateProfileRequest {
+  string name = 1 [(buf.validate.field).string.min_len = 3];
+  string username = 2 [(buf.validate.field).string.min_len = 3];
+  string email = 3 [(buf.validate.field).string.email = true];
+  string picture = 4;
+}
+message UpdateProfileResponse {
+  User user = 1;
+  bool email_sent = 2;
+}
+
+message ChangePasswordRequest {
+  string current_password = 1 [(buf.validate.field).string.min_len = 1];
+  string new_password = 2 [(buf.validate.field).string.min_len = 8];
+}
+message ChangePasswordResponse {}
+
+message DeletePasswordRequest {
+  string current_password = 1 [(buf.validate.field).string.min_len = 1];
+}
+message DeletePasswordResponse {}
+
+// Passkey endpoints ----------------------------------------------------------
+message Passkey {
+  string id = 1;
+  string name = 2;
+  google.protobuf.Timestamp created_at = 3;
+  google.protobuf.Timestamp last_used_at = 4;
+}
+
+message UpdatePasskeyRequest {
+  string id = 1;
+  string name = 2;
+}
+message UpdatePasskeyResponse {
+  Passkey passkey = 1;
+}
+
+message ListPasskeysRequest {}
+message ListPasskeysResponse {
+  repeated Passkey passkeys = 1;
+}
+
+message DeletePasskeyRequest {
+  string id = 1;
+}
+message DeletePasskeyResponse {}
+
+// CLI login flow -------------------------------------------------------------
+enum CliLoginStatus {
+  CLI_LOGIN_STATUS_UNSPECIFIED = 0;
+  CLI_LOGIN_STATUS_PENDING = 1;
+  CLI_LOGIN_STATUS_COMPLETED = 2;
+  CLI_LOGIN_STATUS_EXPIRED = 3;
+}
+
+message StartCliLoginRequest {}
+message StartCliLoginResponse {
+  string login_code = 1;
+  string verification_url = 2;
+  google.protobuf.Timestamp expires_at = 3;
+}
+
+message PollCliLoginRequest {
+  string login_code = 1 [(buf.validate.field).string.min_len = 1];
+}
+message PollCliLoginResponse {
+  CliLoginStatus status = 1;
+  string user_id = 2;
+  string access_token = 3;
+  string refresh_token = 4;
+}
+
+message VerifyCliLoginRequest {
+  string login_code = 1 [(buf.validate.field).string.min_len = 1];
+}
+message VerifyCliLoginResponse {}

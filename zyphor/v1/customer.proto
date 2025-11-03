@@ -1,0 +1,102 @@
+edition = "2023";
+
+package zyphor.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service CustomerService {
+  rpc GetCustomer(GetCustomerRequest) returns (GetCustomerResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/customer"};
+  }
+  rpc CreateCheckout(CreateCheckoutRequest) returns (CreateCheckoutResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {post: "/v1/checkout"};
+  }
+  rpc CancelSubscription(CancelSubscriptionRequest) returns (CancelSubscriptionResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {delete: "/v1/subscription"};
+  }
+}
+
+enum PlanType {
+  PLAN_TYPE_UNSPECIFIED = 0;
+  PLAN_TYPE_TEAM = 1;
+  PLAN_TYPE_BUSINESS = 2;
+  PLAN_TYPE_ENTERPRISE = 3;
+}
+
+enum ResourceType {
+  RESOURCE_TYPE_UNSPECIFIED = 0;
+  RESOURCE_TYPE_WORKSPACE = 1;
+  RESOURCE_TYPE_MEMBER = 2;
+  RESOURCE_TYPE_TEAM = 3;
+  RESOURCE_TYPE_ROOT_CA = 4;
+  RESOURCE_TYPE_AGENT = 5;
+  RESOURCE_TYPE_TARGET = 6;
+  RESOURCE_TYPE_PRINCIPAL = 7;
+}
+
+// External data from polar ---
+message CustomerState {
+  string id = 1;
+  string external_id = 2;
+  string email = 3;
+  string name = 4;
+  string avatar_url = 5;
+  SubscriptionSummary subscription = 6; // Current subscription summary
+}
+message SubscriptionSummary {
+  string id = 1; // Subscription ID
+  string product_id = 2; // Product ID
+  string product_name = 3; // Name of the product
+  string status = 4; // "active", "trialing", "canceled", etc.
+  int64 amount_due = 5; // Current amount in cents
+  string currency = 6; // ISO 4217 currency code
+  string recurring_interval = 7; // "month", "year", etc.
+  bool cancel_at_period_end = 8;
+  UsageSummary usage = 9; // Current usage snapshot
+  google.protobuf.Timestamp period_end = 10; // When current billing period ends
+}
+message UsageSummary {
+  float consumed_units = 1; // Units consumed this period
+  int64 amount_so_far = 2; // Billed amount so far this period
+}
+// ---
+
+message LimitCount {
+  ResourceType resource = 1;
+  int64 current = 2;
+  int64 max = 3;
+  float usage_percent = 4; // Calculated: (current/max) * 100
+}
+message WorkspaceLimits {
+  string workspace_id = 1;
+  string workspace_name = 2;
+  repeated LimitCount limits = 3;
+}
+message CustomerLimit {
+  int64 current_workspaces = 1;
+  int64 max_workspaces = 2;
+  repeated WorkspaceLimits limits = 3;
+}
+
+message GetCustomerRequest {}
+message GetCustomerResponse {
+  CustomerState state = 1;
+  CustomerLimit limit = 2;
+}
+
+message CreateCheckoutRequest {
+  PlanType plan_type = 1;
+}
+message CreateCheckoutResponse {
+  string checkout_url = 1;
+}
+
+message CancelSubscriptionRequest {
+  bool immediate = 1;
+  string reason = 2;
+}
+message CancelSubscriptionResponse {}

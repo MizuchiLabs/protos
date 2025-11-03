@@ -1,0 +1,100 @@
+edition = "2023";
+
+package zyphor.v1;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service PrincipalService {
+  rpc CreatePrincipal(CreatePrincipalRequest) returns (CreatePrincipalResponse) {
+    option (google.api.http) = {
+      post: "/v1/principal"
+      body: "*"
+    };
+  }
+  rpc DeletePrincipal(DeletePrincipalRequest) returns (DeletePrincipalResponse) {
+    option (google.api.http) = {delete: "/v1/principal/{target_id}/{username}"};
+  }
+  rpc ListPrincipals(ListPrincipalsRequest) returns (ListPrincipalsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/principals/{workspace_id}"};
+  }
+  rpc AddSubjectToPrincipal(AddSubjectToPrincipalRequest) returns (AddSubjectToPrincipalResponse) {
+    option (google.api.http) = {
+      post: "/v1/principal/{id}"
+      body: "*"
+    };
+  }
+  rpc RemoveSubjectFromPrincipal(RemoveSubjectFromPrincipalRequest) returns (RemoveSubjectFromPrincipalResponse) {
+    option (google.api.http) = {
+      delete: "/v1/principal/{id}"
+      body: "*"
+    };
+  }
+  rpc GetAgentPrincipals(GetAgentPrincipalsRequest) returns (GetAgentPrincipalsResponse);
+}
+
+enum PrincipalType {
+  PRINCIPAL_TYPE_UNSPECIFIED = 0;
+  PRINCIPAL_TYPE_USER = 1;
+  PRINCIPAL_TYPE_TEAM = 2;
+}
+
+message Principal {
+  string id = 1;
+  string target_id = 2;
+  string username = 3;
+  repeated string user_ids = 4;
+  repeated string team_ids = 5;
+  google.protobuf.Timestamp created_at = 6;
+}
+
+message CreatePrincipalRequest {
+  string target_id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
+  string username = 3 [(buf.validate.field).string.min_len = 1];
+}
+message CreatePrincipalResponse {
+  Principal principal = 1;
+}
+
+message DeletePrincipalRequest {
+  string target_id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
+  string username = 3 [(buf.validate.field).string.min_len = 1];
+}
+message DeletePrincipalResponse {}
+
+message ListPrincipalsRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+}
+message ListPrincipalsResponse {
+  repeated Principal principals = 1;
+}
+
+message AddSubjectToPrincipalRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
+  string subject_id = 3 [(buf.validate.field).string.uuid = true];
+  PrincipalType type = 4;
+}
+message AddSubjectToPrincipalResponse {}
+
+message RemoveSubjectFromPrincipalRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
+  string subject_id = 3 [(buf.validate.field).string.uuid = true];
+  PrincipalType type = 4;
+}
+message RemoveSubjectFromPrincipalResponse {}
+
+// For agents
+message PrincipalUsers {
+  string username = 1;
+  repeated string user_ids = 2;
+}
+message GetAgentPrincipalsRequest {}
+message GetAgentPrincipalsResponse {
+  repeated PrincipalUsers principals = 1;
+}

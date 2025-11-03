@@ -1,0 +1,155 @@
+edition = "2023";
+
+package zyphor.v1;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service TargetService {
+  rpc GetTarget(GetTargetRequest) returns (GetTargetResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/target/{id}"};
+  }
+  rpc CreateTarget(CreateTargetRequest) returns (CreateTargetResponse) {
+    option (google.api.http) = {
+      post: "/v1/target"
+      body: "*"
+    };
+  }
+  rpc UpdateTarget(UpdateTargetRequest) returns (UpdateTargetResponse) {
+    option (google.api.http) = {
+      patch: "/v1/target/{id}"
+      body: "*"
+    };
+  }
+  rpc DeleteTarget(DeleteTargetRequest) returns (DeleteTargetResponse) {
+    option (google.api.http) = {delete: "/v1/target/{id}"};
+  }
+  rpc ListTargets(ListTargetsRequest) returns (ListTargetsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/targets/{workspace_id}"};
+  }
+  rpc AddTargetEndpoint(AddTargetEndpointRequest) returns (AddTargetEndpointResponse) {
+    option (google.api.http) = {post: "/v1/target/{target_id}/endpoint/{value}"};
+  }
+  rpc RemoveTargetEndpoint(RemoveTargetEndpointRequest) returns (RemoveTargetEndpointResponse) {
+    option (google.api.http) = {delete: "/v1/target/{target_id}/endpoint/{value}"};
+  }
+  rpc GetUserAccessibleTargets(GetUserAccessibleTargetsRequest) returns (GetUserAccessibleTargetsResponse) {
+    option (google.api.http) = {get: "/v1/target/accessible"};
+  }
+}
+
+message Target {
+  string id = 1;
+  string workspace_id = 2;
+  string template_id = 3;
+  string name = 4;
+  string description = 5;
+  repeated string endpoints = 6;
+  TargetMetadata metadata = 7;
+  google.protobuf.Timestamp created_at = 8;
+  google.protobuf.Timestamp updated_at = 9;
+}
+message TargetMetadata {
+  // Basic system info
+  string hostname = 1;
+  string host_id = 2;
+  string os = 3;
+  string platform = 4;
+  string platform_version = 5;
+  string architecture = 6;
+
+  // Networking
+  repeated string ip_addresses = 7;
+
+  // SSH-specific metadata
+  string ssh_version = 8;
+  bool ssh_service_running = 9;
+  repeated string ssh_ports = 10;
+
+  // Extras
+  repeated string tags = 11;
+}
+
+message GetTargetRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
+}
+message GetTargetResponse {
+  Target target = 2;
+}
+
+message CreateTargetRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string name = 2 [(buf.validate.field).string.min_len = 1];
+  string description = 3;
+  string template_id = 4 [(buf.validate.field).string.uuid = true];
+  TargetMetadata metadata = 5;
+}
+message CreateTargetResponse {
+  Target target = 1;
+}
+
+message UpdateTargetRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
+  string template_id = 3 [(buf.validate.field).string.uuid = true];
+  string name = 4;
+  string description = 5;
+  TargetMetadata metadata = 6;
+}
+message UpdateTargetResponse {
+  Target target = 1;
+}
+
+message DeleteTargetRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
+}
+message DeleteTargetResponse {}
+
+message ListTargetsRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+}
+message ListTargetsResponse {
+  repeated Target targets = 1;
+}
+
+message AddTargetEndpointRequest {
+  string target_id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
+  string value = 3 [(buf.validate.field).cel = {
+    id: "value.ip_or_uri"
+    message: "value must be either a valid IP or a valid URI"
+    expression: "this.isIp() || this.isUri()"
+  }];
+}
+message AddTargetEndpointResponse {}
+
+message RemoveTargetEndpointRequest {
+  string target_id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
+  string value = 3 [(buf.validate.field).cel = {
+    id: "value.ip_or_uri"
+    message: "value must be either a valid IP or a valid URI"
+    expression: "this.isIp() || this.isUri()"
+  }];
+}
+message RemoveTargetEndpointResponse {}
+
+message AccessibleTarget {
+  string target_name = 1;
+  string username = 2;
+  string endpoint = 3;
+  string root_ca_id = 4;
+  string root_ca_name = 5;
+}
+
+message GetUserAccessibleTargetsRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+}
+message GetUserAccessibleTargetsResponse {
+  repeated AccessibleTarget targets = 1;
+}

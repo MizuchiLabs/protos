@@ -1,0 +1,58 @@
+edition = "2023";
+
+package zyphor.v1;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+
+service PermissionsService {
+  rpc ListRoles(ListRolesRequest) returns (ListRolesResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/roles/{workspace_id}"};
+  }
+  rpc TransferOwnership(TransferOwnershipRequest) returns (TransferOwnershipResponse) {
+    option (google.api.http) = {
+      post: "/v1/role/{workspace_id}/transfer"
+      body: "*"
+    };
+  }
+  rpc AssignRole(AssignRoleRequest) returns (AssignRoleResponse) {
+    option (google.api.http) = {
+      post: "/v1/role/{workspace_id}/{role_name}"
+      body: "*"
+    };
+  }
+  rpc RevokeRole(RevokeRoleRequest) returns (RevokeRoleResponse) {
+    option (google.api.http) = {
+      delete: "/v1/role/{workspace_id}/{role_name}"
+      body: "*"
+    };
+  }
+}
+
+message ListRolesRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+}
+message ListRolesResponse {
+  repeated string roles = 1;
+}
+
+message TransferOwnershipRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string new_owner = 2 [(buf.validate.field).string.uuid = true];
+}
+message TransferOwnershipResponse {}
+
+message AssignRoleRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string user_id = 2 [(buf.validate.field).string.uuid = true];
+  string role_name = 3 [(buf.validate.field).string.min_len = 1];
+}
+message AssignRoleResponse {}
+
+message RevokeRoleRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string user_id = 2 [(buf.validate.field).string.uuid = true];
+  string role_name = 3 [(buf.validate.field).string.min_len = 1];
+}
+message RevokeRoleResponse {}

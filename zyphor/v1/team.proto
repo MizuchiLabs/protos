@@ -1,0 +1,104 @@
+edition = "2023";
+
+package zyphor.v1;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "zyphor/v1/user.proto";
+
+service TeamService {
+  rpc GetTeam(GetTeamRequest) returns (GetTeamResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/team/{id}"};
+  }
+  rpc CreateTeam(CreateTeamRequest) returns (CreateTeamResponse) {
+    option (google.api.http) = {
+      post: "/v1/team"
+      body: "*"
+    };
+  }
+  rpc UpdateTeam(UpdateTeamRequest) returns (UpdateTeamResponse) {
+    option (google.api.http) = {
+      patch: "/v1/team/{id}"
+      body: "*"
+    };
+  }
+  rpc DeleteTeam(DeleteTeamRequest) returns (DeleteTeamResponse) {
+    option (google.api.http) = {delete: "/v1/team/{id}"};
+  }
+  rpc ListTeams(ListTeamsRequest) returns (ListTeamsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/teams/{workspace_id}"};
+  }
+  rpc AddTeamMember(AddTeamMemberRequest) returns (AddTeamMemberResponse) {
+    option (google.api.http) = {post: "/v1/team/{team_id}/members/{user_id}"};
+  }
+  rpc RemoveTeamMember(RemoveTeamMemberRequest) returns (RemoveTeamMemberResponse) {
+    option (google.api.http) = {delete: "/v1/team/{team_id}/members/{user_id}"};
+  }
+}
+
+message Team {
+  string id = 1;
+  string workspace_id = 2;
+  string name = 3;
+  string description = 4;
+  repeated User members = 5;
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp updated_at = 7;
+}
+
+message GetTeamRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
+}
+message GetTeamResponse {
+  Team team = 3;
+}
+
+message CreateTeamRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string name = 2 [(buf.validate.field).string.min_len = 1];
+  string description = 3;
+}
+message CreateTeamResponse {
+  Team team = 3;
+}
+
+message UpdateTeamRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
+  string name = 3;
+  string description = 4;
+}
+message UpdateTeamResponse {
+  Team team = 1;
+}
+
+message DeleteTeamRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
+}
+message DeleteTeamResponse {}
+
+message ListTeamsRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+}
+message ListTeamsResponse {
+  repeated Team teams = 1;
+}
+
+message AddTeamMemberRequest {
+  string team_id = 1 [(buf.validate.field).string.uuid = true];
+  string user_id = 2 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 3 [(buf.validate.field).string.uuid = true];
+}
+message AddTeamMemberResponse {}
+
+message RemoveTeamMemberRequest {
+  string team_id = 1 [(buf.validate.field).string.uuid = true];
+  string user_id = 2 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 3 [(buf.validate.field).string.uuid = true];
+}
+message RemoveTeamMemberResponse {}
