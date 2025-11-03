@@ -72,6 +72,7 @@ message GetAgentRequest {
 }
 message GetAgentResponse {
   Agent agent = 1;
+  bool online = 2;
 }
 
 message UpdateAgentRequest {
