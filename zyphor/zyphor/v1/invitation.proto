@@ -13,7 +13,7 @@ service InvitationService {
   rpc CreateInvitation(CreateInvitationRequest) returns (CreateInvitationResponse) {
     option (google.api.http) = {post: "/v1/invite/{workspace_id}/{expiry}"};
   }
-  rpc ClaimInvitation(ClaimInvitationRequest) returns (ClaimInvitationResponse) {
+  rpc AcceptInvitation(AcceptInvitationRequest) returns (AcceptInvitationResponse) {
     option (google.api.http) = {post: "/v1/invite/claim/{token}"};
   }
 }
@@ -28,15 +28,18 @@ message GetInvitationResponse {
 
 message CreateInvitationRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  google.protobuf.Duration expiry = 2; // default: 24 hours
+  google.protobuf.Duration expiry = 2 [(buf.validate.field).duration = {
+    gte: {seconds: 300} /* Min 5 minutes */
+    lte: {seconds: 2592000} /* Max 30 days */
+  }];
 }
 message CreateInvitationResponse {
   string link = 1;
 }
 
-message ClaimInvitationRequest {
+message AcceptInvitationRequest {
   string token = 1 [(buf.validate.field).string.min_len = 1];
 }
-message ClaimInvitationResponse {
+message AcceptInvitationResponse {
   string workspace_id = 1;
 }

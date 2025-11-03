@@ -51,10 +51,12 @@ message GetWorkspaceDomainResponse {
 }
 message CreateWorkspaceDomainRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string domain = 2 [
-    (buf.validate.field).string.hostname = true,
-    (buf.validate.field).string.pattern = "^[^.]+\\.[^.]+$"
-  ];
+  string domain = 2 [(buf.validate.field).string = {
+    hostname: true
+    min_len: 4
+    max_len: 253
+    pattern: "^([a-z0-9]+(-[a-z0-9]+)*\\.)+[a-z]{2,}$"
+  }];
 }
 message CreateWorkspaceDomainResponse {
   WorkspaceDomain workspace_domain = 1;

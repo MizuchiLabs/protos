@@ -78,13 +78,17 @@ message GetTargetRequest {
   string workspace_id = 2 [(buf.validate.field).string.uuid = true];
 }
 message GetTargetResponse {
-  Target target = 2;
+  Target target = 1;
 }
 
 message CreateTargetRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string name = 2 [(buf.validate.field).string.min_len = 1];
-  string description = 3;
+  string name = 2 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 255
+    pattern: "^[a-zA-Z0-9][a-zA-Z0-9-_]*$"
+  }];
+  string description = 3 [(buf.validate.field).string.max_len = 1000];
   string template_id = 4 [(buf.validate.field).string.uuid = true];
   TargetMetadata metadata = 5;
 }
@@ -96,8 +100,12 @@ message UpdateTargetRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
   string workspace_id = 2 [(buf.validate.field).string.uuid = true];
   string template_id = 3 [(buf.validate.field).string.uuid = true];
-  string name = 4;
-  string description = 5;
+  string name = 4 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 255
+    pattern: "^[a-zA-Z0-9][a-zA-Z0-9-_]*$"
+  }];
+  string description = 5 [(buf.validate.field).string.max_len = 1000];
   TargetMetadata metadata = 6;
 }
 message UpdateTargetResponse {

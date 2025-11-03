@@ -11,54 +11,54 @@ import "google/protobuf/timestamp.proto";
 service CertificateService {
   rpc GetRootCA(GetRootCARequest) returns (GetRootCAResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/ca/{id}"};
+    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/ca/{id}"};
   }
   rpc CreateRootCA(CreateRootCARequest) returns (CreateRootCAResponse) {
     option (google.api.http) = {
-      post: "/v1/ca"
+      post: "/v1/workspaces/{workspace_id}/ca"
       body: "*"
     };
   }
   rpc UpdateRootCA(UpdateRootCARequest) returns (UpdateRootCAResponse) {
     option (google.api.http) = {
-      patch: "/v1/ca/{id}"
+      patch: "/v1/workspaces/{workspace_id}/ca/{id}"
       body: "*"
     };
   }
   rpc ListRootCAs(ListRootCAsRequest) returns (ListRootCAsResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/cas/{workspace_id}"};
+    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/cas"};
   }
   rpc DeleteRootCA(DeleteRootCARequest) returns (DeleteRootCAResponse) {
-    option (google.api.http) = {delete: "/v1/ca/{id}"};
+    option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}/ca/{id}"};
   }
   rpc RolloverRootCA(RolloverRootCARequest) returns (RolloverRootCAResponse) {
-    option (google.api.http) = {post: "/v1/ca/rollover/{id}"};
+    option (google.api.http) = {post: "/v1/workspaces/{workspace_id}/ca/{id}/rollover"};
   }
 
   // SSH Certificate Template management
   rpc GetSSHCertTemplate(GetSSHCertTemplateRequest) returns (GetSSHCertTemplateResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/template/{id}"};
+    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/template/{id}"};
   }
   rpc CreateSSHCertTemplate(CreateSSHCertTemplateRequest) returns (CreateSSHCertTemplateResponse) {
     option (google.api.http) = {
-      post: "/v1/template"
+      post: "/v1/workspaces/{workspace_id}/template"
       body: "*"
     };
   }
   rpc UpdateSSHCertTemplate(UpdateSSHCertTemplateRequest) returns (UpdateSSHCertTemplateResponse) {
     option (google.api.http) = {
-      patch: "/v1/template/{id}"
+      patch: "/v1/workspaces/{workspace_id}/template/{id}"
       body: "*"
     };
   }
   rpc ListSSHCertTemplates(ListSSHCertTemplatesRequest) returns (ListSSHCertTemplatesResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/templates/{workspace_id}"};
+    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/templates"};
   }
   rpc DeleteSSHCertTemplate(DeleteSSHCertTemplateRequest) returns (DeleteSSHCertTemplateResponse) {
-    option (google.api.http) = {delete: "/v1/template/{id}"};
+    option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}/template/{id}"};
   }
 
   // Issue certificates
@@ -108,11 +108,24 @@ enum CertificateKeyType {
 
 message CreateRootCARequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string name = 2 [(buf.validate.field).string.min_len = 1];
-  string description = 3;
-  CertificateKeyType key_type = 4;
+  string name = 2 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 255
+  }];
+  string description = 3 [(buf.validate.field).string.max_len = 1000];
+  CertificateKeyType key_type = 4 [(buf.validate.field).enum = {
+    defined_only: true
+    in: [
+      1,
+      2,
+      3
+    ]
+  }];
   int32 key_bits = 5;
-  int32 lifetime_months = 6;
+  int32 lifetime_months = 6 [(buf.validate.field).int32 = {
+    gte: 1
+    lte: 60 // Max 5 years
+  }];
   bool is_default = 7;
 }
 message CreateRootCAResponse {
@@ -192,8 +205,14 @@ message CreateSSHCertTemplateRequest {
   string description = 4;
   bool allow_user_certificates = 5;
   bool allow_host_certificates = 6;
-  google.protobuf.Duration default_ttl = 7;
-  google.protobuf.Duration max_ttl = 8;
+  google.protobuf.Duration default_ttl = 7 [(buf.validate.field).duration = {
+    gte: {seconds: 60} /* Min 1 minute */
+    lte: {seconds: 31536000} /* Max 1 year */
+  }];
+  google.protobuf.Duration max_ttl = 8 [(buf.validate.field).duration = {
+    gte: {seconds: 60}
+    lte: {seconds: 31536000}
+  }];
   bool allow_user_rc = 9;
   bool allow_agent_forwarding = 10;
   bool allow_port_forwarding = 11;
@@ -257,18 +276,38 @@ message Certificate {
   google.protobuf.Timestamp expires_at = 4;
 }
 message SSHConfigOptions {
-  string key_name = 1; // custom private key name (default: zyphor)
-  string strict_host_key_checking = 2; // "yes", "no", "accept-new"
-  int32 keep_alive_interval = 3; // interval in seconds
-  bool add_hash_known_hosts = 4; // add HashKnownHosts yes
-  string user_known_hosts_file = 5; // custom known_hosts file
-  int32 connect_timeout = 6; // timeout in seconds
+  string key_name = 1 [(buf.validate.field).string = {
+    pattern: "^[a-zA-Z0-9_-]+$"
+    max_len: 100
+  }];
+  string strict_host_key_checking = 2 [
+    (buf.validate.field).string.in = "yes",
+    (buf.validate.field).string.in = "no",
+    (buf.validate.field).string.in = "accept-new"
+  ];
+  int32 keep_alive_interval = 3 [(buf.validate.field).int32 = {
+    gte: 0
+    lte: 3600
+  }];
+  int32 connect_timeout = 4 [(buf.validate.field).int32 = {
+    gte: 1
+    lte: 300
+  }];
+  bool add_hash_known_hosts = 5; // add HashKnownHosts yes
+  string user_known_hosts_file = 6; // custom known_hosts file
   bool compression = 7; // enable compression
 }
 
 message SignPublicKeyUserRequest {
-  string public_key = 1;
-  google.protobuf.Duration ttl = 2; // Optional, will use template default
+  string public_key = 1 [(buf.validate.field).string = {
+    min_len: 100 // SSH keys are typically 200-700 chars
+    max_len: 10000
+    pattern: "^ssh-(rsa|ed25519|ecdsa).*"
+  }];
+  google.protobuf.Duration ttl = 2 [(buf.validate.field).duration = {
+    gte: {seconds: 60}
+    lte: {seconds: 31536000}
+  }];
   SSHConfigOptions options = 3;
 }
 message SignPublicKeyUserResponse {

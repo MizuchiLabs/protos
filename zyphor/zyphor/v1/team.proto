@@ -54,23 +54,29 @@ message GetTeamRequest {
   string workspace_id = 2 [(buf.validate.field).string.uuid = true];
 }
 message GetTeamResponse {
-  Team team = 3;
+  Team team = 1;
 }
 
 message CreateTeamRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string name = 2 [(buf.validate.field).string.min_len = 1];
-  string description = 3;
+  string name = 2 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 255
+  }];
+  string description = 3 [(buf.validate.field).string.max_len = 1000];
 }
 message CreateTeamResponse {
-  Team team = 3;
+  Team team = 1;
 }
 
 message UpdateTeamRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
   string workspace_id = 2 [(buf.validate.field).string.uuid = true];
-  string name = 3;
-  string description = 4;
+  string name = 3 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 255
+  }];
+  string description = 4 [(buf.validate.field).string.max_len = 1000];
 }
 message UpdateTeamResponse {
   Team team = 1;

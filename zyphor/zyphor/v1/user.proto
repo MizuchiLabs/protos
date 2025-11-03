@@ -107,10 +107,23 @@ message User {
 
 // Authentication requests/responses
 message RegisterRequest {
-  string name = 1 [(buf.validate.field).string.min_len = 3];
-  string email = 2 [(buf.validate.field).string.email = true];
-  string username = 3 [(buf.validate.field).string.min_len = 3];
-  string password = 4 [(buf.validate.field).string.min_len = 8];
+  string name = 1 [(buf.validate.field).string = {
+    min_len: 3
+    max_len: 255
+  }];
+  string email = 2 [(buf.validate.field).string = {
+    email: true
+    max_len: 255
+  }];
+  string username = 3 [(buf.validate.field).string = {
+    min_len: 3
+    max_len: 39 // GitHub's max
+    pattern: "^[a-zA-Z0-9]([a-zA-Z0-9-_])*[a-zA-Z0-9]$"
+  }];
+  string password = 4 [(buf.validate.field).string = {
+    min_len: 8
+    max_len: 256
+  }];
 }
 message RegisterResponse {}
 
@@ -134,7 +147,10 @@ message LogoutRequest {}
 message LogoutResponse {}
 
 message CheckSSORequest {
-  string email = 1 [(buf.validate.field).string.email = true];
+  string email = 1 [(buf.validate.field).string = {
+    email: true
+    max_len: 255
+  }];
 }
 message CheckSSOResponse {
   bool has_sso = 1;
@@ -144,7 +160,10 @@ message CheckSSOResponse {
 }
 
 message ForgotPasswordRequest {
-  string email = 1 [(buf.validate.field).string.email = true];
+  string email = 1 [(buf.validate.field).string = {
+    email: true
+    max_len: 255
+  }];
 }
 message ForgotPasswordResponse {}
 
@@ -160,7 +179,10 @@ message VerifyEmailRequest {
 message VerifyEmailResponse {}
 
 message ResendVerificationRequest {
-  string email = 1 [(buf.validate.field).string.email = true];
+  string email = 1 [(buf.validate.field).string = {
+    email: true
+    max_len: 255
+  }];
 }
 message ResendVerificationResponse {}
 
@@ -170,9 +192,19 @@ message WhoamiResponse {
 }
 
 message UpdateProfileRequest {
-  string name = 1 [(buf.validate.field).string.min_len = 3];
-  string username = 2 [(buf.validate.field).string.min_len = 3];
-  string email = 3 [(buf.validate.field).string.email = true];
+  string name = 1 [(buf.validate.field).string = {
+    min_len: 3
+    max_len: 255
+  }];
+  string email = 2 [(buf.validate.field).string = {
+    email: true
+    max_len: 255
+  }];
+  string username = 3 [(buf.validate.field).string = {
+    min_len: 3
+    max_len: 39 // GitHub's max
+    pattern: "^[a-zA-Z0-9]([a-zA-Z0-9-_])*[a-zA-Z0-9]$"
+  }];
   string picture = 4;
 }
 message UpdateProfileResponse {
@@ -200,8 +232,11 @@ message Passkey {
 }
 
 message UpdatePasskeyRequest {
-  string id = 1;
-  string name = 2;
+  string id = 1 [(buf.validate.field).string.min_len = 1];
+  string name = 2 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 100
+  }];
 }
 message UpdatePasskeyResponse {
   Passkey passkey = 1;
@@ -213,7 +248,7 @@ message ListPasskeysResponse {
 }
 
 message DeletePasskeyRequest {
-  string id = 1;
+  string id = 1 [(buf.validate.field).string.min_len = 1];
 }
 message DeletePasskeyResponse {}
 

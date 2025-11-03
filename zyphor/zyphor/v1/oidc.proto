@@ -47,11 +47,32 @@ message GetOIDCProviderResponse {
 
 message UpsertOIDCProviderRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string name = 2 [(buf.validate.field).string.min_len = 1];
-  string issuer_url = 3 [(buf.validate.field).string.uri = true];
-  string client_id = 4 [(buf.validate.field).string.min_len = 1];
-  string client_secret = 5 [(buf.validate.field).string.min_len = 1];
-  repeated string scopes = 6;
+  string name = 2 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 255
+  }];
+  string issuer_url = 3 [(buf.validate.field).string = {
+    uri: true
+    prefix: "https://" // Must be HTTPS
+  }];
+  string client_id = 4 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 500
+  }];
+  string client_secret = 5 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 1000
+  }];
+  repeated string scopes = 6 [(buf.validate.field).repeated = {
+    min_items: 1
+    max_items: 20
+    items: {
+      string: {
+        min_len: 1
+        max_len: 100
+      }
+    }
+  }];
   string email_claim = 7;
   string name_claim = 8;
   string username_claim = 9;
