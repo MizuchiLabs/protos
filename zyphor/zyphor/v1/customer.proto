@@ -54,8 +54,9 @@ message SubscriptionSummary {
   string currency = 6; // ISO 4217 currency code
   string recurring_interval = 7; // "month", "year", etc.
   bool cancel_at_period_end = 8;
-  UsageSummary usage = 9; // Current usage snapshot
-  google.protobuf.Timestamp period_end = 10; // When current billing period ends
+  PlanType plan_type = 9; // "team", "business", etc.
+  UsageSummary usage = 10; // Current usage snapshot
+  google.protobuf.Timestamp period_end = 11; // When current billing period ends
 }
 message UsageSummary {
   float consumed_units = 1; // Units consumed this period
