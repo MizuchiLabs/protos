@@ -299,16 +299,17 @@ message SSHConfigOptions {
 }
 
 message SignPublicKeyUserRequest {
-  string public_key = 1 [(buf.validate.field).string = {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string public_key = 2 [(buf.validate.field).string = {
     min_len: 1
     max_len: 10000
     pattern: "^ssh-(rsa|ed25519|ecdsa).*"
   }];
-  google.protobuf.Duration ttl = 2 [(buf.validate.field).duration = {
+  google.protobuf.Duration ttl = 3 [(buf.validate.field).duration = {
     gte: {seconds: 60}
     lte: {seconds: 31536000}
   }];
-  SSHConfigOptions options = 3;
+  SSHConfigOptions options = 4;
 }
 message SignPublicKeyUserResponse {
   repeated Certificate certificates = 1;
