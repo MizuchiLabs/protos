@@ -300,7 +300,7 @@ message SSHConfigOptions {
 
 message SignPublicKeyUserRequest {
   string public_key = 1 [(buf.validate.field).string = {
-    min_len: 100 // SSH keys are typically 200-700 chars
+    min_len: 1
     max_len: 10000
     pattern: "^ssh-(rsa|ed25519|ecdsa).*"
   }];
