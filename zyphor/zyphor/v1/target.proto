@@ -4,6 +4,7 @@ package zyphor.v1;
 
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
 
 service TargetService {
@@ -148,11 +149,16 @@ message RemoveTargetEndpointRequest {
 message RemoveTargetEndpointResponse {}
 
 message AccessibleTarget {
-  string target_name = 1;
-  string username = 2;
-  string endpoint = 3;
-  string root_ca_id = 4;
-  string root_ca_name = 5;
+  string target_id = 1;
+  string target_name = 2;
+  string target_description = 3;
+  repeated string endpoints = 4;
+  repeated string usernames = 5;
+  string root_ca_id = 6;
+  string root_ca_name = 7;
+  string template_id = 8;
+  google.protobuf.Duration default_ttl = 9;
+  google.protobuf.Duration max_ttl = 10;
 }
 
 message GetUserAccessibleTargetsRequest {
