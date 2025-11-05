@@ -39,6 +39,7 @@ enum PrincipalType {
   PRINCIPAL_TYPE_UNSPECIFIED = 0;
   PRINCIPAL_TYPE_USER = 1;
   PRINCIPAL_TYPE_TEAM = 2;
+  PRINCIPAL_TYPE_SERVICE_ACCOUNT = 3;
 }
 
 message Principal {
@@ -85,7 +86,8 @@ message AddSubjectToPrincipalRequest {
     defined_only: true
     in: [
       1,
-      2
+      2,
+      3
     ]
   }];
 }
@@ -99,7 +101,8 @@ message RemoveSubjectFromPrincipalRequest {
     defined_only: true
     in: [
       1,
-      2
+      2,
+      3
     ]
   }];
 }
