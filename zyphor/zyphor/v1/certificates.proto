@@ -321,5 +321,5 @@ message SignPublicKeyHostRequest {
 }
 message SignPublicKeyHostResponse {
   repeated Certificate certificates = 1;
-  string ca_public_key = 2;
+  bytes ca_public_key = 2;
 }
