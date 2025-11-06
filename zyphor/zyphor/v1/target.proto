@@ -6,6 +6,7 @@ import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
+import "zyphor/v1/principal.proto";
 
 service TargetService {
   rpc GetTarget(GetTargetRequest) returns (GetTargetResponse) {
@@ -49,9 +50,10 @@ message Target {
   string name = 4;
   string description = 5;
   repeated string endpoints = 6;
-  TargetMetadata metadata = 7;
-  google.protobuf.Timestamp created_at = 8;
-  google.protobuf.Timestamp updated_at = 9;
+  repeated Principal principals = 7;
+  TargetMetadata metadata = 8;
+  google.protobuf.Timestamp created_at = 9;
+  google.protobuf.Timestamp updated_at = 10;
 }
 message TargetMetadata {
   // Basic system info
