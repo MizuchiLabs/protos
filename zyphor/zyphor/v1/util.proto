@@ -60,7 +60,7 @@ message ListAuditLogsRequest {
   string actor_type = 5;
   string action = 6;
   string resource_type = 7;
-  bool success = 8;
+  bool status = 8;
   google.protobuf.Timestamp from_time = 9;
   google.protobuf.Timestamp to_time = 10;
 }
