@@ -45,10 +45,27 @@ message AuditSource {
   map<string, string> details = 3;
 }
 
+// Request message with filters and pagination
 message ListAuditLogsRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+
+  // Pagination
+  int32 page_size = 2 [(buf.validate.field).int32 = {
+    gte: 1
+    lte: 100
+  }]; // Max 100 items
+  string page_token = 3; // Cursor for next page (opaque token)
+
+  // Filters (optional)
+  string actor_id = 4 [(buf.validate.field).string.uuid = true];
+  string action = 5;
+  string resource_type = 6;
+  google.protobuf.Timestamp from_time = 7;
+  google.protobuf.Timestamp to_time = 8;
 }
 
 message ListAuditLogsResponse {
   repeated AuditLog audit_logs = 1;
+  string next_page_token = 2; // Empty if no more pages
+  int32 total_count = 3; // Optional: approximate count for UI
 }
