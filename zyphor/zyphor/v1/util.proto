@@ -57,10 +57,12 @@ message ListAuditLogsRequest {
 
   // Filters (optional)
   string actor_id = 4 [(buf.validate.field).string.uuid = true];
-  string action = 5;
-  string resource_type = 6;
-  google.protobuf.Timestamp from_time = 7;
-  google.protobuf.Timestamp to_time = 8;
+  string actor_type = 5;
+  string action = 6;
+  string resource_type = 7;
+  bool success = 8;
+  google.protobuf.Timestamp from_time = 9;
+  google.protobuf.Timestamp to_time = 10;
 }
 
 message ListAuditLogsResponse {
