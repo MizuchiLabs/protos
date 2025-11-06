@@ -33,7 +33,10 @@ service PrincipalService {
     };
   }
   rpc RevokeAllAccess(RevokeAllAccessRequest) returns (RevokeAllAccessResponse) {
-    option (google.api.http) = {post: "/v1/principal/{id}/revoke-all-access"};
+    option (google.api.http) = {
+      post: "/v1/principal/{subject_id}/revoke-all-access"
+      body: "*"
+    };
   }
   rpc GetAgentPrincipals(GetAgentPrincipalsRequest) returns (GetAgentPrincipalsResponse);
 }
