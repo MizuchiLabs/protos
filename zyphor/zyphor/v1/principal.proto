@@ -32,6 +32,9 @@ service PrincipalService {
       body: "*"
     };
   }
+  rpc RevokeAllAccess(RevokeAllAccessRequest) returns (RevokeAllAccessResponse) {
+    option (google.api.http) = {post: "/v1/principal/{id}/revoke-all-access"};
+  }
   rpc GetAgentPrincipals(GetAgentPrincipalsRequest) returns (GetAgentPrincipalsResponse);
 }
 
@@ -107,6 +110,20 @@ message RemoveSubjectFromPrincipalRequest {
   }];
 }
 message RemoveSubjectFromPrincipalResponse {}
+
+message RevokeAllAccessRequest {
+  string subject_id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
+  PrincipalType type = 3 [(buf.validate.field).enum = {
+    defined_only: true
+    in: [
+      1,
+      2,
+      3
+    ]
+  }];
+}
+message RevokeAllAccessResponse {}
 
 // For agents
 message PrincipalUsers {
