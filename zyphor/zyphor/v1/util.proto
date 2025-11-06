@@ -45,7 +45,6 @@ message AuditSource {
   map<string, string> details = 3;
 }
 
-// Request message with filters and pagination
 message ListAuditLogsRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
 
@@ -67,5 +66,5 @@ message ListAuditLogsRequest {
 message ListAuditLogsResponse {
   repeated AuditLog audit_logs = 1;
   string next_page_token = 2; // Empty if no more pages
-  int32 total_count = 3; // Optional: approximate count for UI
+  int64 total_count = 3;
 }
