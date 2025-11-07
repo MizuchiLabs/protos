@@ -73,7 +73,6 @@ message ListAuditLogsResponse {
 }
 
 message ExportAuditLogsRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   enum Format {
     FORMAT_UNSPECIFIED = 0;
     FORMAT_CSV = 1;
@@ -81,6 +80,8 @@ message ExportAuditLogsRequest {
     FORMAT_JSONL = 3;
     FORMAT_PDF = 4;
   }
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  Format format = 2 [(buf.validate.field).enum = {defined_only: true}];
   google.protobuf.Timestamp start_date = 3;
   google.protobuf.Timestamp end_date = 4;
 }
