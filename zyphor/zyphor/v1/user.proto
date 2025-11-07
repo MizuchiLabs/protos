@@ -88,6 +88,9 @@ service UserService {
   rpc DeletePasskey(DeletePasskeyRequest) returns (DeletePasskeyResponse) {
     option (google.api.http) = {delete: "/v1/passkeys/{id}"};
   }
+  rpc DeleteAccount(DeleteAccountRequest) returns (DeleteAccountResponse) {
+    option (google.api.http) = {delete: "/v1/account"};
+  }
   rpc VerifyCliLogin(VerifyCliLoginRequest) returns (VerifyCliLoginResponse) {
     option (google.api.http) = {post: "/v1/cli-login/verify"};
   }
@@ -222,6 +225,9 @@ message DeletePasswordRequest {
   string current_password = 1 [(buf.validate.field).string.min_len = 1];
 }
 message DeletePasswordResponse {}
+
+message DeleteAccountRequest {}
+message DeleteAccountResponse {}
 
 // Passkey endpoints ----------------------------------------------------------
 message Passkey {
