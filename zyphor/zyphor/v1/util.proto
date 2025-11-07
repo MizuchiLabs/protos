@@ -15,6 +15,9 @@ service UtilService {
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/audit"};
   }
+  rpc ExportAuditLogs(ExportAuditLogsRequest) returns (ExportAuditLogsResponse) {
+    option (google.api.http) = {post: "/v1/audit/export"};
+  }
 }
 
 message GetVersionRequest {}
@@ -61,11 +64,28 @@ message ListAuditLogsRequest {
   string action = 6;
   string resource_type = 7;
   bool status = 8;
-  google.protobuf.Timestamp from_time = 9;
-  google.protobuf.Timestamp to_time = 10;
+  google.protobuf.Timestamp start_date = 9;
+  google.protobuf.Timestamp end_date = 10;
 }
-
 message ListAuditLogsResponse {
   repeated AuditLog logs = 1;
   int64 total_count = 2;
+}
+
+message ExportAuditLogsRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  enum Format {
+    FORMAT_UNSPECIFIED = 0;
+    FORMAT_CSV = 1;
+    FORMAT_JSON = 2;
+    FORMAT_JSONL = 3;
+    FORMAT_PDF = 4;
+  }
+  google.protobuf.Timestamp start_date = 3;
+  google.protobuf.Timestamp end_date = 4;
+}
+message ExportAuditLogsResponse {
+  bytes data = 1;
+  string filename = 2;
+  string content_type = 3;
 }
