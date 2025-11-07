@@ -6,6 +6,7 @@ import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
+import "zyphor/v1/options.proto";
 import "zyphor/v1/target.proto";
 
 service AgentService {
@@ -106,11 +107,14 @@ message CreateBootstrapTokenRequest {
   }];
 }
 message CreateBootstrapTokenResponse {
-  string token = 1;
+  string token = 1 [(zyphor.v1.sensitive) = true];
 }
 
 message BootstrapAgentRequest {
-  string bootstrap_token = 1 [(buf.validate.field).string.min_len = 1];
+  string bootstrap_token = 1 [
+    (buf.validate.field).string.min_len = 1,
+    (zyphor.v1.sensitive) = true
+  ];
   string hostname = 2 [(buf.validate.field).string = {
     min_len: 1
     max_len: 253
@@ -120,7 +124,7 @@ message BootstrapAgentRequest {
 }
 message BootstrapAgentResponse {
   Agent agent = 1;
-  string token = 2;
+  string token = 2 [(zyphor.v1.sensitive) = true];
 }
 
 message AgentHeartbeatRequest {
