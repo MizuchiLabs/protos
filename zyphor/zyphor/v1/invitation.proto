@@ -5,6 +5,7 @@ package zyphor.v1;
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/duration.proto";
+import "zyphor/v1/options.proto";
 
 service InvitationService {
   rpc GetInvitation(GetInvitationRequest) returns (GetInvitationResponse) {
@@ -19,7 +20,10 @@ service InvitationService {
 }
 
 message GetInvitationRequest {
-  string token = 1 [(buf.validate.field).string.min_len = 1];
+  string token = 1 [
+    (buf.validate.field).string.min_len = 1,
+    (zyphor.v1.sensitive) = true
+  ];
 }
 message GetInvitationResponse {
   string invited_by = 1;
@@ -34,11 +38,14 @@ message CreateInvitationRequest {
   }];
 }
 message CreateInvitationResponse {
-  string link = 1;
+  string link = 1 [(zyphor.v1.sensitive) = true];
 }
 
 message AcceptInvitationRequest {
-  string token = 1 [(buf.validate.field).string.min_len = 1];
+  string token = 1 [
+    (buf.validate.field).string.min_len = 1,
+    (zyphor.v1.sensitive) = true
+  ];
 }
 message AcceptInvitationResponse {
   string workspace_id = 1;

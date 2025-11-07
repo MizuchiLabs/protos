@@ -5,6 +5,7 @@ package zyphor.v1;
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
+import "zyphor/v1/options.proto";
 
 service WorkspaceDomainService {
   rpc GetWorkspaceDomain(GetWorkspaceDomainRequest) returns (GetWorkspaceDomainResponse) {
@@ -35,8 +36,8 @@ service WorkspaceDomainService {
 message WorkspaceDomain {
   string id = 1;
   string workspace_id = 2;
-  string domain = 3;
-  string verification_token = 4;
+  string domain = 3 [(zyphor.v1.sensitive) = true];
+  string verification_token = 4 [(zyphor.v1.sensitive) = true];
   google.protobuf.Timestamp verified_at = 5;
   google.protobuf.Timestamp created_at = 6;
   google.protobuf.Timestamp updated_at = 7;
@@ -51,12 +52,15 @@ message GetWorkspaceDomainResponse {
 }
 message CreateWorkspaceDomainRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string domain = 2 [(buf.validate.field).string = {
-    hostname: true
-    min_len: 4
-    max_len: 253
-    pattern: "^([a-z0-9]+(-[a-z0-9]+)*\\.)+[a-z]{2,}$"
-  }];
+  string domain = 2 [
+    (buf.validate.field).string = {
+      hostname: true
+      min_len: 4
+      max_len: 253
+      pattern: "^([a-z0-9]+(-[a-z0-9]+)*\\.)+[a-z]{2,}$"
+    },
+    (zyphor.v1.sensitive) = true
+  ];
 }
 message CreateWorkspaceDomainResponse {
   WorkspaceDomain workspace_domain = 1;

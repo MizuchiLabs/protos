@@ -7,6 +7,7 @@ import "google/api/annotations.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
+import "zyphor/v1/options.proto";
 
 service CertificateService {
   rpc GetRootCA(GetRootCARequest) returns (GetRootCAResponse) {
@@ -115,11 +116,7 @@ message CreateRootCARequest {
   string description = 3 [(buf.validate.field).string.max_len = 1000];
   CertificateKeyType key_type = 4 [(buf.validate.field).enum = {
     defined_only: true
-    in: [
-      1,
-      2,
-      3
-    ]
+    not_in: [0]
   }];
   int32 key_bits = 5;
   int32 lifetime_months = 6 [(buf.validate.field).int32 = {
@@ -272,7 +269,7 @@ message DeleteSSHCertTemplateResponse {}
 message Certificate {
   string id = 1;
   string name = 2;
-  string pem = 3;
+  string pem = 3 [(zyphor.v1.sensitive) = true];
   google.protobuf.Timestamp expires_at = 4;
 }
 message SSHConfigOptions {
@@ -300,11 +297,14 @@ message SSHConfigOptions {
 
 message SignPublicKeyUserRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string public_key = 2 [(buf.validate.field).string = {
-    min_len: 1
-    max_len: 10000
-    pattern: "^ssh-(rsa|ed25519|ecdsa).*"
-  }];
+  string public_key = 2 [
+    (buf.validate.field).string = {
+      min_len: 1
+      max_len: 10000
+      pattern: "^ssh-(rsa|ed25519|ecdsa).*"
+    },
+    (zyphor.v1.sensitive) = true
+  ];
   google.protobuf.Duration ttl = 3 [(buf.validate.field).duration = {
     gte: {seconds: 60}
     lte: {seconds: 31536000}
@@ -313,14 +313,14 @@ message SignPublicKeyUserRequest {
 }
 message SignPublicKeyUserResponse {
   repeated Certificate certificates = 1;
-  string ssh_config = 2;
+  string ssh_config = 2 [(zyphor.v1.sensitive) = true];
 }
 
 // Meant for agents
 message SignPublicKeyHostRequest {
-  repeated bytes public_keys = 1;
+  repeated bytes public_keys = 1 [(zyphor.v1.sensitive) = true];
 }
 message SignPublicKeyHostResponse {
-  repeated Certificate certificates = 1;
-  bytes ca_public_key = 2;
+  repeated Certificate certificates = 1 [(zyphor.v1.sensitive) = true];
+  bytes ca_public_key = 2 [(zyphor.v1.sensitive) = true];
 }

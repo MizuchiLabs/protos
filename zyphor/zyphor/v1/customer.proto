@@ -2,8 +2,10 @@ edition = "2023";
 
 package zyphor.v1;
 
+import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
+import "zyphor/v1/options.proto";
 
 service CustomerService {
   rpc GetCustomer(GetCustomerRequest) returns (GetCustomerResponse) {
@@ -40,7 +42,7 @@ enum ResourceType {
 message CustomerState {
   string id = 1;
   string external_id = 2;
-  string email = 3;
+  string email = 3 [(zyphor.v1.sensitive) = true];
   string name = 4;
   string avatar_url = 5;
   SubscriptionSummary subscription = 6; // Current subscription summary
@@ -62,7 +64,6 @@ message UsageSummary {
   float consumed_units = 1; // Units consumed this period
   int64 amount_so_far = 2; // Billed amount so far this period
 }
-// ---
 
 message LimitCount {
   ResourceType resource = 1;
@@ -83,7 +84,7 @@ message CustomerLimit {
 
 message GetCustomerRequest {}
 message GetCustomerResponse {
-  CustomerState state = 1;
+  CustomerState state = 1 [(zyphor.v1.sensitive) = true];
   CustomerLimit limit = 2;
 }
 
@@ -91,11 +92,14 @@ message CreateCheckoutRequest {
   PlanType plan_type = 1;
 }
 message CreateCheckoutResponse {
-  string checkout_url = 1;
+  string checkout_url = 1 [(zyphor.v1.sensitive) = true];
 }
 
 message CancelSubscriptionRequest {
   bool immediate = 1;
-  string reason = 2;
+  string reason = 2 [
+    (buf.validate.field).string.max_len = 1000,
+    (zyphor.v1.sensitive) = true
+  ];
 }
 message CancelSubscriptionResponse {}

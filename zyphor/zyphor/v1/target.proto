@@ -6,6 +6,7 @@ import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
+import "zyphor/v1/options.proto";
 import "zyphor/v1/principal.proto";
 
 service TargetService {
@@ -49,7 +50,7 @@ message Target {
   string template_id = 3;
   string name = 4;
   string description = 5;
-  repeated string endpoints = 6;
+  repeated string endpoints = 6 [(zyphor.v1.sensitive) = true];
   repeated Principal principals = 7;
   TargetMetadata metadata = 8;
   google.protobuf.Timestamp created_at = 9;
@@ -65,7 +66,7 @@ message TargetMetadata {
   string architecture = 6;
 
   // Networking
-  repeated string ip_addresses = 7;
+  repeated string ip_addresses = 7 [(zyphor.v1.sensitive) = true];
 
   // SSH-specific metadata
   string ssh_version = 8;
@@ -131,22 +132,28 @@ message ListTargetsResponse {
 message AddTargetEndpointRequest {
   string target_id = 1 [(buf.validate.field).string.uuid = true];
   string workspace_id = 2 [(buf.validate.field).string.uuid = true];
-  string value = 3 [(buf.validate.field).cel = {
-    id: "value.ip_or_uri"
-    message: "value must be either a valid IP or a valid URI"
-    expression: "this.isIp() || this.isUri()"
-  }];
+  string value = 3 [
+    (buf.validate.field).cel = {
+      id: "value.ip_or_uri"
+      message: "value must be either a valid IP or a valid URI"
+      expression: "this.isIp() || this.isUri()"
+    },
+    (zyphor.v1.sensitive) = true
+  ];
 }
 message AddTargetEndpointResponse {}
 
 message RemoveTargetEndpointRequest {
   string target_id = 1 [(buf.validate.field).string.uuid = true];
   string workspace_id = 2 [(buf.validate.field).string.uuid = true];
-  string value = 3 [(buf.validate.field).cel = {
-    id: "value.ip_or_uri"
-    message: "value must be either a valid IP or a valid URI"
-    expression: "this.isIp() || this.isUri()"
-  }];
+  string value = 3 [
+    (buf.validate.field).cel = {
+      id: "value.ip_or_uri"
+      message: "value must be either a valid IP or a valid URI"
+      expression: "this.isIp() || this.isUri()"
+    },
+    (zyphor.v1.sensitive) = true
+  ];
 }
 message RemoveTargetEndpointResponse {}
 
@@ -154,8 +161,8 @@ message AccessibleTarget {
   string target_id = 1;
   string target_name = 2;
   string target_description = 3;
-  repeated string endpoints = 4;
-  repeated string usernames = 5;
+  repeated string endpoints = 4 [(zyphor.v1.sensitive) = true];
+  repeated string usernames = 5 [(zyphor.v1.sensitive) = true];
   string root_ca_id = 6;
   string root_ca_name = 7;
   string template_id = 8;

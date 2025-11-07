@@ -5,6 +5,7 @@ package zyphor.v1;
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
+import "zyphor/v1/options.proto";
 import "zyphor/v1/user.proto";
 
 service WorkspaceService {
@@ -62,7 +63,7 @@ message Workspace {
 }
 message WorkspaceSettings {
   BootstrapSettings bootstrap = 1;
-  NotificationSettings notifications = 2;
+  NotificationSettings notifications = 2 [(zyphor.v1.sensitive) = true];
 }
 message BootstrapSettings {
   bool enabled = 1;

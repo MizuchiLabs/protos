@@ -5,6 +5,7 @@ package zyphor.v1;
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
+import "zyphor/v1/options.proto";
 
 service PrincipalService {
   rpc CreatePrincipal(CreatePrincipalRequest) returns (CreatePrincipalResponse) {
@@ -51,7 +52,7 @@ enum PrincipalType {
 message Principal {
   string id = 1;
   string target_id = 2;
-  string username = 3;
+  string username = 3 [(zyphor.v1.sensitive) = true];
   repeated string user_ids = 4;
   repeated string team_ids = 5;
   google.protobuf.Timestamp created_at = 6;
@@ -60,11 +61,14 @@ message Principal {
 message CreatePrincipalRequest {
   string target_id = 1 [(buf.validate.field).string.uuid = true];
   string workspace_id = 2 [(buf.validate.field).string.uuid = true];
-  string username = 3 [(buf.validate.field).string = {
-    min_len: 1
-    max_len: 32
-    pattern: "^[a-z_][a-z0-9_-]*\\$?$" // Valid Unix username
-  }];
+  string username = 3 [
+    (buf.validate.field).string = {
+      min_len: 1
+      max_len: 32
+      pattern: "^[a-z_][a-z0-9_-]*\\$?$" // Valid Unix username
+    },
+    (zyphor.v1.sensitive) = true
+  ];
 }
 message CreatePrincipalResponse {
   Principal principal = 1;
@@ -73,7 +77,10 @@ message CreatePrincipalResponse {
 message DeletePrincipalRequest {
   string target_id = 1 [(buf.validate.field).string.uuid = true];
   string workspace_id = 2 [(buf.validate.field).string.uuid = true];
-  string username = 3 [(buf.validate.field).string.min_len = 1];
+  string username = 3 [
+    (buf.validate.field).string.min_len = 1,
+    (zyphor.v1.sensitive) = true
+  ];
 }
 message DeletePrincipalResponse {}
 
@@ -90,11 +97,7 @@ message AddSubjectToPrincipalRequest {
   string subject_id = 3 [(buf.validate.field).string.uuid = true];
   PrincipalType type = 4 [(buf.validate.field).enum = {
     defined_only: true
-    in: [
-      1,
-      2,
-      3
-    ]
+    not_in: [0]
   }];
 }
 message AddSubjectToPrincipalResponse {}
@@ -105,11 +108,7 @@ message RemoveSubjectFromPrincipalRequest {
   string subject_id = 3 [(buf.validate.field).string.uuid = true];
   PrincipalType type = 4 [(buf.validate.field).enum = {
     defined_only: true
-    in: [
-      1,
-      2,
-      3
-    ]
+    not_in: [0]
   }];
 }
 message RemoveSubjectFromPrincipalResponse {}
@@ -119,18 +118,14 @@ message RevokeAllAccessRequest {
   string workspace_id = 2 [(buf.validate.field).string.uuid = true];
   PrincipalType type = 3 [(buf.validate.field).enum = {
     defined_only: true
-    in: [
-      1,
-      2,
-      3
-    ]
+    not_in: [0]
   }];
 }
 message RevokeAllAccessResponse {}
 
 // For agents
 message PrincipalUsers {
-  string username = 1;
+  string username = 1 [(zyphor.v1.sensitive) = true];
   repeated string user_ids = 2;
 }
 message GetAgentPrincipalsRequest {}
