@@ -56,7 +56,7 @@ message ListAuditLogsRequest {
     gte: 1
     lte: 100
   }]; // Max 100 items
-  int32 page_index = 3 [(buf.validate.field).int32 = {gte: 0}]; // Zero-based index
+  string page_token = 3;
 
   // Filters (optional)
   string actor_id = 4 [(buf.validate.field).string.uuid = true];
@@ -69,7 +69,7 @@ message ListAuditLogsRequest {
 }
 message ListAuditLogsResponse {
   repeated AuditLog logs = 1;
-  int64 total_count = 2;
+  string next_page_token = 2;
 }
 
 message ExportAuditLogsRequest {
