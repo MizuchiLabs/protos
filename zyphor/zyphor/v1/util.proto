@@ -59,13 +59,14 @@ message ListAuditLogsRequest {
   string page_token = 3;
 
   // Filters (optional)
-  string actor_id = 4 [(buf.validate.field).string.uuid = true];
-  string actor_type = 5;
-  string action = 6;
-  string resource_type = 7;
-  bool status = 8;
-  google.protobuf.Timestamp start_date = 9;
-  google.protobuf.Timestamp end_date = 10;
+  string search = 4;
+  string actor_id = 5 [(buf.validate.field).string.uuid = true];
+  string actor_type = 6;
+  string action = 7;
+  string resource_type = 8;
+  bool status = 9;
+  google.protobuf.Timestamp start_date = 10;
+  google.protobuf.Timestamp end_date = 11;
 }
 message ListAuditLogsResponse {
   repeated AuditLog logs = 1;
