@@ -39,27 +39,27 @@ service CertificateService {
   }
 
   // Certificate Template messages --------------------------------------------
-  rpc GetSSHCertTemplate(GetSSHCertTemplateRequest) returns (GetSSHCertTemplateResponse) {
+  rpc GetCertTemplate(GetCertTemplateRequest) returns (GetCertTemplateResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/template/{id}"};
   }
-  rpc CreateSSHCertTemplate(CreateSSHCertTemplateRequest) returns (CreateSSHCertTemplateResponse) {
+  rpc CreateCertTemplate(CreateCertTemplateRequest) returns (CreateCertTemplateResponse) {
     option (google.api.http) = {
       post: "/v1/workspaces/{workspace_id}/template"
       body: "*"
     };
   }
-  rpc UpdateSSHCertTemplate(UpdateSSHCertTemplateRequest) returns (UpdateSSHCertTemplateResponse) {
+  rpc UpdateCertTemplate(UpdateCertTemplateRequest) returns (UpdateCertTemplateResponse) {
     option (google.api.http) = {
       patch: "/v1/workspaces/{workspace_id}/template/{id}"
       body: "*"
     };
   }
-  rpc ListSSHCertTemplates(ListSSHCertTemplatesRequest) returns (ListSSHCertTemplatesResponse) {
+  rpc ListCertTemplates(ListCertTemplatesRequest) returns (ListCertTemplatesResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/templates"};
   }
-  rpc DeleteSSHCertTemplate(DeleteSSHCertTemplateRequest) returns (DeleteSSHCertTemplateResponse) {
+  rpc DeleteCertTemplate(DeleteCertTemplateRequest) returns (DeleteCertTemplateResponse) {
     option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}/template/{id}"};
   }
 
@@ -171,8 +171,8 @@ message RolloverCAResponse {
   CA ca = 1;
 }
 
-// SSH Certificate Template messages ------------------------------------------
-message SSHCertTemplate {
+// Certificate Template messages ----------------------------------------------
+message CertTemplate {
   string id = 1;
   string ca_id = 2;
   string name = 3;
@@ -192,7 +192,7 @@ message SSHCertTemplate {
   google.protobuf.Timestamp updated_at = 17;
 }
 
-message CreateSSHCertTemplateRequest {
+message CreateCertTemplateRequest {
   string ca_id = 1 [(buf.validate.field).string.uuid = true];
   string name = 2 [(buf.validate.field).string.min_len = 1];
   string workspace_id = 3 [(buf.validate.field).string.uuid = true];
@@ -215,27 +215,27 @@ message CreateSSHCertTemplateRequest {
   repeated CertificateKeyType allowed_key_types = 14;
   google.protobuf.Struct custom_extensions = 15;
 }
-message CreateSSHCertTemplateResponse {
-  SSHCertTemplate template = 1;
+message CreateCertTemplateResponse {
+  CertTemplate template = 1;
 }
 
-message GetSSHCertTemplateRequest {
+message GetCertTemplateRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
   string workspace_id = 2 [(buf.validate.field).string.uuid = true];
 }
-message GetSSHCertTemplateResponse {
-  SSHCertTemplate template = 1;
+message GetCertTemplateResponse {
+  CertTemplate template = 1;
 }
 
-message ListSSHCertTemplatesRequest {
+message ListCertTemplatesRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   string ca_id = 2 [(buf.validate.field).string.uuid = true];
 }
-message ListSSHCertTemplatesResponse {
-  repeated SSHCertTemplate templates = 1;
+message ListCertTemplatesResponse {
+  repeated CertTemplate templates = 1;
 }
 
-message UpdateSSHCertTemplateRequest {
+message UpdateCertTemplateRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
   string workspace_id = 2 [(buf.validate.field).string.uuid = true];
   string ca_id = 3 [(buf.validate.field).string.uuid = true];
@@ -252,15 +252,15 @@ message UpdateSSHCertTemplateRequest {
   bool is_active = 14;
   repeated CertificateKeyType allowed_key_types = 15;
 }
-message UpdateSSHCertTemplateResponse {
-  SSHCertTemplate template = 1;
+message UpdateCertTemplateResponse {
+  CertTemplate template = 1;
 }
 
-message DeleteSSHCertTemplateRequest {
+message DeleteCertTemplateRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
   string workspace_id = 2 [(buf.validate.field).string.uuid = true];
 }
-message DeleteSSHCertTemplateResponse {}
+message DeleteCertTemplateResponse {}
 
 // Certificate messages -------------------------------------------------------
 message Certificate {
