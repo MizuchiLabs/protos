@@ -10,34 +10,35 @@ import "google/protobuf/timestamp.proto";
 import "zyphor/v1/options.proto";
 
 service CertificateService {
-  rpc GetRootCA(GetRootCARequest) returns (GetRootCAResponse) {
+  // Certificate Authority messages -------------------------------------------
+  rpc GetCA(GetCARequest) returns (GetCAResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/ca/{id}"};
   }
-  rpc CreateRootCA(CreateRootCARequest) returns (CreateRootCAResponse) {
+  rpc CreateCA(CreateCARequest) returns (CreateCAResponse) {
     option (google.api.http) = {
       post: "/v1/workspaces/{workspace_id}/ca"
       body: "*"
     };
   }
-  rpc UpdateRootCA(UpdateRootCARequest) returns (UpdateRootCAResponse) {
+  rpc UpdateCA(UpdateCARequest) returns (UpdateCAResponse) {
     option (google.api.http) = {
       patch: "/v1/workspaces/{workspace_id}/ca/{id}"
       body: "*"
     };
   }
-  rpc ListRootCAs(ListRootCAsRequest) returns (ListRootCAsResponse) {
+  rpc ListCAs(ListCAsRequest) returns (ListCAsResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/cas"};
   }
-  rpc DeleteRootCA(DeleteRootCARequest) returns (DeleteRootCAResponse) {
+  rpc DeleteCA(DeleteCARequest) returns (DeleteCAResponse) {
     option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}/ca/{id}"};
   }
-  rpc RolloverRootCA(RolloverRootCARequest) returns (RolloverRootCAResponse) {
+  rpc RolloverCA(RolloverCARequest) returns (RolloverCAResponse) {
     option (google.api.http) = {post: "/v1/workspaces/{workspace_id}/ca/{id}/rollover"};
   }
 
-  // SSH Certificate Template management
+  // Certificate Template messages --------------------------------------------
   rpc GetSSHCertTemplate(GetSSHCertTemplateRequest) returns (GetSSHCertTemplateResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/template/{id}"};
@@ -77,8 +78,8 @@ service CertificateService {
   }
 }
 
-// Root Certificate Authority messages ----------------------------------------
-message RootCA {
+// Certificate Authority messages ---------------------------------------------
+message CA {
   string id = 1;
   string workspace_id = 2;
   string name = 3;
@@ -104,7 +105,7 @@ enum CertificateKeyType {
   CERTIFICATE_KEY_TYPE_ED25519 = 3;
 }
 
-message CreateRootCARequest {
+message CreateCARequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   string name = 2 [(buf.validate.field).string = {
     min_len: 1
@@ -122,43 +123,43 @@ message CreateRootCARequest {
   }];
   bool is_default = 7;
 }
-message CreateRootCAResponse {
-  RootCA root_ca = 1;
+message CreateCAResponse {
+  CA ca = 1;
 }
 
-message GetRootCARequest {
+message GetCARequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
   string workspace_id = 2 [(buf.validate.field).string.uuid = true];
 }
-message GetRootCAResponse {
-  RootCA root_ca = 1;
+message GetCAResponse {
+  CA ca = 1;
 }
 
-message ListRootCAsRequest {
+message ListCAsRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
 }
-message ListRootCAsResponse {
-  repeated RootCA root_cas = 1;
+message ListCAsResponse {
+  repeated CA cas = 1;
 }
 
-message UpdateRootCARequest {
+message UpdateCARequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
   string workspace_id = 2 [(buf.validate.field).string.uuid = true];
   string description = 3;
   bool is_active = 4;
   bool is_default = 5;
 }
-message UpdateRootCAResponse {
-  RootCA root_ca = 1;
+message UpdateCAResponse {
+  CA ca = 1;
 }
 
-message DeleteRootCARequest {
+message DeleteCARequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
   string workspace_id = 2 [(buf.validate.field).string.uuid = true];
 }
-message DeleteRootCAResponse {}
+message DeleteCAResponse {}
 
-message RolloverRootCARequest {
+message RolloverCARequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
   string workspace_id = 2 [(buf.validate.field).string.uuid = true];
   CertificateKeyType key_type = 3;
@@ -166,14 +167,14 @@ message RolloverRootCARequest {
   int32 lifetime_months = 5;
   bool force = 6;
 }
-message RolloverRootCAResponse {
-  RootCA root_ca = 1;
+message RolloverCAResponse {
+  CA ca = 1;
 }
 
 // SSH Certificate Template messages ------------------------------------------
 message SSHCertTemplate {
   string id = 1;
-  string root_ca_id = 2;
+  string ca_id = 2;
   string name = 3;
   string description = 4;
   bool allow_user_certificates = 5;
@@ -192,7 +193,7 @@ message SSHCertTemplate {
 }
 
 message CreateSSHCertTemplateRequest {
-  string root_ca_id = 1 [(buf.validate.field).string.uuid = true];
+  string ca_id = 1 [(buf.validate.field).string.uuid = true];
   string name = 2 [(buf.validate.field).string.min_len = 1];
   string workspace_id = 3 [(buf.validate.field).string.uuid = true];
   string description = 4;
@@ -228,7 +229,7 @@ message GetSSHCertTemplateResponse {
 
 message ListSSHCertTemplatesRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string root_ca_id = 2 [(buf.validate.field).string.uuid = true];
+  string ca_id = 2 [(buf.validate.field).string.uuid = true];
 }
 message ListSSHCertTemplatesResponse {
   repeated SSHCertTemplate templates = 1;
@@ -237,7 +238,7 @@ message ListSSHCertTemplatesResponse {
 message UpdateSSHCertTemplateRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
   string workspace_id = 2 [(buf.validate.field).string.uuid = true];
-  string root_ca_id = 3 [(buf.validate.field).string.uuid = true];
+  string ca_id = 3 [(buf.validate.field).string.uuid = true];
   string description = 4;
   bool allow_user_certificates = 5;
   bool allow_host_certificates = 6;

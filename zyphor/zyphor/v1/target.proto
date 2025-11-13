@@ -163,8 +163,8 @@ message AccessibleTarget {
   string target_description = 3;
   repeated string endpoints = 4 [(zyphor.v1.sensitive) = true];
   repeated string usernames = 5 [(zyphor.v1.sensitive) = true];
-  string root_ca_id = 6;
-  string root_ca_name = 7;
+  string ca_id = 6;
+  string ca_name = 7;
   string template_id = 8;
   google.protobuf.Duration default_ttl = 9;
   google.protobuf.Duration max_ttl = 10;
