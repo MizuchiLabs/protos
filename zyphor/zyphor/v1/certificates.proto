@@ -87,17 +87,14 @@ message RootCA {
   string public_key = 6;
   string serial_number = 7;
   string subject = 8;
-  string issuer = 9;
-  google.protobuf.Timestamp not_before = 10;
-  google.protobuf.Timestamp not_after = 11;
-  bool is_active = 12;
-  bool is_default = 13;
-  bool is_root = 14;
-  CertificateKeyType key_type = 15;
-  int32 key_bits = 16;
-  google.protobuf.Timestamp created_at = 17;
-  google.protobuf.Timestamp updated_at = 18;
-  string created_by = 19;
+  google.protobuf.Timestamp not_before = 9;
+  google.protobuf.Timestamp not_after = 10;
+  bool is_active = 11;
+  bool is_default = 12;
+  CertificateKeyType key_type = 13;
+  int32 key_bits = 14;
+  google.protobuf.Timestamp created_at = 15;
+  google.protobuf.Timestamp updated_at = 16;
 }
 
 enum CertificateKeyType {
@@ -192,7 +189,6 @@ message SSHCertTemplate {
   bool is_active = 15;
   google.protobuf.Timestamp created_at = 16;
   google.protobuf.Timestamp updated_at = 17;
-  string created_by = 18;
 }
 
 message CreateSSHCertTemplateRequest {
