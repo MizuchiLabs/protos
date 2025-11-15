@@ -20,57 +20,69 @@ service UtilService {
   }
 }
 
+enum LogType {
+  LOG_TYPE_UNSPECIFIED = 0;
+  LOG_TYPE_WORKSPACE = 1;
+  LOG_TYPE_USER = 2;
+}
+
 message GetVersionRequest {}
 message GetVersionResponse {
   string version = 1;
 }
 
-message AuditLog {
+message WorkspaceLog {
   string id = 1;
   string workspace_id = 2;
   string actor_id = 3;
   string actor_name = 4;
   string actor_type = 5;
   string action = 6;
-  string resource_type = 7;
-  AuditMetadata metadata = 8;
-  AuditSource source = 9;
-  google.protobuf.Timestamp created_at = 10;
+  string resource_id = 7;
+  string resource_name = 8;
+  string resource_type = 9;
+  string error = 10;
+  string source_ip = 11;
+  string user_agent = 12;
+  map<string, string> metadata = 13;
+  google.protobuf.Timestamp created_at = 14;
 }
-message AuditMetadata {
-  bool success = 1;
-  int64 duration_ms = 2;
-  map<string, string> details = 3;
-}
-message AuditSource {
-  string ip_address = 1;
-  string user_agent = 2;
-  map<string, string> details = 3;
+message UserLog {
+  string id = 1;
+  string user_id = 2;
+  string event_type = 3;
+  string authentication_method = 4;
+  string source_ip = 5;
+  string user_agent = 6;
+  string error = 7;
+  map<string, string> metadata = 13;
+  google.protobuf.Timestamp created_at = 14;
 }
 
 message ListAuditLogsRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  LogType log_type = 2 [(buf.validate.field).enum = {defined_only: true}];
 
   // Pagination
-  int32 page_size = 2 [(buf.validate.field).int32 = {
+  int32 page_size = 3 [(buf.validate.field).int32 = {
     gte: 1
     lte: 100
   }]; // Max 100 items
-  string page_token = 3;
+  string page_token = 4;
 
   // Filters (optional)
-  string search = 4;
-  string actor_id = 5 [(buf.validate.field).string.uuid = true];
-  string actor_type = 6;
-  string action = 7;
-  string resource_type = 8;
-  bool status = 9;
+  string search = 5;
+  string actor_id = 6 [(buf.validate.field).string.uuid = true];
+  string actor_type = 7;
+  string action = 8;
+  string resource_type = 9;
   google.protobuf.Timestamp start_date = 10;
   google.protobuf.Timestamp end_date = 11;
 }
 message ListAuditLogsResponse {
-  repeated AuditLog logs = 1;
-  string next_page_token = 2;
+  repeated WorkspaceLog workspace_logs = 1;
+  repeated UserLog user_logs = 2;
+  string next_page_token = 3;
 }
 
 message ExportAuditLogsRequest {
@@ -82,9 +94,10 @@ message ExportAuditLogsRequest {
     FORMAT_PDF = 4;
   }
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  Format format = 2 [(buf.validate.field).enum = {defined_only: true}];
-  google.protobuf.Timestamp start_date = 3;
-  google.protobuf.Timestamp end_date = 4;
+  LogType log_type = 2 [(buf.validate.field).enum = {defined_only: true}];
+  Format format = 3 [(buf.validate.field).enum = {defined_only: true}];
+  google.protobuf.Timestamp start_date = 4;
+  google.protobuf.Timestamp end_date = 5;
 }
 message ExportAuditLogsResponse {
   bytes data = 1;
