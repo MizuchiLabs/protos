@@ -76,8 +76,10 @@ message ListAuditLogsRequest {
   string actor_type = 7;
   string action = 8;
   string resource_type = 9;
-  google.protobuf.Timestamp start_date = 10;
-  google.protobuf.Timestamp end_date = 11;
+  string event_type = 10;
+  string authentication_method = 11;
+  google.protobuf.Timestamp start_date = 12;
+  google.protobuf.Timestamp end_date = 13;
 }
 message ListAuditLogsResponse {
   repeated WorkspaceLog workspace_logs = 1;
