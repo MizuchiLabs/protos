@@ -93,6 +93,7 @@ message ExportAuditLogsRequest {
     FORMAT_CSV = 1;
     FORMAT_JSON = 2;
     FORMAT_JSONL = 3;
+    FORMAT_PARQUET = 4;
   }
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   LogType log_type = 2 [(buf.validate.field).enum = {defined_only: true}];
