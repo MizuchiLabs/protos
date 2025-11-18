@@ -73,11 +73,11 @@ message ListAuditLogsRequest {
   // Filters (optional)
   string search = 5;
   string actor_id = 6 [(buf.validate.field).string.uuid = true];
-  string actor_type = 7;
-  string action = 8;
-  string resource_type = 9;
-  string event_type = 10;
-  string authentication_method = 11;
+  repeated string actor_type = 7;
+  repeated string action = 8;
+  repeated string resource_type = 9;
+  repeated string event_type = 10;
+  repeated string authentication_method = 11;
   google.protobuf.Timestamp start_date = 12;
   google.protobuf.Timestamp end_date = 13;
 }
