@@ -87,7 +87,7 @@ message NotificationSettings {
 }
 
 message GetWorkspaceRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
 }
 message GetWorkspaceResponse {
   Workspace workspace = 1;
@@ -105,7 +105,7 @@ message CreateWorkspaceResponse {
 }
 
 message UpdateWorkspaceRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   string name = 2 [(buf.validate.field).string = {
     min_len: 3
     max_len: 255
@@ -117,7 +117,7 @@ message UpdateWorkspaceResponse {
 }
 
 message UpdateWorkspaceSettingsRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   WorkspaceSettings settings = 2;
 }
 message UpdateWorkspaceSettingsResponse {
@@ -125,7 +125,7 @@ message UpdateWorkspaceSettingsResponse {
 }
 
 message DeleteWorkspaceRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
 }
 message DeleteWorkspaceResponse {}
 
@@ -135,7 +135,7 @@ message ListWorkspacesResponse {
 }
 
 message RemoveWorkspaceMemberRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   string user_id = 2 [(buf.validate.field).string.uuid = true];
 }
 message RemoveWorkspaceMemberResponse {}
