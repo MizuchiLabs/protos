@@ -72,7 +72,7 @@ message ListAuditLogsRequest {
 
   // Filters (optional)
   string search = 5;
-  string actor_id = 6 [(buf.validate.field).string.uuid = true];
+  repeated string actor_ids = 6 [(buf.validate.field).repeated.items.string.uuid = true];
   repeated string actor_types = 7;
   repeated string actions = 8;
   repeated string resource_types = 9;
