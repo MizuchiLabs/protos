@@ -39,8 +39,11 @@ service TargetService {
   rpc RemoveTargetEndpoint(RemoveTargetEndpointRequest) returns (RemoveTargetEndpointResponse) {
     option (google.api.http) = {delete: "/v1/target/{target_id}/endpoint/{value}"};
   }
-  rpc GetUserAccessibleTargets(GetUserAccessibleTargetsRequest) returns (GetUserAccessibleTargetsResponse) {
-    option (google.api.http) = {get: "/v1/target/accessible"};
+  rpc GetSubjectAccess(GetSubjectAccessRequest) returns (GetSubjectAccessResponse) {
+    option (google.api.http) = {
+      get: "/v1/target/access"
+      body: "*"
+    };
   }
 }
 
@@ -170,9 +173,14 @@ message AccessibleTarget {
   google.protobuf.Duration max_ttl = 10;
 }
 
-message GetUserAccessibleTargetsRequest {
+message GetSubjectAccessRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string subject_id = 2 [(buf.validate.field).string.uuid = true];
+  PrincipalType type = 3 [(buf.validate.field).enum = {
+    defined_only: true
+    not_in: [0]
+  }];
 }
-message GetUserAccessibleTargetsResponse {
+message GetSubjectAccessResponse {
   repeated AccessibleTarget targets = 1;
 }
