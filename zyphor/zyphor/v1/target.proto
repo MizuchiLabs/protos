@@ -169,8 +169,8 @@ message AccessibleTarget {
   repeated string usernames = 6 [(zyphor.v1.sensitive) = true];
   string ca_id = 7;
   string ca_name = 8;
-  google.protobuf.Duration created_at = 9;
-  google.protobuf.Duration updated_at = 10;
+  google.protobuf.Timestamp created_at = 9;
+  google.protobuf.Timestamp updated_at = 10;
 }
 
 message GetSubjectAccessRequest {
