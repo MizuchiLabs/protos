@@ -55,7 +55,8 @@ message Principal {
   string username = 3 [(zyphor.v1.sensitive) = true];
   repeated string user_ids = 4;
   repeated string team_ids = 5;
-  google.protobuf.Timestamp created_at = 6;
+  repeated string service_account_ids = 6;
+  google.protobuf.Timestamp created_at = 7;
 }
 
 message CreatePrincipalRequest {
@@ -126,7 +127,7 @@ message RevokeAllAccessResponse {}
 // For agents
 message PrincipalUsers {
   string username = 1 [(zyphor.v1.sensitive) = true];
-  repeated string user_ids = 2;
+  repeated string ids = 2;
 }
 message GetAgentPrincipalsRequest {}
 message GetAgentPrincipalsResponse {
