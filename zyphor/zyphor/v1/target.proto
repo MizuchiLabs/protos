@@ -167,10 +167,11 @@ message AccessibleTarget {
   TargetMetadata metadata = 4;
   repeated string endpoints = 5 [(zyphor.v1.sensitive) = true];
   repeated string usernames = 6 [(zyphor.v1.sensitive) = true];
-  string ca_id = 7;
-  string ca_name = 8;
-  google.protobuf.Timestamp created_at = 9;
-  google.protobuf.Timestamp updated_at = 10;
+  repeated string principal_ids = 7;
+  string ca_id = 8;
+  string ca_name = 9;
+  google.protobuf.Timestamp created_at = 10;
+  google.protobuf.Timestamp updated_at = 11;
 }
 
 message GetSubjectAccessRequest {
