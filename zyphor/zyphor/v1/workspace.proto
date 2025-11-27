@@ -25,12 +25,6 @@ service WorkspaceService {
       body: "*"
     };
   }
-  rpc UpdateWorkspaceSettings(UpdateWorkspaceSettingsRequest) returns (UpdateWorkspaceSettingsResponse) {
-    option (google.api.http) = {
-      patch: "/v1/workspace/{workspace_id}/settings"
-      body: "*"
-    };
-  }
   rpc DeleteWorkspace(DeleteWorkspaceRequest) returns (DeleteWorkspaceResponse) {
     option (google.api.http) = {delete: "/v1/workspace/{workspace_id}"};
   }
@@ -130,16 +124,9 @@ message UpdateWorkspaceRequest {
     max_len: 255
   }];
   string description = 3 [(buf.validate.field).string.max_len = 1000];
+  WorkspaceSettings settings = 4;
 }
 message UpdateWorkspaceResponse {
-  Workspace workspace = 1;
-}
-
-message UpdateWorkspaceSettingsRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  WorkspaceSettings settings = 2;
-}
-message UpdateWorkspaceSettingsResponse {
   Workspace workspace = 1;
 }
 
