@@ -57,7 +57,7 @@ message WorkspaceSettings {
 message BootstrapSettings {
   bool enabled = 1;
   bool auto_approve = 2;
-  int64 max_agents = 3;
+  int32 max_agents = 3;
 }
 
 message NotificationSettings {
