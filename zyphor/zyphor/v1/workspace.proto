@@ -70,6 +70,9 @@ message NotificationSettings {
 
   bool enabled = 1;
   Type type = 2;
+  SlackNotification slack = 3;
+  DiscordNotification discord = 4;
+  EmailNotification email = 5;
 }
 
 message SlackNotification {
