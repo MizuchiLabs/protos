@@ -157,10 +157,11 @@ message UpsertSAMLProviderRequest {
   string name_attribute = 7;
   string username_attribute = 8;
   string picture_attribute = 9;
-  bool sign_requests = 10;
-  bool enforce_sso = 11;
-  bool allow_jit_provisioning = 12;
-  bool is_active = 13;
+  bool rotate_certificate = 10;
+  bool sign_requests = 11;
+  bool enforce_sso = 12;
+  bool allow_jit_provisioning = 13;
+  bool is_active = 14;
 }
 message UpsertSAMLProviderResponse {
   SAMLProvider saml_provider = 1;
