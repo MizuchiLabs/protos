@@ -110,19 +110,17 @@ message SAMLProvider {
   string id = 1;
   string workspace_id = 2;
   string name = 3;
-  string idp_entity_id = 4;
-  string idp_sso_url = 5;
-  string idp_certificate = 6 [(zyphor.v1.sensitive) = true];
-  string email_attribute = 7;
-  string name_attribute = 8;
-  string username_attribute = 9;
-  string picture_attribute = 10;
-  bool sign_requests = 11;
-  bool enforce_sso = 12;
-  bool allow_jit_provisioning = 13;
-  bool is_active = 14;
-  google.protobuf.Timestamp created_at = 15;
-  google.protobuf.Timestamp updated_at = 16;
+  string metadata_url = 4 [(zyphor.v1.sensitive) = true];
+  string email_attribute = 5;
+  string name_attribute = 6;
+  string username_attribute = 7;
+  string picture_attribute = 8;
+  bool sign_requests = 9;
+  bool enforce_sso = 10;
+  bool allow_jit_provisioning = 11;
+  bool is_active = 12;
+  google.protobuf.Timestamp created_at = 13;
+  google.protobuf.Timestamp updated_at = 14;
 }
 
 message GetSAMLProviderRequest {
@@ -138,30 +136,19 @@ message UpsertSAMLProviderRequest {
     min_len: 1
     max_len: 255
   }];
-  string idp_entity_id = 3 [(buf.validate.field).string = {
-    min_len: 1
-    max_len: 500
-  }];
-  string idp_sso_url = 4 [(buf.validate.field).string = {
+  string metadata_url = 3 [(buf.validate.field).string = {
     uri: true
     // prefix: "https://" // Must be HTTPS
   }];
-  string idp_certificate = 5 [
-    (buf.validate.field).string = {
-      min_len: 1
-      max_len: 5000
-    },
-    (zyphor.v1.sensitive) = true
-  ];
-  string email_attribute = 6;
-  string name_attribute = 7;
-  string username_attribute = 8;
-  string picture_attribute = 9;
-  bool rotate_certificate = 10;
-  bool sign_requests = 11;
-  bool enforce_sso = 12;
-  bool allow_jit_provisioning = 13;
-  bool is_active = 14;
+  string email_attribute = 4;
+  string name_attribute = 5;
+  string username_attribute = 6;
+  string picture_attribute = 7;
+  bool rotate_certificate = 8;
+  bool sign_requests = 9;
+  bool enforce_sso = 10;
+  bool allow_jit_provisioning = 11;
+  bool is_active = 12;
 }
 message UpsertSAMLProviderResponse {
   SAMLProvider saml_provider = 1;
