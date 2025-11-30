@@ -65,7 +65,7 @@ message UpsertOIDCProviderRequest {
   string issuer_url = 3 [
     (buf.validate.field).string = {
       uri: true
-      prefix: "https://" // Must be HTTPS
+      // prefix: "https://" // Must be HTTPS
     },
     (zyphor.v1.sensitive) = true
   ];
@@ -144,7 +144,7 @@ message UpsertSAMLProviderRequest {
   }];
   string idp_sso_url = 4 [(buf.validate.field).string = {
     uri: true
-    prefix: "https://" // Must be HTTPS
+    // prefix: "https://" // Must be HTTPS
   }];
   string idp_certificate = 5 [
     (buf.validate.field).string = {
