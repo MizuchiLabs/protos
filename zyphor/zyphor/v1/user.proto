@@ -162,22 +162,6 @@ message RefreshTokenResponse {
 message LogoutRequest {}
 message LogoutResponse {}
 
-message CheckSSORequest {
-  string email = 1 [
-    (buf.validate.field).string = {
-      email: true
-      max_len: 255
-    },
-    (zyphor.v1.sensitive) = true
-  ];
-}
-message CheckSSOResponse {
-  bool has_sso = 1;
-  bool enforce_sso = 2;
-  string provider_id = 3;
-  string provider_name = 4;
-}
-
 message ForgotPasswordRequest {
   string email = 1 [
     (buf.validate.field).string = {
@@ -297,6 +281,28 @@ message DeletePasskeyRequest {
   string id = 1 [(buf.validate.field).string.min_len = 1];
 }
 message DeletePasskeyResponse {}
+
+// SSO ------------------------------------------------------------------------
+message SSOProvider {
+  string type = 1; // "oidc" or "saml"
+  string id = 2;
+  string name = 3;
+}
+
+message CheckSSORequest {
+  string email = 1 [
+    (buf.validate.field).string = {
+      email: true
+      max_len: 255
+    },
+    (zyphor.v1.sensitive) = true
+  ];
+}
+message CheckSSOResponse {
+  bool has_sso = 1;
+  bool enforce_sso = 2;
+  repeated SSOProvider providers = 3;
+}
 
 // CLI login flow -------------------------------------------------------------
 enum CliLoginStatus {
