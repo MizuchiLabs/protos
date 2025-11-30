@@ -284,7 +284,12 @@ message DeletePasskeyResponse {}
 
 // SSO ------------------------------------------------------------------------
 message SSOProvider {
-  string type = 1; // "oidc" or "saml"
+  enum Type {
+    TYPE_UNSPECIFIED = 0;
+    TYPE_OIDC = 1;
+    TYPE_SAML = 2;
+  }
+  Type type = 1;
   string id = 2;
   string name = 3;
 }
