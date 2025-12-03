@@ -69,7 +69,6 @@ message AgentNotification {
 
 message GetAgentRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
-  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
 }
 message GetAgentResponse {
   Agent agent = 1;
@@ -78,8 +77,7 @@ message GetAgentResponse {
 
 message UpdateAgentRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
-  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
-  AgentStatus status = 3 [(buf.validate.field).enum = {
+  AgentStatus status = 2 [(buf.validate.field).enum = {
     defined_only: true
     not_in: [0] /* Prevent UNSPECIFIED */
   }];
@@ -88,7 +86,6 @@ message UpdateAgentResponse {}
 
 message DeleteAgentRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
-  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
 }
 message DeleteAgentResponse {}
 

@@ -61,8 +61,7 @@ message Principal {
 
 message CreatePrincipalRequest {
   string target_id = 1 [(buf.validate.field).string.uuid = true];
-  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
-  string username = 3 [
+  string username = 2 [
     (buf.validate.field).string = {
       min_len: 1
       max_len: 32
@@ -77,8 +76,7 @@ message CreatePrincipalResponse {
 
 message DeletePrincipalRequest {
   string target_id = 1 [(buf.validate.field).string.uuid = true];
-  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
-  string username = 3 [
+  string username = 2 [
     (buf.validate.field).string.min_len = 1,
     (zyphor.v1.sensitive) = true
   ];
@@ -94,9 +92,8 @@ message ListPrincipalsResponse {
 
 message AddSubjectToPrincipalRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
-  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
-  string subject_id = 3 [(buf.validate.field).string.uuid = true];
-  PrincipalType type = 4 [(buf.validate.field).enum = {
+  string subject_id = 2 [(buf.validate.field).string.uuid = true];
+  PrincipalType type = 3 [(buf.validate.field).enum = {
     defined_only: true
     not_in: [0]
   }];
@@ -105,9 +102,8 @@ message AddSubjectToPrincipalResponse {}
 
 message RemoveSubjectFromPrincipalRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
-  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
-  string subject_id = 3 [(buf.validate.field).string.uuid = true];
-  PrincipalType type = 4 [(buf.validate.field).enum = {
+  string subject_id = 2 [(buf.validate.field).string.uuid = true];
+  PrincipalType type = 3 [(buf.validate.field).enum = {
     defined_only: true
     not_in: [0]
   }];

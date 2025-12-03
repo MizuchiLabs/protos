@@ -129,7 +129,6 @@ message CreateCAResponse {
 
 message GetCARequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
-  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
 }
 message GetCAResponse {
   CA ca = 1;
@@ -144,10 +143,9 @@ message ListCAsResponse {
 
 message UpdateCARequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
-  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
-  string description = 3;
-  bool is_active = 4;
-  bool is_default = 5;
+  string description = 2 [(buf.validate.field).string.max_len = 1000];
+  bool is_active = 3;
+  bool is_default = 4;
 }
 message UpdateCAResponse {
   CA ca = 1;
@@ -155,17 +153,15 @@ message UpdateCAResponse {
 
 message DeleteCARequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
-  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
 }
 message DeleteCAResponse {}
 
 message RolloverCARequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
-  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
-  CertificateKeyType key_type = 3;
-  int32 key_bits = 4;
-  int32 lifetime_months = 5;
-  bool force = 6;
+  CertificateKeyType key_type = 2;
+  int32 key_bits = 3;
+  int32 lifetime_months = 4;
+  bool force = 5;
 }
 message RolloverCAResponse {
   CA ca = 1;
@@ -196,7 +192,7 @@ message CreateCertTemplateRequest {
   string ca_id = 1 [(buf.validate.field).string.uuid = true];
   string name = 2 [(buf.validate.field).string.min_len = 1];
   string workspace_id = 3 [(buf.validate.field).string.uuid = true];
-  string description = 4;
+  string description = 4 [(buf.validate.field).string.max_len = 1000];
   bool allow_user_certificates = 5;
   bool allow_host_certificates = 6;
   google.protobuf.Duration default_ttl = 7 [(buf.validate.field).duration = {
@@ -221,7 +217,6 @@ message CreateCertTemplateResponse {
 
 message GetCertTemplateRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
-  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
 }
 message GetCertTemplateResponse {
   CertTemplate template = 1;
@@ -229,7 +224,6 @@ message GetCertTemplateResponse {
 
 message ListCertTemplatesRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string ca_id = 2 [(buf.validate.field).string.uuid = true];
 }
 message ListCertTemplatesResponse {
   repeated CertTemplate templates = 1;
@@ -237,20 +231,19 @@ message ListCertTemplatesResponse {
 
 message UpdateCertTemplateRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
-  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
-  string ca_id = 3 [(buf.validate.field).string.uuid = true];
-  string description = 4;
-  bool allow_user_certificates = 5;
-  bool allow_host_certificates = 6;
-  google.protobuf.Duration default_ttl = 7;
-  google.protobuf.Duration max_ttl = 8;
-  bool allow_user_rc = 9;
-  bool allow_agent_forwarding = 10;
-  bool allow_port_forwarding = 11;
-  bool allow_pty = 12;
-  bool allow_x11_forwarding = 13;
-  bool is_active = 14;
-  repeated CertificateKeyType allowed_key_types = 15;
+  string ca_id = 2 [(buf.validate.field).string.uuid = true];
+  string description = 3 [(buf.validate.field).string.max_len = 1000];
+  bool allow_user_certificates = 4;
+  bool allow_host_certificates = 5;
+  google.protobuf.Duration default_ttl = 6;
+  google.protobuf.Duration max_ttl = 7;
+  bool allow_user_rc = 8;
+  bool allow_agent_forwarding = 9;
+  bool allow_port_forwarding = 10;
+  bool allow_pty = 11;
+  bool allow_x11_forwarding = 12;
+  bool is_active = 13;
+  repeated CertificateKeyType allowed_key_types = 14;
 }
 message UpdateCertTemplateResponse {
   CertTemplate template = 1;
@@ -258,7 +251,6 @@ message UpdateCertTemplateResponse {
 
 message DeleteCertTemplateRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
-  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
 }
 message DeleteCertTemplateResponse {}
 
