@@ -13,54 +13,54 @@ service CertificateService {
   // Certificate Authority messages -------------------------------------------
   rpc GetCA(GetCARequest) returns (GetCAResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/ca/{id}"};
+    option (google.api.http) = {get: "/v1/ca/{id}"};
   }
   rpc CreateCA(CreateCARequest) returns (CreateCAResponse) {
     option (google.api.http) = {
-      post: "/v1/workspaces/{workspace_id}/ca"
+      post: "/v1/ca"
       body: "*"
     };
   }
   rpc UpdateCA(UpdateCARequest) returns (UpdateCAResponse) {
     option (google.api.http) = {
-      patch: "/v1/workspaces/{workspace_id}/ca/{id}"
+      patch: "/v1/ca/{id}"
       body: "*"
     };
   }
   rpc ListCAs(ListCAsRequest) returns (ListCAsResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/cas"};
+    option (google.api.http) = {get: "/v1/cas/{workspace_id}"};
   }
   rpc DeleteCA(DeleteCARequest) returns (DeleteCAResponse) {
-    option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}/ca/{id}"};
+    option (google.api.http) = {delete: "/v1/ca/{id}"};
   }
   rpc RolloverCA(RolloverCARequest) returns (RolloverCAResponse) {
-    option (google.api.http) = {post: "/v1/workspaces/{workspace_id}/ca/{id}/rollover"};
+    option (google.api.http) = {post: "/v1/ca/{id}/rollover"};
   }
 
   // Certificate Template messages --------------------------------------------
   rpc GetCertTemplate(GetCertTemplateRequest) returns (GetCertTemplateResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/template/{id}"};
+    option (google.api.http) = {get: "/v1/template/{id}"};
   }
   rpc CreateCertTemplate(CreateCertTemplateRequest) returns (CreateCertTemplateResponse) {
     option (google.api.http) = {
-      post: "/v1/workspaces/{workspace_id}/template"
+      post: "/v1/template"
       body: "*"
     };
   }
   rpc UpdateCertTemplate(UpdateCertTemplateRequest) returns (UpdateCertTemplateResponse) {
     option (google.api.http) = {
-      patch: "/v1/workspaces/{workspace_id}/template/{id}"
+      patch: "/v1/template/{id}"
       body: "*"
     };
   }
   rpc ListCertTemplates(ListCertTemplatesRequest) returns (ListCertTemplatesResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/templates"};
+    option (google.api.http) = {get: "/v1/templates/{workspace_id}"};
   }
   rpc DeleteCertTemplate(DeleteCertTemplateRequest) returns (DeleteCertTemplateResponse) {
-    option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}/template/{id}"};
+    option (google.api.http) = {delete: "/v1/template/{id}"};
   }
 
   // Issue certificates
