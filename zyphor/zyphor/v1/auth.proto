@@ -170,8 +170,7 @@ message PollCLILoginRequest {
 message PollCLILoginResponse {
   enum Status {
     STATUS_UNSPECIFIED = 0;
-    STATUS_PENDING = 1;
-    STATUS_COMPLETED = 2;
+    STATUS_ACCEPTED = 1;
   }
   Status status = 1;
   User user = 2;
