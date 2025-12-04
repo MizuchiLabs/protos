@@ -8,54 +8,6 @@ import "google/protobuf/timestamp.proto";
 import "zyphor/v1/options.proto";
 
 service UserService {
-  // Public endpoints
-  rpc Register(RegisterRequest) returns (RegisterResponse) {
-    option (google.api.http) = {
-      post: "/v1/register"
-      body: "*"
-    };
-  }
-  rpc Login(LoginRequest) returns (LoginResponse) {
-    option (google.api.http) = {
-      post: "/v1/login"
-      body: "*"
-    };
-  }
-  rpc Logout(LogoutRequest) returns (LogoutResponse) {
-    option (google.api.http) = {post: "/v1/logout"};
-  }
-  rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse) {
-    option (google.api.http) = {post: "/v1/refresh"};
-  }
-  rpc ForgotPassword(ForgotPasswordRequest) returns (ForgotPasswordResponse) {
-    option (google.api.http) = {
-      post: "/v1/forgot"
-      body: "*"
-    };
-  }
-  rpc ResendVerification(ResendVerificationRequest) returns (ResendVerificationResponse) {
-    option (google.api.http) = {post: "/v1/resend-verification"};
-  }
-  rpc VerifyEmail(VerifyEmailRequest) returns (VerifyEmailResponse) {
-    option (google.api.http) = {post: "/v1/verify-email"};
-  }
-  rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse) {
-    option (google.api.http) = {
-      post: "/v1/reset-password"
-      body: "*"
-    };
-  }
-  rpc StartCLILogin(StartCLILoginRequest) returns (StartCLILoginResponse) {
-    option (google.api.http) = {
-      post: "/v1/cli-login"
-      body: "*"
-    };
-  }
-  rpc PollCLILogin(PollCLILoginRequest) returns (PollCLILoginResponse) {
-    option (google.api.http) = {post: "/v1/cli-login/poll"};
-  }
-
-  // Authenticated endpoints
   rpc Whoami(WhoamiRequest) returns (WhoamiResponse) {
     option (google.api.http) = {get: "/v1/whoami"};
   }
@@ -67,9 +19,6 @@ service UserService {
   }
   rpc DeleteAccount(DeleteAccountRequest) returns (DeleteAccountResponse) {
     option (google.api.http) = {delete: "/v1/account"};
-  }
-  rpc VerifyCLILogin(VerifyCLILoginRequest) returns (VerifyCLILoginResponse) {
-    option (google.api.http) = {post: "/v1/cli-login/verify"};
   }
 }
 
@@ -84,99 +33,6 @@ message User {
   google.protobuf.Timestamp created_at = 8;
   google.protobuf.Timestamp updated_at = 9;
 }
-
-// Authentication requests/responses
-message RegisterRequest {
-  string name = 1 [(buf.validate.field).string = {
-    min_len: 3
-    max_len: 255
-  }];
-  string email = 2 [
-    (buf.validate.field).string = {
-      email: true
-      max_len: 255
-    },
-    (zyphor.v1.sensitive) = true
-  ];
-  string username = 3 [(buf.validate.field).string = {
-    min_len: 3
-    max_len: 39 // GitHub's max
-    pattern: "^[a-zA-Z0-9]([a-zA-Z0-9-_])*[a-zA-Z0-9]$"
-  }];
-  string password = 4 [
-    (buf.validate.field).string = {
-      min_len: 8
-      max_len: 256
-    },
-    (zyphor.v1.sensitive) = true
-  ];
-}
-message RegisterResponse {}
-
-message LoginRequest {
-  string email = 1 [
-    (buf.validate.field).string.email = true,
-    (zyphor.v1.sensitive) = true
-  ];
-  string password = 2 [
-    (buf.validate.field).string.min_len = 1,
-    (zyphor.v1.sensitive) = true
-  ];
-}
-message LoginResponse {
-  string access_token = 1 [(zyphor.v1.sensitive) = true];
-  string refresh_token = 2 [(zyphor.v1.sensitive) = true];
-}
-
-message RefreshTokenRequest {
-  string refresh_token = 1 [(zyphor.v1.sensitive) = true];
-}
-message RefreshTokenResponse {
-  string access_token = 1 [(zyphor.v1.sensitive) = true];
-}
-
-message LogoutRequest {}
-message LogoutResponse {}
-
-message ForgotPasswordRequest {
-  string email = 1 [
-    (buf.validate.field).string = {
-      email: true
-      max_len: 255
-    },
-    (zyphor.v1.sensitive) = true
-  ];
-}
-message ForgotPasswordResponse {}
-
-message ResetPasswordRequest {
-  string token = 1 [
-    (buf.validate.field).string.min_len = 1,
-    (zyphor.v1.sensitive) = true
-  ];
-  string new_password = 2 [
-    (buf.validate.field).string.min_len = 8,
-    (zyphor.v1.sensitive) = true
-  ];
-}
-message ResetPasswordResponse {}
-
-message VerifyEmailRequest {
-  string token = 1 [(zyphor.v1.sensitive) = true];
-}
-message VerifyEmailResponse {}
-
-message ResendVerificationRequest {
-  string email = 1 [
-    (buf.validate.field).string = {
-      email: true
-      max_len: 255
-    },
-    (zyphor.v1.sensitive) = true
-  ];
-}
-message ResendVerificationResponse {}
-
 message WhoamiRequest {}
 message WhoamiResponse {
   User user = 1;
@@ -208,38 +64,3 @@ message UpdateProfileResponse {
 
 message DeleteAccountRequest {}
 message DeleteAccountResponse {}
-
-// CLI login flow -------------------------------------------------------------
-message StartCLILoginRequest {}
-message StartCLILoginResponse {
-  string login_code = 1 [(zyphor.v1.sensitive) = true];
-  string verification_url = 2 [(zyphor.v1.sensitive) = true];
-  google.protobuf.Timestamp expires_at = 3;
-}
-
-message PollCLILoginRequest {
-  string login_code = 1 [
-    (buf.validate.field).string.min_len = 1,
-    (zyphor.v1.sensitive) = true
-  ];
-}
-message PollCLILoginResponse {
-  enum Status {
-    STATUS_UNSPECIFIED = 0;
-    STATUS_PENDING = 1;
-    STATUS_COMPLETED = 2;
-    STATUS_EXPIRED = 3;
-  }
-  Status status = 1;
-  User user = 2;
-  string access_token = 3 [(zyphor.v1.sensitive) = true];
-  string refresh_token = 4 [(zyphor.v1.sensitive) = true];
-}
-
-message VerifyCLILoginRequest {
-  string login_code = 1 [
-    (buf.validate.field).string.min_len = 1,
-    (zyphor.v1.sensitive) = true
-  ];
-}
-message VerifyCLILoginResponse {}

@@ -34,6 +34,8 @@ service SSOService {
   }
 }
 
+// OIDC messages --------------------------------------------------------------
+
 message OIDCProvider {
   string id = 1;
   string workspace_id = 2;
@@ -109,6 +111,8 @@ message UpsertOIDCProviderRequest {
 message UpsertOIDCProviderResponse {
   OIDCProvider oidc_provider = 1;
 }
+
+// SAML messages --------------------------------------------------------------
 
 message SAMLProvider {
   string id = 1;
