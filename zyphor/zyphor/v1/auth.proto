@@ -15,6 +15,12 @@ service AuthService {
       body: "*"
     };
   }
+  rpc LoginWithBackupCode(LoginWithBackupCodeRequest) returns (LoginWithBackupCodeResponse) {
+    option (google.api.http) = {
+      post: "/v1/login/backup-code"
+      body: "*"
+    };
+  }
   rpc Logout(LogoutRequest) returns (LogoutResponse) {
     option (google.api.http) = {post: "/v1/logout"};
   }
@@ -98,6 +104,21 @@ message LoginRequest {
   ];
 }
 message LoginResponse {
+  string access_token = 1 [(zyphor.v1.sensitive) = true];
+  string refresh_token = 2 [(zyphor.v1.sensitive) = true];
+}
+
+message LoginWithBackupCodeRequest {
+  string email = 1 [
+    (buf.validate.field).string.email = true,
+    (zyphor.v1.sensitive) = true
+  ];
+  string code = 2 [
+    (buf.validate.field).string.min_len = 1,
+    (zyphor.v1.sensitive) = true
+  ];
+}
+message LoginWithBackupCodeResponse {
   string access_token = 1 [(zyphor.v1.sensitive) = true];
   string refresh_token = 2 [(zyphor.v1.sensitive) = true];
 }
