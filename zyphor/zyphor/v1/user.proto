@@ -65,27 +65,6 @@ service UserService {
       body: "*"
     };
   }
-  rpc ChangePassword(ChangePasswordRequest) returns (ChangePasswordResponse) {
-    option (google.api.http) = {
-      patch: "/v1/password"
-      body: "*"
-    };
-  }
-  rpc DeletePassword(DeletePasswordRequest) returns (DeletePasswordResponse) {
-    option (google.api.http) = {delete: "/v1/password"};
-  }
-  rpc UpdatePasskey(UpdatePasskeyRequest) returns (UpdatePasskeyResponse) {
-    option (google.api.http) = {
-      patch: "/v1/passkeys/{id}"
-      body: "*"
-    };
-  }
-  rpc ListPasskeys(ListPasskeysRequest) returns (ListPasskeysResponse) {
-    option (google.api.http) = {get: "/v1/passkeys"};
-  }
-  rpc DeletePasskey(DeletePasskeyRequest) returns (DeletePasskeyResponse) {
-    option (google.api.http) = {delete: "/v1/passkeys/{id}"};
-  }
   rpc DeleteAccount(DeleteAccountRequest) returns (DeleteAccountResponse) {
     option (google.api.http) = {delete: "/v1/account"};
   }
@@ -227,57 +206,8 @@ message UpdateProfileResponse {
   bool email_sent = 2;
 }
 
-message ChangePasswordRequest {
-  string current_password = 1 [
-    (buf.validate.field).string.min_len = 1,
-    (zyphor.v1.sensitive) = true
-  ];
-  string new_password = 2 [
-    (buf.validate.field).string.min_len = 8,
-    (zyphor.v1.sensitive) = true
-  ];
-}
-message ChangePasswordResponse {}
-
-message DeletePasswordRequest {
-  string current_password = 1 [
-    (buf.validate.field).string.min_len = 1,
-    (zyphor.v1.sensitive) = true
-  ];
-}
-message DeletePasswordResponse {}
-
 message DeleteAccountRequest {}
 message DeleteAccountResponse {}
-
-// Passkey endpoints ----------------------------------------------------------
-message Passkey {
-  string id = 1;
-  string name = 2;
-  google.protobuf.Timestamp created_at = 3;
-  google.protobuf.Timestamp last_used_at = 4;
-}
-
-message UpdatePasskeyRequest {
-  string id = 1 [(buf.validate.field).string.min_len = 1];
-  string name = 2 [(buf.validate.field).string = {
-    min_len: 1
-    max_len: 100
-  }];
-}
-message UpdatePasskeyResponse {
-  Passkey passkey = 1;
-}
-
-message ListPasskeysRequest {}
-message ListPasskeysResponse {
-  repeated Passkey passkeys = 1;
-}
-
-message DeletePasskeyRequest {
-  string id = 1 [(buf.validate.field).string.min_len = 1];
-}
-message DeletePasskeyResponse {}
 
 // CLI login flow -------------------------------------------------------------
 message StartCLILoginRequest {}
