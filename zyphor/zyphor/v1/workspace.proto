@@ -67,7 +67,6 @@ message NotificationSettings {
     TYPE_SLACK = 2;
     TYPE_DISCORD = 3;
   }
-
   bool enabled = 1;
   Type type = 2;
   SlackNotification slack = 3;

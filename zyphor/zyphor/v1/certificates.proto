@@ -78,6 +78,13 @@ service CertificateService {
   }
 }
 
+enum CertificateKeyType {
+  CERTIFICATE_KEY_TYPE_UNSPECIFIED = 0;
+  CERTIFICATE_KEY_TYPE_RSA = 1;
+  CERTIFICATE_KEY_TYPE_ECDSA = 2;
+  CERTIFICATE_KEY_TYPE_ED25519 = 3;
+}
+
 // Certificate Authority messages ---------------------------------------------
 message CA {
   string id = 1;
@@ -96,13 +103,6 @@ message CA {
   int32 key_bits = 14;
   google.protobuf.Timestamp created_at = 15;
   google.protobuf.Timestamp updated_at = 16;
-}
-
-enum CertificateKeyType {
-  CERTIFICATE_KEY_TYPE_UNSPECIFIED = 0;
-  CERTIFICATE_KEY_TYPE_RSA = 1;
-  CERTIFICATE_KEY_TYPE_ECDSA = 2;
-  CERTIFICATE_KEY_TYPE_ED25519 = 3;
 }
 
 message CreateCARequest {

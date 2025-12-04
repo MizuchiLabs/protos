@@ -28,6 +28,10 @@ service SSOService {
       body: "*"
     };
   }
+  // Public endpoint for users
+  rpc CheckSSO(CheckSSORequest) returns (CheckSSOResponse) {
+    option (google.api.http) = {get: "/v1/sso/{email}"};
+  }
 }
 
 message OIDCProvider {
@@ -152,4 +156,30 @@ message UpsertSAMLProviderRequest {
 }
 message UpsertSAMLProviderResponse {
   SAMLProvider saml_provider = 1;
+}
+
+message SSOProvider {
+  enum Type {
+    TYPE_UNSPECIFIED = 0;
+    TYPE_OIDC = 1;
+    TYPE_SAML = 2;
+  }
+  Type type = 1;
+  string id = 2;
+  string name = 3;
+}
+
+message CheckSSORequest {
+  string email = 1 [
+    (buf.validate.field).string = {
+      email: true
+      max_len: 255
+    },
+    (zyphor.v1.sensitive) = true
+  ];
+}
+message CheckSSOResponse {
+  bool has_sso = 1;
+  bool enforce_sso = 2;
+  repeated SSOProvider providers = 3;
 }

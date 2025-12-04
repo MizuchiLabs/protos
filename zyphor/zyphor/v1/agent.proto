@@ -32,12 +32,6 @@ service AgentService {
   rpc AgentHeartbeat(AgentHeartbeatRequest) returns (AgentHeartbeatResponse);
 }
 
-enum AgentEventType {
-  AGENT_EVENT_TYPE_UNSPECIFIED = 0;
-  AGENT_EVENT_TYPE_STATUS = 1;
-  AGENT_EVENT_TYPE_PRINCIPALS = 2;
-  AGENT_EVENT_TYPE_CERTIFICATES = 3;
-}
 enum AgentStatus {
   AGENT_STATUS_UNSPECIFIED = 0;
   AGENT_STATUS_PENDING = 1;
@@ -59,11 +53,17 @@ message AgentMetadata {
   string version = 1;
 }
 
-// For nats
+// For NATS
 message AgentNotification {
+  enum EventType {
+    EVENT_TYPE_UNSPECIFIED = 0;
+    EVENT_TYPE_STATUS = 1;
+    EVENT_TYPE_PRINCIPALS = 2;
+    EVENT_TYPE_CERTIFICATES = 3;
+  }
   string agent_id = 1;
   AgentStatus status = 2;
-  AgentEventType event_type = 3;
+  EventType event_type = 3;
   google.protobuf.Timestamp timestamp = 4;
 }
 

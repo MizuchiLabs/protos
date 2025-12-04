@@ -24,9 +24,6 @@ service UserService {
   rpc Logout(LogoutRequest) returns (LogoutResponse) {
     option (google.api.http) = {post: "/v1/logout"};
   }
-  rpc CheckSSO(CheckSSORequest) returns (CheckSSOResponse) {
-    option (google.api.http) = {get: "/v1/sso"};
-  }
   rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse) {
     option (google.api.http) = {post: "/v1/refresh"};
   }
@@ -48,13 +45,13 @@ service UserService {
       body: "*"
     };
   }
-  rpc StartCliLogin(StartCliLoginRequest) returns (StartCliLoginResponse) {
+  rpc StartCLILogin(StartCLILoginRequest) returns (StartCLILoginResponse) {
     option (google.api.http) = {
       post: "/v1/cli-login"
       body: "*"
     };
   }
-  rpc PollCliLogin(PollCliLoginRequest) returns (PollCliLoginResponse) {
+  rpc PollCLILogin(PollCLILoginRequest) returns (PollCLILoginResponse) {
     option (google.api.http) = {post: "/v1/cli-login/poll"};
   }
 
@@ -92,7 +89,7 @@ service UserService {
   rpc DeleteAccount(DeleteAccountRequest) returns (DeleteAccountResponse) {
     option (google.api.http) = {delete: "/v1/account"};
   }
-  rpc VerifyCliLogin(VerifyCliLoginRequest) returns (VerifyCliLoginResponse) {
+  rpc VerifyCLILogin(VerifyCLILoginRequest) returns (VerifyCLILoginResponse) {
     option (google.api.http) = {post: "/v1/cli-login/verify"};
   }
 }
@@ -282,65 +279,37 @@ message DeletePasskeyRequest {
 }
 message DeletePasskeyResponse {}
 
-// SSO ------------------------------------------------------------------------
-message SSOProvider {
-  enum Type {
-    TYPE_UNSPECIFIED = 0;
-    TYPE_OIDC = 1;
-    TYPE_SAML = 2;
-  }
-  Type type = 1;
-  string id = 2;
-  string name = 3;
-}
-
-message CheckSSORequest {
-  string email = 1 [
-    (buf.validate.field).string = {
-      email: true
-      max_len: 255
-    },
-    (zyphor.v1.sensitive) = true
-  ];
-}
-message CheckSSOResponse {
-  bool has_sso = 1;
-  bool enforce_sso = 2;
-  repeated SSOProvider providers = 3;
-}
-
 // CLI login flow -------------------------------------------------------------
-enum CliLoginStatus {
-  CLI_LOGIN_STATUS_UNSPECIFIED = 0;
-  CLI_LOGIN_STATUS_PENDING = 1;
-  CLI_LOGIN_STATUS_COMPLETED = 2;
-  CLI_LOGIN_STATUS_EXPIRED = 3;
-}
-
-message StartCliLoginRequest {}
-message StartCliLoginResponse {
+message StartCLILoginRequest {}
+message StartCLILoginResponse {
   string login_code = 1 [(zyphor.v1.sensitive) = true];
   string verification_url = 2 [(zyphor.v1.sensitive) = true];
   google.protobuf.Timestamp expires_at = 3;
 }
 
-message PollCliLoginRequest {
+message PollCLILoginRequest {
   string login_code = 1 [
     (buf.validate.field).string.min_len = 1,
     (zyphor.v1.sensitive) = true
   ];
 }
-message PollCliLoginResponse {
-  CliLoginStatus status = 1;
+message PollCLILoginResponse {
+  enum Status {
+    STATUS_UNSPECIFIED = 0;
+    STATUS_PENDING = 1;
+    STATUS_COMPLETED = 2;
+    STATUS_EXPIRED = 3;
+  }
+  Status status = 1;
   User user = 2;
   string access_token = 3 [(zyphor.v1.sensitive) = true];
   string refresh_token = 4 [(zyphor.v1.sensitive) = true];
 }
 
-message VerifyCliLoginRequest {
+message VerifyCLILoginRequest {
   string login_code = 1 [
     (buf.validate.field).string.min_len = 1,
     (zyphor.v1.sensitive) = true
   ];
 }
-message VerifyCliLoginResponse {}
+message VerifyCLILoginResponse {}
