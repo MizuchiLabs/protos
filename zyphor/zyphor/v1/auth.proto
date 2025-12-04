@@ -172,7 +172,6 @@ message PollCLILoginResponse {
     STATUS_UNSPECIFIED = 0;
     STATUS_PENDING = 1;
     STATUS_COMPLETED = 2;
-    STATUS_EXPIRED = 3;
   }
   Status status = 1;
   User user = 2;
