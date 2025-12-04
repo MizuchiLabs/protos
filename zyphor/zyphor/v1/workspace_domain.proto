@@ -10,26 +10,26 @@ import "zyphor/v1/options.proto";
 service WorkspaceDomainService {
   rpc GetWorkspaceDomain(GetWorkspaceDomainRequest) returns (GetWorkspaceDomainResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/workspace/domain/{id}"};
+    option (google.api.http) = {get: "/v1/domain/{id}"};
   }
   rpc ListWorkspaceDomains(ListWorkspaceDomainsRequest) returns (ListWorkspaceDomainsResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/workspace/domains/{workspace_id}"};
+    option (google.api.http) = {get: "/v1/domains/{workspace_id}"};
   }
   rpc CreateWorkspaceDomain(CreateWorkspaceDomainRequest) returns (CreateWorkspaceDomainResponse) {
     option (google.api.http) = {
-      post: "/v1/workspace/{workspace_id}/domain"
+      post: "/v1/domain"
       body: "*"
     };
   }
   rpc DeleteWorkspaceDomain(DeleteWorkspaceDomainRequest) returns (DeleteWorkspaceDomainResponse) {
-    option (google.api.http) = {delete: "/v1/workspace/domain/{id}"};
+    option (google.api.http) = {delete: "/v1/domain/{id}"};
   }
   rpc VerifyWorkspaceDomain(VerifyWorkspaceDomainRequest) returns (VerifyWorkspaceDomainResponse) {
-    option (google.api.http) = {post: "/v1/workspace/domain/{id}/verify"};
+    option (google.api.http) = {post: "/v1/domain/{id}/verify"};
   }
   rpc RegenerateWorkspaceDomainToken(RegenerateWorkspaceDomainTokenRequest) returns (RegenerateWorkspaceDomainTokenResponse) {
-    option (google.api.http) = {post: "/v1/workspace/domain/{id}/token"};
+    option (google.api.http) = {post: "/v1/domain/{id}/token"};
   }
 }
 

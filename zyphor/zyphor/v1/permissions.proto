@@ -12,19 +12,19 @@ service PermissionsService {
   }
   rpc TransferOwnership(TransferOwnershipRequest) returns (TransferOwnershipResponse) {
     option (google.api.http) = {
-      post: "/v1/role/{workspace_id}/transfer"
+      post: "/v1/roles/transfer"
       body: "*"
     };
   }
   rpc AssignRole(AssignRoleRequest) returns (AssignRoleResponse) {
     option (google.api.http) = {
-      post: "/v1/role/{workspace_id}/{role_name}"
+      post: "/v1/roles/assign"
       body: "*"
     };
   }
   rpc RevokeRole(RevokeRoleRequest) returns (RevokeRoleResponse) {
     option (google.api.http) = {
-      delete: "/v1/role/{workspace_id}/{role_name}"
+      post: "/v1/roles/revoke"
       body: "*"
     };
   }

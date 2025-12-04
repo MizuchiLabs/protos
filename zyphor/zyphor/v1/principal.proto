@@ -23,19 +23,19 @@ service PrincipalService {
   }
   rpc AddSubjectToPrincipal(AddSubjectToPrincipalRequest) returns (AddSubjectToPrincipalResponse) {
     option (google.api.http) = {
-      post: "/v1/principal/{id}"
+      post: "/v1/principals/add-subject"
       body: "*"
     };
   }
   rpc RemoveSubjectFromPrincipal(RemoveSubjectFromPrincipalRequest) returns (RemoveSubjectFromPrincipalResponse) {
     option (google.api.http) = {
-      delete: "/v1/principal/{id}"
+      post: "/v1/principals/remove-subject"
       body: "*"
     };
   }
   rpc RevokeAllAccess(RevokeAllAccessRequest) returns (RevokeAllAccessResponse) {
     option (google.api.http) = {
-      post: "/v1/principal/{subject_id}/revoke-all-access"
+      post: "/v1/principals/revoke-all-access"
       body: "*"
     };
   }

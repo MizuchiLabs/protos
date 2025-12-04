@@ -13,7 +13,7 @@ service UtilService {
   }
   rpc ListAuditLogs(ListAuditLogsRequest) returns (ListAuditLogsResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/audit"};
+    option (google.api.http) = {get: "/v1/audit/logs"};
   }
   rpc ExportAuditLogs(ExportAuditLogsRequest) returns (ExportAuditLogsResponse) {
     option (google.api.http) = {post: "/v1/audit/export"};

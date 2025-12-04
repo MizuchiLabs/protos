@@ -12,7 +12,10 @@ service InvitationService {
     option (google.api.http) = {get: "/v1/invite/{token}"};
   }
   rpc CreateInvitation(CreateInvitationRequest) returns (CreateInvitationResponse) {
-    option (google.api.http) = {post: "/v1/invite/{workspace_id}/{expiry}"};
+    option (google.api.http) = {
+      post: "/v1/invite"
+      body: "*"
+    };
   }
   rpc AcceptInvitation(AcceptInvitationRequest) returns (AcceptInvitationResponse) {
     option (google.api.http) = {post: "/v1/invite/claim/{token}"};

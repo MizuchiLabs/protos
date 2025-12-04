@@ -10,27 +10,27 @@ import "zyphor/v1/options.proto";
 service SSOService {
   rpc GetOIDCProvider(GetOIDCProviderRequest) returns (GetOIDCProviderResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/oidc/{workspace_id}"};
+    option (google.api.http) = {get: "/v1/sso/oidc/{workspace_id}"};
   }
   rpc UpsertOIDCProvider(UpsertOIDCProviderRequest) returns (UpsertOIDCProviderResponse) {
     option (google.api.http) = {
-      patch: "/v1/oidc/{workspace_id}"
+      patch: "/v1/sso/oidc/{workspace_id}"
       body: "*"
     };
   }
   rpc GetSAMLProvider(GetSAMLProviderRequest) returns (GetSAMLProviderResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/saml/{workspace_id}"};
+    option (google.api.http) = {get: "/v1/sso/saml/{workspace_id}"};
   }
   rpc UpsertSAMLProvider(UpsertSAMLProviderRequest) returns (UpsertSAMLProviderResponse) {
     option (google.api.http) = {
-      patch: "/v1/saml/{workspace_id}"
+      patch: "/v1/sso/saml/{workspace_id}"
       body: "*"
     };
   }
   // Public endpoint for users
   rpc CheckSSO(CheckSSORequest) returns (CheckSSOResponse) {
-    option (google.api.http) = {get: "/v1/sso/{email}"};
+    option (google.api.http) = {get: "/v1/sso/check/{email}"};
   }
 }
 
