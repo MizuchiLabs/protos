@@ -84,6 +84,11 @@ enum CertificateKeyType {
   CERTIFICATE_KEY_TYPE_ECDSA = 2;
   CERTIFICATE_KEY_TYPE_ED25519 = 3;
 }
+enum CertificateType {
+  CERTIFICATE_TYPE_UNSPECIFIED = 0;
+  CERTIFICATE_TYPE_USER = 1;
+  CERTIFICATE_TYPE_HOST = 2;
+}
 
 // Certificate Authority messages ---------------------------------------------
 message CA {
@@ -173,19 +178,18 @@ message CertTemplate {
   string ca_id = 2;
   string name = 3;
   string description = 4;
-  bool allow_user_certificates = 5;
-  bool allow_host_certificates = 6;
-  google.protobuf.Duration default_ttl = 7;
-  google.protobuf.Duration max_ttl = 8;
-  bool allow_user_rc = 9;
-  bool allow_agent_forwarding = 10;
-  bool allow_port_forwarding = 11;
-  bool allow_pty = 12;
-  bool allow_x11_forwarding = 13;
-  repeated CertificateKeyType allowed_key_types = 14;
-  bool is_active = 15;
-  google.protobuf.Timestamp created_at = 16;
-  google.protobuf.Timestamp updated_at = 17;
+  CertificateType type = 5;
+  google.protobuf.Duration default_ttl = 6;
+  google.protobuf.Duration max_ttl = 7;
+  bool allow_user_rc = 8;
+  bool allow_agent_forwarding = 9;
+  bool allow_port_forwarding = 10;
+  bool allow_pty = 11;
+  bool allow_x11_forwarding = 12;
+  repeated CertificateKeyType allowed_key_types = 13;
+  bool is_active = 14;
+  google.protobuf.Timestamp created_at = 15;
+  google.protobuf.Timestamp updated_at = 16;
 }
 
 message CreateCertTemplateRequest {
@@ -193,23 +197,25 @@ message CreateCertTemplateRequest {
   string name = 2 [(buf.validate.field).string.min_len = 1];
   string workspace_id = 3 [(buf.validate.field).string.uuid = true];
   string description = 4 [(buf.validate.field).string.max_len = 1000];
-  bool allow_user_certificates = 5;
-  bool allow_host_certificates = 6;
-  google.protobuf.Duration default_ttl = 7 [(buf.validate.field).duration = {
+  CertificateType type = 5 [(buf.validate.field).enum = {
+    defined_only: true
+    not_in: [0]
+  }];
+  google.protobuf.Duration default_ttl = 6 [(buf.validate.field).duration = {
     gte: {seconds: 60} /* Min 1 minute */
     lte: {seconds: 31536000} /* Max 1 year */
   }];
-  google.protobuf.Duration max_ttl = 8 [(buf.validate.field).duration = {
+  google.protobuf.Duration max_ttl = 7 [(buf.validate.field).duration = {
     gte: {seconds: 60}
     lte: {seconds: 31536000}
   }];
-  bool allow_user_rc = 9;
-  bool allow_agent_forwarding = 10;
-  bool allow_port_forwarding = 11;
-  bool allow_pty = 12;
-  bool allow_x11_forwarding = 13;
-  repeated CertificateKeyType allowed_key_types = 14;
-  google.protobuf.Struct custom_extensions = 15;
+  bool allow_user_rc = 8;
+  bool allow_agent_forwarding = 9;
+  bool allow_port_forwarding = 10;
+  bool allow_pty = 11;
+  bool allow_x11_forwarding = 12;
+  repeated CertificateKeyType allowed_key_types = 13;
+  google.protobuf.Struct custom_extensions = 14;
 }
 message CreateCertTemplateResponse {
   CertTemplate template = 1;
@@ -233,17 +239,19 @@ message UpdateCertTemplateRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
   string ca_id = 2 [(buf.validate.field).string.uuid = true];
   string description = 3 [(buf.validate.field).string.max_len = 1000];
-  bool allow_user_certificates = 4;
-  bool allow_host_certificates = 5;
-  google.protobuf.Duration default_ttl = 6;
-  google.protobuf.Duration max_ttl = 7;
-  bool allow_user_rc = 8;
-  bool allow_agent_forwarding = 9;
-  bool allow_port_forwarding = 10;
-  bool allow_pty = 11;
-  bool allow_x11_forwarding = 12;
-  bool is_active = 13;
-  repeated CertificateKeyType allowed_key_types = 14;
+  CertificateType type = 4 [(buf.validate.field).enum = {
+    defined_only: true
+    not_in: [0]
+  }];
+  google.protobuf.Duration default_ttl = 5;
+  google.protobuf.Duration max_ttl = 6;
+  bool allow_user_rc = 7;
+  bool allow_agent_forwarding = 8;
+  bool allow_port_forwarding = 9;
+  bool allow_pty = 10;
+  bool allow_x11_forwarding = 11;
+  bool is_active = 12;
+  repeated CertificateKeyType allowed_key_types = 13;
 }
 message UpdateCertTemplateResponse {
   CertTemplate template = 1;
