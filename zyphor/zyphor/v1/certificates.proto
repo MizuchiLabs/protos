@@ -64,9 +64,9 @@ service CertificateService {
   }
 
   // Issue certificates
-  rpc SignPublicKeyUser(SignPublicKeyUserRequest) returns (SignPublicKeyUserResponse) {
+  rpc SignPublicKey(SignPublicKeyRequest) returns (SignPublicKeyResponse) {
     option (google.api.http) = {
-      post: "/v1/user/sign"
+      post: "/v1/sign"
       body: "*"
     };
   }
