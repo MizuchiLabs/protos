@@ -284,7 +284,7 @@ message SignPublicKeyRequest {
     (buf.validate.field).repeated.items.string = {
       min_len: 1
       max_len: 10000
-      pattern: "^(ssh-rsa|ssh-ed25519|ssh-dss|ecdsa-sha2-nistp(256|384|521))\\s+"
+      pattern: "^[A-Za-z0-9._-@]+\s+[A-Za-z0-9+/=]+(?:\s+.+)?$"
     },
     (zyphor.v1.sensitive) = true
   ];
