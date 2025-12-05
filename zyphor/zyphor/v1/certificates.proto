@@ -284,23 +284,27 @@ message SSHConfigOptions {
   bool compression = 7; // enable compression
 }
 
-message SignPublicKeyUserRequest {
+message SignPublicKeyRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string public_key = 2 [
-    (buf.validate.field).string = {
+  repeated string public_key = 2 [
+    (buf.validate.field).repeated.items.string = {
       min_len: 1
       max_len: 10000
       pattern: "^ssh-(rsa|ed25519|ecdsa).*"
     },
     (zyphor.v1.sensitive) = true
   ];
-  google.protobuf.Duration ttl = 3 [(buf.validate.field).duration = {
+  CertificateType type = 3 [(buf.validate.field).enum = {
+    defined_only: true
+    not_in: [0]
+  }];
+  google.protobuf.Duration ttl = 4 [(buf.validate.field).duration = {
     gte: {seconds: 60}
     lte: {seconds: 31536000}
   }];
-  SSHConfigOptions options = 4;
+  SSHConfigOptions options = 5;
 }
-message SignPublicKeyUserResponse {
+message SignPublicKeyResponse {
   repeated Certificate certificates = 1;
   string ssh_config = 2 [(zyphor.v1.sensitive) = true];
 }
