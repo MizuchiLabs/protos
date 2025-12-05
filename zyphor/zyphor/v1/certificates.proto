@@ -256,10 +256,11 @@ message DeleteCertTemplateResponse {}
 
 // Certificate messages -------------------------------------------------------
 message Certificate {
-  string id = 1;
-  string name = 2;
-  string pem = 3 [(zyphor.v1.sensitive) = true];
-  google.protobuf.Timestamp expires_at = 4;
+  string ca_id = 1;
+  string ca_name = 2;
+  bytes ssh_certificate = 3 [(zyphor.v1.sensitive) = true];
+  bytes ca_public_key = 4 [(zyphor.v1.sensitive) = true];
+  google.protobuf.Timestamp expires_at = 5;
 }
 message SSHConfigOptions {
   string key_name = 1 [(buf.validate.field).string = {
