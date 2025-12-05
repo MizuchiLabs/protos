@@ -70,12 +70,6 @@ service CertificateService {
       body: "*"
     };
   }
-  rpc SignPublicKeyHost(SignPublicKeyHostRequest) returns (SignPublicKeyHostResponse) {
-    option (google.api.http) = {
-      post: "/v1/host/sign"
-      body: "*"
-    };
-  }
 }
 
 enum CertificateKeyType {
@@ -306,14 +300,4 @@ message SignPublicKeyRequest {
 }
 message SignPublicKeyResponse {
   repeated Certificate certificates = 1;
-  string ssh_config = 2 [(zyphor.v1.sensitive) = true];
-}
-
-// Meant for agents
-message SignPublicKeyHostRequest {
-  repeated bytes public_keys = 1 [(zyphor.v1.sensitive) = true];
-}
-message SignPublicKeyHostResponse {
-  repeated Certificate certificates = 1 [(zyphor.v1.sensitive) = true];
-  bytes ca_public_key = 2 [(zyphor.v1.sensitive) = true];
 }
