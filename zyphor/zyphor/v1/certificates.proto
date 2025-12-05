@@ -181,15 +181,12 @@ message CertTemplate {
   CertificateType type = 5;
   google.protobuf.Duration default_ttl = 6;
   google.protobuf.Duration max_ttl = 7;
-  bool allow_user_rc = 8;
-  bool allow_agent_forwarding = 9;
-  bool allow_port_forwarding = 10;
-  bool allow_pty = 11;
-  bool allow_x11_forwarding = 12;
-  repeated CertificateKeyType allowed_key_types = 13;
-  bool is_active = 14;
-  google.protobuf.Timestamp created_at = 15;
-  google.protobuf.Timestamp updated_at = 16;
+  map<string, string> extensions = 8;
+  map<string, string> critical_options = 9;
+  repeated CertificateKeyType allowed_key_types = 10;
+  bool is_active = 11;
+  google.protobuf.Timestamp created_at = 12;
+  google.protobuf.Timestamp updated_at = 13;
 }
 
 message CreateCertTemplateRequest {
@@ -209,13 +206,10 @@ message CreateCertTemplateRequest {
     gte: {seconds: 60}
     lte: {seconds: 31536000}
   }];
-  bool allow_user_rc = 8;
-  bool allow_agent_forwarding = 9;
-  bool allow_port_forwarding = 10;
-  bool allow_pty = 11;
-  bool allow_x11_forwarding = 12;
-  repeated CertificateKeyType allowed_key_types = 13;
-  google.protobuf.Struct custom_extensions = 14;
+  map<string, string> extensions = 8;
+  map<string, string> critical_options = 9;
+  repeated CertificateKeyType allowed_key_types = 10;
+  google.protobuf.Struct custom_extensions = 11;
 }
 message CreateCertTemplateResponse {
   CertTemplate template = 1;
@@ -245,13 +239,10 @@ message UpdateCertTemplateRequest {
   }];
   google.protobuf.Duration default_ttl = 5;
   google.protobuf.Duration max_ttl = 6;
-  bool allow_user_rc = 7;
-  bool allow_agent_forwarding = 8;
-  bool allow_port_forwarding = 9;
-  bool allow_pty = 10;
-  bool allow_x11_forwarding = 11;
-  bool is_active = 12;
-  repeated CertificateKeyType allowed_key_types = 13;
+  map<string, string> extensions = 7;
+  map<string, string> critical_options = 8;
+  bool is_active = 9;
+  repeated CertificateKeyType allowed_key_types = 10;
 }
 message UpdateCertTemplateResponse {
   CertTemplate template = 1;
