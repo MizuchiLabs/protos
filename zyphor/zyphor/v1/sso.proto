@@ -123,12 +123,11 @@ message SAMLProvider {
   string name_attribute = 6;
   string username_attribute = 7;
   string picture_attribute = 8;
-  bool sign_requests = 9;
-  bool enforce_sso = 10;
-  bool allow_jit_provisioning = 11;
-  bool is_active = 12;
-  google.protobuf.Timestamp created_at = 13;
-  google.protobuf.Timestamp updated_at = 14;
+  bool enforce_sso = 9;
+  bool allow_jit_provisioning = 10;
+  bool is_active = 11;
+  google.protobuf.Timestamp created_at = 12;
+  google.protobuf.Timestamp updated_at = 13;
 }
 
 message GetSAMLProviderRequest {
@@ -153,10 +152,9 @@ message UpsertSAMLProviderRequest {
   string username_attribute = 6;
   string picture_attribute = 7;
   bool rotate_certificate = 8;
-  bool sign_requests = 9;
-  bool enforce_sso = 10;
-  bool allow_jit_provisioning = 11;
-  bool is_active = 12;
+  bool enforce_sso = 9;
+  bool allow_jit_provisioning = 10;
+  bool is_active = 11;
 }
 message UpsertSAMLProviderResponse {
   SAMLProvider saml_provider = 1;
