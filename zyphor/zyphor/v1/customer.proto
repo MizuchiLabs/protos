@@ -71,8 +71,8 @@ message UsageSummary {
 
 message LimitCount {
   ResourceType resource = 1;
-  int64 current = 2;
-  int64 max = 3;
+  int32 current = 2;
+  int32 max = 3;
   float usage_percent = 4; // Calculated: (current/max) * 100
 }
 message WorkspaceLimits {
@@ -81,8 +81,8 @@ message WorkspaceLimits {
   repeated LimitCount limits = 3;
 }
 message CustomerLimit {
-  int64 current_workspaces = 1;
-  int64 max_workspaces = 2;
+  int32 current_workspaces = 1;
+  int32 max_workspaces = 2;
   repeated WorkspaceLimits limits = 3;
 }
 
