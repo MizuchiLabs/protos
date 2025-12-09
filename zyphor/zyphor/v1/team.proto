@@ -5,7 +5,6 @@ package zyphor.v1;
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
-import "zyphor/v1/options.proto";
 import "zyphor/v1/user.proto";
 
 service TeamService {
@@ -88,11 +87,9 @@ message DeleteTeamResponse {}
 
 message ListTeamsRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  PageRequest page = 2;
 }
 message ListTeamsResponse {
   repeated Team teams = 1;
-  PageResponse page = 2;
 }
 
 message AddTeamMemberRequest {
