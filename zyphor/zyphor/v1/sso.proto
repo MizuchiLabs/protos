@@ -28,7 +28,7 @@ service SSOService {
       body: "*"
     };
   }
-  // Public endpoint for users
+  // Public endpoint
   rpc CheckSSO(CheckSSORequest) returns (CheckSSOResponse) {
     option (google.api.http) = {get: "/v1/sso/check/{email}"};
   }

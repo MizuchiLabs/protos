@@ -11,56 +11,56 @@ import "zyphor/v1/options.proto";
 
 service CertificateService {
   // Certificate Authority messages -------------------------------------------
-  rpc GetCA(GetCARequest) returns (GetCAResponse) {
+  rpc GetCertificateAuthority(GetCertificateAuthorityRequest) returns (GetCertificateAuthorityResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/ca/{id}"};
+    option (google.api.http) = {get: "/v1/certificate_authority/{id}"};
   }
-  rpc CreateCA(CreateCARequest) returns (CreateCAResponse) {
+  rpc CreateCertificateAuthority(CreateCertificateAuthorityRequest) returns (CreateCertificateAuthorityResponse) {
     option (google.api.http) = {
-      post: "/v1/ca"
+      post: "/v1/certificate_authority"
       body: "*"
     };
   }
-  rpc UpdateCA(UpdateCARequest) returns (UpdateCAResponse) {
+  rpc UpdateCertificateAuthority(UpdateCertificateAuthorityRequest) returns (UpdateCertificateAuthorityResponse) {
     option (google.api.http) = {
-      patch: "/v1/ca/{id}"
+      patch: "/v1/certificate_authority/{id}"
       body: "*"
     };
   }
-  rpc ListCAs(ListCAsRequest) returns (ListCAsResponse) {
+  rpc ListCertificateAuthorities(ListCertificateAuthoritiesRequest) returns (ListCertificateAuthoritiesResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/cas/{workspace_id}"};
+    option (google.api.http) = {get: "/v1/certificate_authorities/{workspace_id}"};
   }
-  rpc DeleteCA(DeleteCARequest) returns (DeleteCAResponse) {
-    option (google.api.http) = {delete: "/v1/ca/{id}"};
+  rpc DeleteCertificateAuthority(DeleteCertificateAuthorityRequest) returns (DeleteCertificateAuthorityResponse) {
+    option (google.api.http) = {delete: "/v1/certificate_authority/{id}"};
   }
-  rpc RolloverCA(RolloverCARequest) returns (RolloverCAResponse) {
-    option (google.api.http) = {post: "/v1/ca/{id}/rollover"};
+  rpc RolloverCertificateAuthority(RolloverCertificateAuthorityRequest) returns (RolloverCertificateAuthorityResponse) {
+    option (google.api.http) = {post: "/v1/certificate_authority/{id}/rollover"};
   }
 
   // Certificate Template messages --------------------------------------------
-  rpc GetCertTemplate(GetCertTemplateRequest) returns (GetCertTemplateResponse) {
+  rpc GetCertificateTemplate(GetCertificateTemplateRequest) returns (GetCertificateTemplateResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/template/{id}"};
+    option (google.api.http) = {get: "/v1/certificate_template/{id}"};
   }
-  rpc CreateCertTemplate(CreateCertTemplateRequest) returns (CreateCertTemplateResponse) {
+  rpc CreateCertificateTemplate(CreateCertificateTemplateRequest) returns (CreateCertificateTemplateResponse) {
     option (google.api.http) = {
-      post: "/v1/template"
+      post: "/v1/certificate_template"
       body: "*"
     };
   }
-  rpc UpdateCertTemplate(UpdateCertTemplateRequest) returns (UpdateCertTemplateResponse) {
+  rpc UpdateCertificateTemplate(UpdateCertificateTemplateRequest) returns (UpdateCertificateTemplateResponse) {
     option (google.api.http) = {
-      patch: "/v1/template/{id}"
+      patch: "/v1/certificate_template/{id}"
       body: "*"
     };
   }
-  rpc ListCertTemplates(ListCertTemplatesRequest) returns (ListCertTemplatesResponse) {
+  rpc ListCertificateTemplates(ListCertificateTemplatesRequest) returns (ListCertificateTemplatesResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/templates/{workspace_id}"};
+    option (google.api.http) = {get: "/v1/certificate_templates/{workspace_id}"};
   }
-  rpc DeleteCertTemplate(DeleteCertTemplateRequest) returns (DeleteCertTemplateResponse) {
-    option (google.api.http) = {delete: "/v1/template/{id}"};
+  rpc DeleteCertificateTemplate(DeleteCertificateTemplateRequest) returns (DeleteCertificateTemplateResponse) {
+    option (google.api.http) = {delete: "/v1/certificate_template/{id}"};
   }
 
   // Issue certificates
@@ -85,7 +85,7 @@ enum CertificateType {
 }
 
 // Certificate Authority messages ---------------------------------------------
-message CA {
+message CertificateAuthority {
   string id = 1;
   string workspace_id = 2;
   string name = 3;
@@ -104,7 +104,7 @@ message CA {
   google.protobuf.Timestamp updated_at = 16;
 }
 
-message CreateCARequest {
+message CreateCertificateAuthorityRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   string name = 2 [(buf.validate.field).string = {
     min_len: 1
@@ -122,52 +122,52 @@ message CreateCARequest {
   }];
   bool is_default = 7;
 }
-message CreateCAResponse {
-  CA ca = 1;
+message CreateCertificateAuthorityResponse {
+  CertificateAuthority certificate_authority = 1;
 }
 
-message GetCARequest {
+message GetCertificateAuthorityRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
 }
-message GetCAResponse {
-  CA ca = 1;
+message GetCertificateAuthorityResponse {
+  CertificateAuthority certificate_authority = 1;
 }
 
-message ListCAsRequest {
+message ListCertificateAuthoritiesRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
 }
-message ListCAsResponse {
-  repeated CA cas = 1;
+message ListCertificateAuthoritiesResponse {
+  repeated CertificateAuthority cas = 1;
 }
 
-message UpdateCARequest {
+message UpdateCertificateAuthorityRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
   string description = 2 [(buf.validate.field).string.max_len = 1000];
   bool is_active = 3;
   bool is_default = 4;
 }
-message UpdateCAResponse {
-  CA ca = 1;
+message UpdateCertificateAuthorityResponse {
+  CertificateAuthority certificate_authority = 1;
 }
 
-message DeleteCARequest {
+message DeleteCertificateAuthorityRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
 }
-message DeleteCAResponse {}
+message DeleteCertificateAuthorityResponse {}
 
-message RolloverCARequest {
+message RolloverCertificateAuthorityRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
   CertificateKeyType key_type = 2;
   int32 key_bits = 3;
   int32 lifetime_months = 4;
   bool force = 5;
 }
-message RolloverCAResponse {
-  CA ca = 1;
+message RolloverCertificateAuthorityResponse {
+  CertificateAuthority certificate_authority = 1;
 }
 
 // Certificate Template messages ----------------------------------------------
-message CertTemplate {
+message CertificateTemplate {
   string id = 1;
   string ca_id = 2;
   string name = 3;
@@ -183,7 +183,7 @@ message CertTemplate {
   google.protobuf.Timestamp updated_at = 13;
 }
 
-message CreateCertTemplateRequest {
+message CreateCertificateTemplateRequest {
   string ca_id = 1 [(buf.validate.field).string.uuid = true];
   string name = 2 [(buf.validate.field).string.min_len = 1];
   string workspace_id = 3 [(buf.validate.field).string.uuid = true];
@@ -205,25 +205,25 @@ message CreateCertTemplateRequest {
   repeated CertificateKeyType allowed_key_types = 10;
   google.protobuf.Struct custom_extensions = 11;
 }
-message CreateCertTemplateResponse {
-  CertTemplate template = 1;
+message CreateCertificateTemplateResponse {
+  CertificateTemplate certificate_template = 1;
 }
 
-message GetCertTemplateRequest {
+message GetCertificateTemplateRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
 }
-message GetCertTemplateResponse {
-  CertTemplate template = 1;
+message GetCertificateTemplateResponse {
+  CertificateTemplate certificate_template = 1;
 }
 
-message ListCertTemplatesRequest {
+message ListCertificateTemplatesRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
 }
-message ListCertTemplatesResponse {
-  repeated CertTemplate templates = 1;
+message ListCertificateTemplatesResponse {
+  repeated CertificateTemplate templates = 1;
 }
 
-message UpdateCertTemplateRequest {
+message UpdateCertificateTemplateRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
   string ca_id = 2 [(buf.validate.field).string.uuid = true];
   string description = 3 [(buf.validate.field).string.max_len = 1000];
@@ -238,14 +238,14 @@ message UpdateCertTemplateRequest {
   bool is_active = 9;
   repeated CertificateKeyType allowed_key_types = 10;
 }
-message UpdateCertTemplateResponse {
-  CertTemplate template = 1;
+message UpdateCertificateTemplateResponse {
+  CertificateTemplate certificate_template = 1;
 }
 
-message DeleteCertTemplateRequest {
+message DeleteCertificateTemplateRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
 }
-message DeleteCertTemplateResponse {}
+message DeleteCertificateTemplateResponse {}
 
 // Certificate messages -------------------------------------------------------
 message Certificate {
