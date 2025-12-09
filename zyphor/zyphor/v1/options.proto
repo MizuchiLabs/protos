@@ -19,7 +19,7 @@ message PageRequest {
 }
 
 message PageResponse {
-  string next_cursor = 1; // empty if no more pages
-  string prev_cursor = 2;
+  string next = 1; // empty if no more pages
+  string prev = 2;
   int32 total = 3;
 }
