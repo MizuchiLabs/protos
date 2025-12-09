@@ -16,6 +16,7 @@ message PageRequest {
     gte: 1
     lte: 100
   }]; // Max 100
+  string order_by = 3;
 }
 
 message PageResponse {
