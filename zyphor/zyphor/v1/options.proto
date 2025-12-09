@@ -2,8 +2,23 @@ edition = "2023";
 
 package zyphor.v1;
 
+import "buf/validate/validate.proto";
 import "google/protobuf/descriptor.proto";
 
 extend google.protobuf.FieldOptions {
   bool sensitive = 50021;
+}
+
+// Pagination
+message PageRequest {
+  string cursor = 1;
+  int32 limit = 2 [(buf.validate.field).int32 = {
+    gte: 1
+    lte: 100
+  }]; // Max 100
+}
+
+message PageResponse {
+  string next_cursor = 1; // empty if no more pages
+  string prev_cursor = 2;
 }
