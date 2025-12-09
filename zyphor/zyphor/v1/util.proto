@@ -68,29 +68,23 @@ message UserLog {
 message ListAuditLogsRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   LogType log_type = 2 [(buf.validate.field).enum = {defined_only: true}];
-
-  // Pagination
-  int32 page_size = 3 [(buf.validate.field).int32 = {
-    gte: 1
-    lte: 100
-  }]; // Max 100 items
-  string page_token = 4;
+  PageRequest page = 3;
 
   // Filters (optional)
-  string search = 5;
-  repeated string actor_ids = 6 [(buf.validate.field).repeated.items.string.uuid = true];
-  repeated string actor_types = 7;
-  repeated string actions = 8;
-  repeated string resource_types = 9;
-  repeated string event_types = 10;
-  repeated string authentication_methods = 11;
-  google.protobuf.Timestamp start_date = 12;
-  google.protobuf.Timestamp end_date = 13;
+  string search = 4;
+  repeated string actor_ids = 5 [(buf.validate.field).repeated.items.string.uuid = true];
+  repeated string actor_types = 6;
+  repeated string actions = 7;
+  repeated string resource_types = 8;
+  repeated string event_types = 9;
+  repeated string authentication_methods = 10;
+  google.protobuf.Timestamp start_date = 11;
+  google.protobuf.Timestamp end_date = 12;
 }
 message ListAuditLogsResponse {
   repeated WorkspaceLog workspace_logs = 1;
   repeated UserLog user_logs = 2;
-  string next_page_token = 3;
+  PageResponse page = 3;
 }
 
 message ExportAuditLogsRequest {
