@@ -137,7 +137,7 @@ message ListCertificateAuthoritiesRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
 }
 message ListCertificateAuthoritiesResponse {
-  repeated CertificateAuthority cas = 1;
+  repeated CertificateAuthority certificate_authorities = 1;
 }
 
 message UpdateCertificateAuthorityRequest {
@@ -220,7 +220,7 @@ message ListCertificateTemplatesRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
 }
 message ListCertificateTemplatesResponse {
-  repeated CertificateTemplate templates = 1;
+  repeated CertificateTemplate certificate_templates = 1;
 }
 
 message UpdateCertificateTemplateRequest {
