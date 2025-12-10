@@ -117,6 +117,7 @@ message UpdateWorkspaceRequest {
   }];
   string description = 3 [(buf.validate.field).string.max_len = 1000];
   WorkspaceSettings settings = 4;
+  NotificationSettings notifications = 5;
 }
 message UpdateWorkspaceResponse {
   Workspace workspace = 1;
