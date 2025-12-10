@@ -31,11 +31,11 @@ service AuthService {
     };
   }
   rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse) {
-    option (google.api.http) = {post: "/v1/refresh"};
+    option (google.api.http) = {post: "/v1/refresh-token"};
   }
   rpc ForgotPassword(ForgotPasswordRequest) returns (ForgotPasswordResponse) {
     option (google.api.http) = {
-      post: "/v1/forgot"
+      post: "/v1/forgot-password"
       body: "*"
     };
   }
@@ -53,24 +53,27 @@ service AuthService {
   }
   rpc StartCLILogin(StartCLILoginRequest) returns (StartCLILoginResponse) {
     option (google.api.http) = {
-      post: "/v1/cli-login"
+      post: "/v1/cli/login"
       body: "*"
     };
   }
   rpc PollCLILogin(PollCLILoginRequest) returns (PollCLILoginResponse) {
-    option (google.api.http) = {post: "/v1/cli-login/poll"};
+    option (google.api.http) = {post: "/v1/cli/poll"};
   }
   rpc VerifyCLILogin(VerifyCLILoginRequest) returns (VerifyCLILoginResponse) {
-    option (google.api.http) = {post: "/v1/cli-login/verify"};
+    option (google.api.http) = {post: "/v1/cli/verify"};
   }
 }
 
 // Authentication requests/responses
 message RegisterRequest {
-  string name = 1 [(buf.validate.field).string = {
-    min_len: 3
-    max_len: 255
-  }];
+  string name = 1 [
+    (buf.validate.field).string = {
+      min_len: 3
+      max_len: 255
+    },
+    (zyphor.v1.sensitive) = true
+  ];
   string email = 2 [
     (buf.validate.field).string = {
       email: true
@@ -80,7 +83,7 @@ message RegisterRequest {
   ];
   string username = 3 [(buf.validate.field).string = {
     min_len: 3
-    max_len: 39 // GitHub's max
+    max_len: 32
     pattern: "^[a-zA-Z0-9]([a-zA-Z0-9-_])*[a-zA-Z0-9]$"
   }];
   string password = 4 [
