@@ -51,8 +51,8 @@ message Workspace {
 }
 
 message WorkspaceSettings {
-  bool enabled = 1;
-  bool auto_approve = 2;
+  bool bootstrap_enabled = 1;
+  bool bootstrap_auto_approve = 2;
   int32 max_agents = 3;
   int32 max_members = 4;
 }
