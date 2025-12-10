@@ -65,7 +65,7 @@ message CreatePrincipalRequest {
     (buf.validate.field).string = {
       min_len: 1
       max_len: 32
-      pattern: "^[a-z_][a-z0-9_-]*\\$?$" // Valid Unix username
+      pattern: "^[a-z_][a-z0-9-_]*\\$?$" // Valid Unix username
     },
     (zyphor.v1.sensitive) = true
   ];
