@@ -45,19 +45,16 @@ message Workspace {
   string created_by = 4;
   repeated User members = 5;
   WorkspaceSettings settings = 6;
-  google.protobuf.Timestamp created_at = 7;
-  google.protobuf.Timestamp updated_at = 8;
+  NotificationSettings notifications = 7;
+  google.protobuf.Timestamp created_at = 8;
+  google.protobuf.Timestamp updated_at = 9;
 }
 
 message WorkspaceSettings {
-  BootstrapSettings bootstrap = 1;
-  NotificationSettings notifications = 2 [(zyphor.v1.sensitive) = true];
-}
-
-message BootstrapSettings {
   bool enabled = 1;
   bool auto_approve = 2;
   int32 max_agents = 3;
+  int32 max_members = 4;
 }
 
 message NotificationSettings {
@@ -69,9 +66,9 @@ message NotificationSettings {
   }
   bool enabled = 1;
   Type type = 2;
-  SlackNotification slack = 3;
-  DiscordNotification discord = 4;
-  EmailNotification email = 5;
+  SlackNotification slack = 3 [(zyphor.v1.sensitive) = true];
+  DiscordNotification discord = 4 [(zyphor.v1.sensitive) = true];
+  EmailNotification email = 5 [(zyphor.v1.sensitive) = true];
 }
 
 message SlackNotification {
