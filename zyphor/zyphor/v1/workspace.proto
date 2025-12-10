@@ -13,6 +13,10 @@ service WorkspaceService {
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/workspace/{workspace_id}"};
   }
+  rpc ListWorkspaces(ListWorkspacesRequest) returns (ListWorkspacesResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/workspaces"};
+  }
   rpc CreateWorkspace(CreateWorkspaceRequest) returns (CreateWorkspaceResponse) {
     option (google.api.http) = {
       post: "/v1/workspace"
@@ -27,10 +31,6 @@ service WorkspaceService {
   }
   rpc DeleteWorkspace(DeleteWorkspaceRequest) returns (DeleteWorkspaceResponse) {
     option (google.api.http) = {delete: "/v1/workspace/{workspace_id}"};
-  }
-  rpc ListWorkspaces(ListWorkspacesRequest) returns (ListWorkspacesResponse) {
-    option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/workspaces"};
   }
   rpc RemoveWorkspaceMember(RemoveWorkspaceMemberRequest) returns (RemoveWorkspaceMemberResponse) {
     option (google.api.http) = {delete: "/v1/workspace/{workspace_id}/members/{user_id}"};

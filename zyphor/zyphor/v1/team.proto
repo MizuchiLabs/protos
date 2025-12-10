@@ -12,6 +12,10 @@ service TeamService {
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/team/{id}"};
   }
+  rpc ListTeams(ListTeamsRequest) returns (ListTeamsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/teams/{workspace_id}"};
+  }
   rpc CreateTeam(CreateTeamRequest) returns (CreateTeamResponse) {
     option (google.api.http) = {
       post: "/v1/team"
@@ -26,10 +30,6 @@ service TeamService {
   }
   rpc DeleteTeam(DeleteTeamRequest) returns (DeleteTeamResponse) {
     option (google.api.http) = {delete: "/v1/team/{id}"};
-  }
-  rpc ListTeams(ListTeamsRequest) returns (ListTeamsResponse) {
-    option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/teams/{workspace_id}"};
   }
   rpc AddTeamMember(AddTeamMemberRequest) returns (AddTeamMemberResponse) {
     option (google.api.http) = {post: "/v1/team/{team_id}/members/{user_id}"};

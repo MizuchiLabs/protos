@@ -12,7 +12,7 @@ service SSOService {
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/sso/oidc/{workspace_id}"};
   }
-  rpc UpsertOIDCProvider(UpsertOIDCProviderRequest) returns (UpsertOIDCProviderResponse) {
+  rpc UpdateOIDCProvider(UpdateOIDCProviderRequest) returns (UpdateOIDCProviderResponse) {
     option (google.api.http) = {
       patch: "/v1/sso/oidc/{workspace_id}"
       body: "*"
@@ -22,7 +22,7 @@ service SSOService {
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/sso/saml/{workspace_id}"};
   }
-  rpc UpsertSAMLProvider(UpsertSAMLProviderRequest) returns (UpsertSAMLProviderResponse) {
+  rpc UpdateSAMLProvider(UpdateSAMLProviderRequest) returns (UpdateSAMLProviderResponse) {
     option (google.api.http) = {
       patch: "/v1/sso/saml/{workspace_id}"
       body: "*"
@@ -62,7 +62,7 @@ message GetOIDCProviderResponse {
   OIDCProvider oidc_provider = 1;
 }
 
-message UpsertOIDCProviderRequest {
+message UpdateOIDCProviderRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   string name = 2 [(buf.validate.field).string = {
     min_len: 1
@@ -108,7 +108,7 @@ message UpsertOIDCProviderRequest {
   bool use_pkce = 13;
   bool is_active = 14;
 }
-message UpsertOIDCProviderResponse {
+message UpdateOIDCProviderResponse {
   OIDCProvider oidc_provider = 1;
 }
 
@@ -137,7 +137,7 @@ message GetSAMLProviderResponse {
   SAMLProvider saml_provider = 1;
 }
 
-message UpsertSAMLProviderRequest {
+message UpdateSAMLProviderRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   string name = 2 [(buf.validate.field).string = {
     min_len: 1
@@ -156,7 +156,7 @@ message UpsertSAMLProviderRequest {
   bool allow_jit_provisioning = 10;
   bool is_active = 11;
 }
-message UpsertSAMLProviderResponse {
+message UpdateSAMLProviderResponse {
   SAMLProvider saml_provider = 1;
 }
 

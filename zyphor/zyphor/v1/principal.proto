@@ -14,12 +14,12 @@ service PrincipalService {
       body: "*"
     };
   }
-  rpc DeletePrincipal(DeletePrincipalRequest) returns (DeletePrincipalResponse) {
-    option (google.api.http) = {delete: "/v1/principal/{target_id}/{username}"};
-  }
   rpc ListPrincipals(ListPrincipalsRequest) returns (ListPrincipalsResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/principals/{workspace_id}"};
+  }
+  rpc DeletePrincipal(DeletePrincipalRequest) returns (DeletePrincipalResponse) {
+    option (google.api.http) = {delete: "/v1/principal/{target_id}/{username}"};
   }
   rpc AddSubjectToPrincipal(AddSubjectToPrincipalRequest) returns (AddSubjectToPrincipalResponse) {
     option (google.api.http) = {
