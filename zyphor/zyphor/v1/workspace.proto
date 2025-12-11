@@ -58,17 +58,16 @@ message WorkspaceSettings {
 }
 
 message NotificationSettings {
-  enum Type {
-    TYPE_UNSPECIFIED = 0;
-    TYPE_EMAIL = 1;
-    TYPE_SLACK = 2;
-    TYPE_DISCORD = 3;
+  enum Provider {
+    PROVIDER_UNSPECIFIED = 0;
+    PROVIDER_EMAIL = 1;
+    PROVIDER_SLACK = 2;
+    PROVIDER_DISCORD = 3;
   }
   bool enabled = 1;
-  Type type = 2;
-  SlackNotification slack = 3 [(zyphor.v1.sensitive) = true];
-  DiscordNotification discord = 4 [(zyphor.v1.sensitive) = true];
-  EmailNotification email = 5 [(zyphor.v1.sensitive) = true];
+  repeated Provider providers = 2;
+  map<string, string> config = 3 [(zyphor.v1.sensitive) = true];
+  google.protobuf.Timestamp updated_at = 4;
 }
 
 message SlackNotification {
