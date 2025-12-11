@@ -21,21 +21,21 @@ service PrincipalService {
   rpc DeletePrincipal(DeletePrincipalRequest) returns (DeletePrincipalResponse) {
     option (google.api.http) = {delete: "/v1/principal/{target_id}/{username}"};
   }
-  rpc AddSubjectToPrincipal(AddSubjectToPrincipalRequest) returns (AddSubjectToPrincipalResponse) {
+  rpc AddSubjectsToPrincipal(AddSubjectsToPrincipalRequest) returns (AddSubjectsToPrincipalResponse) {
     option (google.api.http) = {
-      post: "/v1/principals/add"
+      post: "/v1/principal/add"
       body: "*"
     };
   }
-  rpc RemoveSubjectFromPrincipal(RemoveSubjectFromPrincipalRequest) returns (RemoveSubjectFromPrincipalResponse) {
+  rpc RemoveSubjectsFromPrincipal(RemoveSubjectsFromPrincipalRequest) returns (RemoveSubjectsFromPrincipalResponse) {
     option (google.api.http) = {
-      post: "/v1/principals/remove"
+      post: "/v1/principal/remove"
       body: "*"
     };
   }
   rpc RevokeAllAccess(RevokeAllAccessRequest) returns (RevokeAllAccessResponse) {
     option (google.api.http) = {
-      post: "/v1/principals/revoke"
+      post: "/v1/principal/revoke"
       body: "*"
     };
   }
@@ -90,25 +90,37 @@ message ListPrincipalsResponse {
   repeated Principal principals = 1;
 }
 
-message AddSubjectToPrincipalRequest {
+message AddSubjectsToPrincipalRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
-  string subject_id = 2 [(buf.validate.field).string.uuid = true];
+  repeated string subject_ids = 2 [(buf.validate.field).repeated = {
+    min_items: 1
+    max_items: 50
+    items: {
+      string: {uuid: true}
+    }
+  }];
   PrincipalType type = 3 [(buf.validate.field).enum = {
     defined_only: true
     not_in: [0]
   }];
 }
-message AddSubjectToPrincipalResponse {}
+message AddSubjectsToPrincipalResponse {}
 
-message RemoveSubjectFromPrincipalRequest {
+message RemoveSubjectsFromPrincipalRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
-  string subject_id = 2 [(buf.validate.field).string.uuid = true];
+  repeated string subject_ids = 2 [(buf.validate.field).repeated = {
+    min_items: 1
+    max_items: 50
+    items: {
+      string: {uuid: true}
+    }
+  }];
   PrincipalType type = 3 [(buf.validate.field).enum = {
     defined_only: true
     not_in: [0]
   }];
 }
-message RemoveSubjectFromPrincipalResponse {}
+message RemoveSubjectsFromPrincipalResponse {}
 
 message RevokeAllAccessRequest {
   string subject_id = 1 [(buf.validate.field).string.uuid = true];
