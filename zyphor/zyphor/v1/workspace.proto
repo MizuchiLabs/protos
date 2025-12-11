@@ -65,7 +65,7 @@ message NotificationSettings {
     PROVIDER_DISCORD = 3;
   }
   bool enabled = 1;
-  repeated Provider providers = 2;
+  Provider provider = 2;
   map<string, string> config = 3 [(zyphor.v1.sensitive) = true];
   google.protobuf.Timestamp updated_at = 4;
 }
