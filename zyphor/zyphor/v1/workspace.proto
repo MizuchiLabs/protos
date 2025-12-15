@@ -63,6 +63,9 @@ message NotificationSettings {
     PROVIDER_EMAIL = 1;
     PROVIDER_SLACK = 2;
     PROVIDER_DISCORD = 3;
+    PROVIDER_TEAMS = 4;
+    PROVIDER_MATTERMOST = 5;
+    PROVIDER_WEBHOOK = 6;
   }
   bool enabled = 1;
   Provider provider = 2;
