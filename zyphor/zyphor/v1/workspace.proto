@@ -61,11 +61,11 @@ message NotificationSettings {
   enum Provider {
     PROVIDER_UNSPECIFIED = 0;
     PROVIDER_EMAIL = 1;
-    PROVIDER_SLACK = 2;
-    PROVIDER_DISCORD = 3;
-    PROVIDER_TEAMS = 4;
-    PROVIDER_MATTERMOST = 5;
-    PROVIDER_WEBHOOK = 6;
+    PROVIDER_WEBHOOK = 2;
+    PROVIDER_SLACK = 3;
+    PROVIDER_DISCORD = 4;
+    PROVIDER_TEAMS = 5;
+    PROVIDER_MATTERMOST = 6;
   }
   bool enabled = 1;
   Provider provider = 2;
