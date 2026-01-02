@@ -45,8 +45,9 @@ message EventLog {
   string error_message = 10;
   string ip_address = 11;
   string user_agent = 12;
-  map<string, string> metadata = 13;
-  google.protobuf.Timestamp timestamp = 14;
+  string auth_method = 13;
+  map<string, string> metadata = 14;
+  google.protobuf.Timestamp timestamp = 15;
 }
 
 message ListAuditLogsRequest {
