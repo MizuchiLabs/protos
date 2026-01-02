@@ -251,8 +251,8 @@ message DeleteCertificateTemplateResponse {}
 message Certificate {
   string ca_id = 1;
   string ca_name = 2;
-  bytes ssh_certificate = 3 [(zyphor.v1.sensitive) = true];
-  bytes ca_public_key = 4 [(zyphor.v1.sensitive) = true];
+  bytes ca_public_key = 3 [(zyphor.v1.sensitive) = true];
+  bytes ssh_certificate = 4 [(zyphor.v1.sensitive) = true];
   google.protobuf.Timestamp expires_at = 5;
 }
 message SSHConfigOptions {

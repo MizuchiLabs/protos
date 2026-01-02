@@ -38,7 +38,7 @@ message GetVersionResponse {
   string version = 1;
 }
 
-message WorkspaceLog {
+message EventLog {
   string id = 1;
   string workspace_id = 2;
   string actor_id = 3;
@@ -48,48 +48,33 @@ message WorkspaceLog {
   string resource_id = 7;
   string resource_name = 8;
   string resource_type = 9;
-  string error = 10;
-  string source_ip = 11;
+  string error_message = 10;
+  string ip_address = 11;
   string user_agent = 12;
   map<string, string> metadata = 13;
-  google.protobuf.Timestamp created_at = 14;
-}
-message UserLog {
-  string id = 1;
-  string user_id = 2;
-  string event_type = 3;
-  string authentication_method = 4;
-  string source_ip = 5;
-  string user_agent = 6;
-  string error = 7;
-  map<string, string> metadata = 13;
-  google.protobuf.Timestamp created_at = 14;
+  google.protobuf.Timestamp timestamp = 14;
 }
 
 message ListAuditLogsRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  LogType log_type = 2 [(buf.validate.field).enum = {defined_only: true}];
-  string cursor = 3;
-  int32 limit = 4 [(buf.validate.field).int32 = {
+  string cursor = 2;
+  int32 limit = 3 [(buf.validate.field).int32 = {
     gte: 1
     lte: 100
   }]; // Max 100
 
   // Filters (optional)
-  string search = 5;
-  repeated string actor_ids = 6 [(buf.validate.field).repeated.items.string.uuid = true];
-  repeated string actor_types = 7;
-  repeated string actions = 8;
-  repeated string resource_types = 9;
-  repeated string event_types = 10;
-  repeated string authentication_methods = 11;
-  google.protobuf.Timestamp start_date = 12;
-  google.protobuf.Timestamp end_date = 13;
+  string search = 4;
+  repeated string actor_ids = 5 [(buf.validate.field).repeated.items.string.uuid = true];
+  repeated string actor_types = 6;
+  repeated string actions = 7;
+  repeated string resource_types = 8;
+  google.protobuf.Timestamp start_date = 9;
+  google.protobuf.Timestamp end_date = 10;
 }
 message ListAuditLogsResponse {
-  repeated WorkspaceLog workspace_logs = 1;
-  repeated UserLog user_logs = 2;
-  PageResponse page = 3;
+  repeated EventLog logs = 1;
+  PageResponse page = 2;
 }
 
 message ExportAuditLogsRequest {
@@ -97,14 +82,11 @@ message ExportAuditLogsRequest {
     FORMAT_UNSPECIFIED = 0;
     FORMAT_CSV = 1;
     FORMAT_JSON = 2;
-    FORMAT_JSONL = 3;
-    FORMAT_PARQUET = 4;
   }
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  LogType log_type = 2 [(buf.validate.field).enum = {defined_only: true}];
-  Format format = 3 [(buf.validate.field).enum = {defined_only: true}];
-  google.protobuf.Timestamp start_date = 4;
-  google.protobuf.Timestamp end_date = 5;
+  Format format = 2 [(buf.validate.field).enum = {defined_only: true}];
+  google.protobuf.Timestamp start_date = 3;
+  google.protobuf.Timestamp end_date = 4;
 }
 message ExportAuditLogsResponse {
   bytes data = 1;
