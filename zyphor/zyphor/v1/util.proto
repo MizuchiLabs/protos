@@ -27,12 +27,6 @@ service UtilService {
   }
 }
 
-enum LogType {
-  LOG_TYPE_UNSPECIFIED = 0;
-  LOG_TYPE_WORKSPACE = 1;
-  LOG_TYPE_USER = 2;
-}
-
 message GetVersionRequest {}
 message GetVersionResponse {
   string version = 1;
