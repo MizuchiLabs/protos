@@ -5,7 +5,6 @@ package zyphor.v1;
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
-import "zyphor/v1/options.proto";
 
 service UtilService {
   rpc GetVersion(GetVersionRequest) returns (GetVersionResponse) {
@@ -52,11 +51,11 @@ message EventLog {
 
 message ListAuditLogsRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string cursor = 2;
-  int32 limit = 3 [(buf.validate.field).int32 = {
+  int32 limit = 2 [(buf.validate.field).int32 = {
     gte: 1
     lte: 100
   }]; // Max 100
+  int32 offset = 3 [(buf.validate.field).int32 = {gte: 0}];
 
   // Filters (optional)
   string search = 4;
@@ -69,7 +68,6 @@ message ListAuditLogsRequest {
 }
 message ListAuditLogsResponse {
   repeated EventLog logs = 1;
-  PageResponse page = 2;
 }
 
 message ExportAuditLogsRequest {
