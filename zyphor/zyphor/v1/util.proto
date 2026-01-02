@@ -68,7 +68,7 @@ message ListAuditLogsRequest {
 }
 message ListAuditLogsResponse {
   repeated EventLog logs = 1;
-  int32 total = 2;
+  uint64 total = 2;
 }
 
 message ExportAuditLogsRequest {
