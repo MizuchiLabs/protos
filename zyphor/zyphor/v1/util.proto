@@ -51,11 +51,11 @@ message EventLog {
 
 message ListAuditLogsRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  int32 limit = 2 [(buf.validate.field).int32 = {
+  uint32 limit = 2 [(buf.validate.field).uint32 = {
     gte: 1
     lte: 100
   }]; // Max 100
-  int32 offset = 3 [(buf.validate.field).int32 = {gte: 0}];
+  uint32 offset = 3;
 
   // Filters (optional)
   string search = 4;
