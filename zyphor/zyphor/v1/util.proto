@@ -35,18 +35,16 @@ message EventLog {
   string id = 1;
   string workspace_id = 2;
   string actor_id = 3;
-  string actor_name = 4;
-  string actor_type = 5;
-  string action = 6;
-  string resource_id = 7;
-  string resource_name = 8;
-  string resource_type = 9;
-  string error_message = 10;
-  string ip_address = 11;
-  string user_agent = 12;
-  string auth_method = 13;
-  map<string, string> metadata = 14;
-  google.protobuf.Timestamp timestamp = 15;
+  string actor_type = 4;
+  string action = 5;
+  string resource_id = 6;
+  string resource_type = 7;
+  string error_message = 8;
+  string ip_address = 9;
+  string user_agent = 10;
+  string auth_method = 11;
+  map<string, string> metadata = 12;
+  google.protobuf.Timestamp timestamp = 13;
 }
 
 message ListAuditLogsRequest {
