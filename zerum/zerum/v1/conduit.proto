@@ -69,7 +69,7 @@ enum Algorithm {
   ALGORITHM_ED25519 = 30;
 }
 
-message Key {
+message ConduitKey {
   string id = 1;
   string name = 2;
   int32 version = 3;
@@ -84,14 +84,14 @@ message GetKeyRequest {
   string name = 1 [(buf.validate.field).string.min_len = 1];
 }
 message GetKeyResponse {
-  Key key = 1;
+  ConduitKey key = 1;
 }
 
 message ListKeysRequest {
   bool include_inactive = 1;
 }
 message ListKeysResponse {
-  repeated Key keys = 1;
+  repeated ConduitKey keys = 1;
 }
 
 message CreateKeyRequest {
@@ -100,7 +100,7 @@ message CreateKeyRequest {
   int32 rotation_period = 3 [(buf.validate.field).int32.gte = 60];
 }
 message CreateKeyResponse {
-  Key key = 1;
+  ConduitKey key = 1;
 }
 
 message UpdateKeyRequest {
@@ -109,7 +109,7 @@ message UpdateKeyRequest {
   int32 rotation_period = 3 [(buf.validate.field).int32.gte = 60];
 }
 message UpdateKeyResponse {
-  Key key = 1;
+  ConduitKey key = 1;
 }
 
 message DeleteKeyRequest {
@@ -121,7 +121,7 @@ message RotateKeyRequest {
   string name = 1 [(buf.validate.field).string.min_len = 1];
 }
 message RotateKeyResponse {
-  Key key = 1;
+  ConduitKey key = 1;
 }
 
 message EncryptRequest {
