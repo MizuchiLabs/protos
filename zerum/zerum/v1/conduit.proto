@@ -47,11 +47,33 @@ service ConduitService {
   }
 }
 
+enum Algorithm {
+  ALGORITHM_UNSPECIFIED = 0;
+
+  // Symmetric AEAD
+  ALGORITHM_AES_128_GCM = 1;
+  ALGORITHM_AES_256_GCM = 2;
+  ALGORITHM_SECRETBOX = 3;
+  ALGORITHM_CHACHA20_POLY1305 = 4;
+
+  // Asymmetric
+  ALGORITHM_RSA_2048 = 10;
+  ALGORITHM_RSA_4096 = 11;
+
+  // ECDSA
+  ALGORITHM_ECDSA_P256 = 20;
+  ALGORITHM_ECDSA_P384 = 21;
+  ALGORITHM_ECDSA_P521 = 22;
+
+  // EdDSA
+  ALGORITHM_ED25519 = 30;
+}
+
 message Key {
   string id = 1;
   string name = 2;
   int32 version = 3;
-  string algorithm = 4;
+  Algorithm algorithm = 4;
   bool is_active = 5;
   int32 rotation_period = 6; // seconds, 0 = no rotation
   google.protobuf.Timestamp created_at = 7;
@@ -74,7 +96,7 @@ message ListKeysResponse {
 
 message CreateKeyRequest {
   string name = 1 [(buf.validate.field).string.min_len = 1];
-  string algorithm = 2;
+  Algorithm algorithm = 2;
   int32 rotation_period = 3 [(buf.validate.field).int32.gte = 60];
 }
 message CreateKeyResponse {
