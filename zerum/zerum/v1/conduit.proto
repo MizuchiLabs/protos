@@ -127,7 +127,7 @@ message RotateKeyRequest {
   string name = 1 [(buf.validate.field).string.min_len = 1];
 }
 message RotateKeyResponse {
-  ConduitKeyVersion version = 1;
+  int64 version = 1;
 }
 
 message EncryptRequest {
@@ -137,7 +137,7 @@ message EncryptRequest {
 }
 message EncryptResponse {
   bytes ciphertext = 1;
-  ConduitKeyVersion version = 2;
+  int64 version = 2;
 }
 
 message DecryptRequest {
@@ -147,5 +147,5 @@ message DecryptRequest {
 }
 message DecryptResponse {
   bytes plaintext = 1;
-  ConduitKeyVersion version = 2;
+  int64 version = 2;
 }
