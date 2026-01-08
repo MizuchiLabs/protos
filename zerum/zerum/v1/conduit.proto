@@ -101,8 +101,8 @@ message ListKeysResponse {
 
 message CreateKeyRequest {
   string name = 1 [(buf.validate.field).string.min_len = 1];
-  Algorithm algorithm = 2;
-  int32 rotation_period = 3 [(buf.validate.field).int32.gte = 60];
+  Algorithm algorithm = 2 [(buf.validate.field).enum = {defined_only: true}];
+  int64 rotation_period = 3 [(buf.validate.field).int64.gte = 60];
 }
 message CreateKeyResponse {
   ConduitKey key = 1;
@@ -111,7 +111,7 @@ message CreateKeyResponse {
 message UpdateKeyRequest {
   string name = 1 [(buf.validate.field).string.min_len = 1];
   bool is_active = 2;
-  int32 rotation_period = 3 [(buf.validate.field).int32.gte = 60];
+  int64 rotation_period = 3 [(buf.validate.field).int64.gte = 60];
 }
 message UpdateKeyResponse {
   ConduitKey key = 1;
@@ -137,7 +137,7 @@ message EncryptRequest {
 }
 message EncryptResponse {
   bytes ciphertext = 1;
-  int32 key_version = 2;
+  int64 key_version = 2;
 }
 
 message DecryptRequest {
@@ -147,5 +147,5 @@ message DecryptRequest {
 }
 message DecryptResponse {
   bytes plaintext = 1;
-  int32 key_version = 2;
+  int64 key_version = 2;
 }
