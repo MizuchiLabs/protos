@@ -1,0 +1,123 @@
+edition = "2023";
+
+package zerum.v1;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service ConduitService {
+  rpc GetKey(GetKeyRequest) returns (GetKeyResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/conduit/keys/{name}"};
+  }
+  rpc ListKeys(ListKeysRequest) returns (ListKeysResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/conduit/keys"};
+  }
+  rpc CreateKey(CreateKeyRequest) returns (CreateKeyResponse) {
+    option (google.api.http) = {
+      post: "/v1/conduit/keys"
+      body: "*"
+    };
+  }
+  rpc UpdateKey(UpdateKeyRequest) returns (UpdateKeyResponse) {
+    option (google.api.http) = {
+      patch: "/v1/conduit/keys/{name}"
+      body: "*"
+    };
+  }
+  rpc DeleteKey(DeleteKeyRequest) returns (DeleteKeyResponse) {
+    option (google.api.http) = {delete: "/v1/conduit/keys/{name}"};
+  }
+  rpc RotateKey(RotateKeyRequest) returns (RotateKeyResponse) {
+    option (google.api.http) = {post: "/v1/conduit/keys/{name}:rotate"};
+  }
+  rpc Encrypt(EncryptRequest) returns (EncryptResponse) {
+    option (google.api.http) = {
+      post: "/v1/conduit/keys/{name}:encrypt"
+      body: "*"
+    };
+  }
+  rpc Decrypt(DecryptRequest) returns (DecryptResponse) {
+    option (google.api.http) = {
+      post: "/v1/conduit/keys/{name}:decrypt"
+      body: "*"
+    };
+  }
+}
+
+message Key {
+  string id = 1;
+  string name = 2;
+  int32 version = 3;
+  string algorithm = 4;
+  bool is_active = 5;
+  int32 rotation_period = 6; // seconds, 0 = no rotation
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
+}
+
+message GetKeyRequest {
+  string name = 1 [(buf.validate.field).string.min_len = 1];
+}
+message GetKeyResponse {
+  Key key = 1;
+}
+
+message ListKeysRequest {
+  bool include_inactive = 1;
+}
+message ListKeysResponse {
+  repeated Key keys = 1;
+}
+
+message CreateKeyRequest {
+  string name = 1 [(buf.validate.field).string.min_len = 1];
+  string algorithm = 2;
+  int32 rotation_period = 3 [(buf.validate.field).int32.gte = 60];
+}
+message CreateKeyResponse {
+  Key key = 1;
+}
+
+message UpdateKeyRequest {
+  string name = 1 [(buf.validate.field).string.min_len = 1];
+  bool is_active = 2;
+  int32 rotation_period = 3 [(buf.validate.field).int32.gte = 60];
+}
+message UpdateKeyResponse {
+  Key key = 1;
+}
+
+message DeleteKeyRequest {
+  string name = 1 [(buf.validate.field).string.min_len = 1];
+}
+message DeleteKeyResponse {}
+
+message RotateKeyRequest {
+  string name = 1 [(buf.validate.field).string.min_len = 1];
+}
+message RotateKeyResponse {
+  Key key = 1;
+}
+
+message EncryptRequest {
+  string name = 1 [(buf.validate.field).string.min_len = 1];
+  bytes plaintext = 2 [(buf.validate.field).bytes.min_len = 1];
+  bytes associated_data = 3; // optional AEAD context
+}
+message EncryptResponse {
+  bytes ciphertext = 1;
+  int32 key_version = 2;
+}
+
+message DecryptRequest {
+  string name = 1 [(buf.validate.field).string.min_len = 1];
+  bytes ciphertext = 2 [(buf.validate.field).bytes.min_len = 1];
+  bytes associated_data = 3;
+}
+message DecryptResponse {
+  bytes plaintext = 1;
+  int32 key_version = 2;
+}
