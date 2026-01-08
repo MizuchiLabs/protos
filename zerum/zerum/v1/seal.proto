@@ -7,10 +7,10 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 
 service SealService {
-  rpc SealVault(SealVaultRequest) returns (SealVaultResponse) {
+  rpc Seal(SealRequest) returns (SealResponse) {
     option (google.api.http) = {post: "/v1/seal"};
   }
-  rpc UnsealVault(UnsealVaultRequest) returns (UnsealVaultResponse) {
+  rpc Unseal(UnsealRequest) returns (UnsealResponse) {
     option (google.api.http) = {post: "/v1/unseal"};
   }
   rpc GetStatus(GetStatusRequest) returns (GetStatusResponse) {
@@ -19,13 +19,13 @@ service SealService {
   }
 }
 
-message SealVaultRequest {}
-message SealVaultResponse {}
+message SealRequest {}
+message SealResponse {}
 
-message UnsealVaultRequest {
+message UnsealRequest {
   string unseal_key = 1 [(buf.validate.field).string.min_len = 1];
 }
-message UnsealVaultResponse {}
+message UnsealResponse {}
 
 message GetStatusRequest {}
 message GetStatusResponse {
