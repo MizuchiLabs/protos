@@ -70,14 +70,20 @@ enum Algorithm {
 }
 
 message ConduitKey {
-  string id = 1;
+  int64 id = 1;
   string name = 2;
-  int32 version = 3;
-  Algorithm algorithm = 4;
-  bool is_active = 5;
-  int32 rotation_period = 6; // seconds, 0 = no rotation
-  google.protobuf.Timestamp created_at = 7;
-  google.protobuf.Timestamp updated_at = 8;
+  Algorithm algorithm = 3;
+  bool is_active = 4;
+  int64 rotation_period = 5; // seconds, 0 = no rotation
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp updated_at = 7;
+}
+
+message ConduitKeyVersion {
+  int64 key_id = 1;
+  int64 version = 2;
+  bool is_active = 3;
+  google.protobuf.Timestamp created_at = 4;
 }
 
 message GetKeyRequest {
@@ -85,6 +91,7 @@ message GetKeyRequest {
 }
 message GetKeyResponse {
   ConduitKey key = 1;
+  repeated ConduitKeyVersion versions = 2;
 }
 
 message ListKeysRequest {}
