@@ -119,7 +119,7 @@ message UpdateKeyResponse {
 
 message DeleteKeyRequest {
   string name = 1 [(buf.validate.field).string.min_len = 1];
-  string version = 2; // optional delete specific version
+  int64 version = 2; // optional delete specific version
 }
 message DeleteKeyResponse {}
 
@@ -127,7 +127,7 @@ message RotateKeyRequest {
   string name = 1 [(buf.validate.field).string.min_len = 1];
 }
 message RotateKeyResponse {
-  ConduitKey key = 1;
+  ConduitKeyVersion version = 1;
 }
 
 message EncryptRequest {
@@ -137,7 +137,7 @@ message EncryptRequest {
 }
 message EncryptResponse {
   bytes ciphertext = 1;
-  int64 key_version = 2;
+  ConduitKeyVersion version = 2;
 }
 
 message DecryptRequest {
@@ -147,5 +147,5 @@ message DecryptRequest {
 }
 message DecryptResponse {
   bytes plaintext = 1;
-  int64 key_version = 2;
+  ConduitKeyVersion version = 2;
 }
