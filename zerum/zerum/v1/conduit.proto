@@ -87,9 +87,7 @@ message GetKeyResponse {
   ConduitKey key = 1;
 }
 
-message ListKeysRequest {
-  bool include_inactive = 1;
-}
+message ListKeysRequest {}
 message ListKeysResponse {
   repeated ConduitKey keys = 1;
 }
@@ -114,6 +112,7 @@ message UpdateKeyResponse {
 
 message DeleteKeyRequest {
   string name = 1 [(buf.validate.field).string.min_len = 1];
+  string version = 2; // optional delete specific version
 }
 message DeleteKeyResponse {}
 
