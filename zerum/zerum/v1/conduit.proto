@@ -74,7 +74,7 @@ message ConduitKey {
   string name = 2;
   Algorithm algorithm = 3;
   bool is_active = 4;
-  int64 rotation_period = 5; // seconds, 0 = no rotation
+  int64 rotation_period = 5;
   google.protobuf.Timestamp created_at = 6;
   google.protobuf.Timestamp updated_at = 7;
 }
@@ -87,7 +87,11 @@ message ConduitKeyVersion {
 }
 
 message GetKeyRequest {
-  string name = 1 [(buf.validate.field).string.min_len = 1];
+  string name = 1 [
+    (buf.validate.field).string.min_len = 1,
+    (buf.validate.field).string.max_len = 100,
+    (buf.validate.field).string.pattern = "^[a-z]+$"
+  ];
 }
 message GetKeyResponse {
   ConduitKey key = 1;
@@ -100,38 +104,64 @@ message ListKeysResponse {
 }
 
 message CreateKeyRequest {
-  string name = 1 [(buf.validate.field).string.min_len = 1];
+  string name = 1 [
+    (buf.validate.field).string.min_len = 1,
+    (buf.validate.field).string.max_len = 100,
+    (buf.validate.field).string.pattern = "^[a-z]+$"
+  ];
   Algorithm algorithm = 2 [(buf.validate.field).enum = {defined_only: true}];
-  int64 rotation_period = 3 [(buf.validate.field).int64.gte = 60];
+  int64 rotation_period = 3 [(buf.validate.field).int64 = {
+    gte: 1
+    lte: 87600
+  }];
 }
 message CreateKeyResponse {
   ConduitKey key = 1;
 }
 
 message UpdateKeyRequest {
-  string name = 1 [(buf.validate.field).string.min_len = 1];
+  string name = 1 [
+    (buf.validate.field).string.min_len = 1,
+    (buf.validate.field).string.max_len = 100,
+    (buf.validate.field).string.pattern = "^[a-z]+$"
+  ];
   bool is_active = 2;
-  int64 rotation_period = 3 [(buf.validate.field).int64.gte = 60];
+  int64 rotation_period = 3 [(buf.validate.field).int64 = {
+    gte: 1
+    lte: 87600
+  }];
 }
 message UpdateKeyResponse {
   ConduitKey key = 1;
 }
 
 message DeleteKeyRequest {
-  string name = 1 [(buf.validate.field).string.min_len = 1];
+  string name = 1 [
+    (buf.validate.field).string.min_len = 1,
+    (buf.validate.field).string.max_len = 100,
+    (buf.validate.field).string.pattern = "^[a-z]+$"
+  ];
   int64 version = 2; // optional delete specific version
 }
 message DeleteKeyResponse {}
 
 message RotateKeyRequest {
-  string name = 1 [(buf.validate.field).string.min_len = 1];
+  string name = 1 [
+    (buf.validate.field).string.min_len = 1,
+    (buf.validate.field).string.max_len = 100,
+    (buf.validate.field).string.pattern = "^[a-z]+$"
+  ];
 }
 message RotateKeyResponse {
   int64 version = 1;
 }
 
 message EncryptRequest {
-  string name = 1 [(buf.validate.field).string.min_len = 1];
+  string name = 1 [
+    (buf.validate.field).string.min_len = 1,
+    (buf.validate.field).string.max_len = 100,
+    (buf.validate.field).string.pattern = "^[a-z]+$"
+  ];
   bytes plaintext = 2 [(buf.validate.field).bytes.min_len = 1];
   bytes associated_data = 3; // optional AEAD context
 }
@@ -141,7 +171,11 @@ message EncryptResponse {
 }
 
 message DecryptRequest {
-  string name = 1 [(buf.validate.field).string.min_len = 1];
+  string name = 1 [
+    (buf.validate.field).string.min_len = 1,
+    (buf.validate.field).string.max_len = 100,
+    (buf.validate.field).string.pattern = "^[a-z]+$"
+  ];
   bytes ciphertext = 2 [(buf.validate.field).bytes.min_len = 1];
   bytes associated_data = 3;
 }
