@@ -1,0 +1,88 @@
+edition = "2023";
+
+package zerum.v1;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service APITokenService {
+  rpc GetAPIToken(GetAPITokenRequest) returns (GetAPITokenResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/api-token/{name}"};
+  }
+  rpc ListAPITokens(ListAPITokensRequest) returns (ListAPITokensResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/api-token"};
+  }
+  rpc CreateAPIToken(CreateAPITokenRequest) returns (CreateAPITokenResponse) {
+    option (google.api.http) = {
+      post: "/v1/api-token"
+      body: "*"
+    };
+  }
+  rpc UpdateAPIToken(UpdateAPITokenRequest) returns (UpdateAPITokenResponse) {
+    option (google.api.http) = {
+      patch: "/v1/api-token"
+      body: "*"
+    };
+  }
+  rpc DeleteAPIToken(DeleteAPITokenRequest) returns (DeleteAPITokenResponse) {
+    option (google.api.http) = {delete: "/v1/api-token"};
+  }
+}
+
+message APIToken {
+  int64 id = 1;
+  int64 user_id = 2;
+  string name = 3;
+  string description = 4;
+  google.protobuf.Timestamp expires_at = 5;
+  google.protobuf.Timestamp last_used_at = 6;
+  google.protobuf.Timestamp created_at = 7;
+}
+
+message GetAPITokenRequest {
+  int64 id = 1;
+}
+message GetAPITokenResponse {
+  APIToken token = 1;
+}
+
+message ListAPITokensRequest {}
+message ListAPITokensResponse {
+  repeated APIToken tokens = 1;
+}
+
+message CreateAPITokenRequest {
+  string name = 1 [
+    (buf.validate.field).string.min_len = 1,
+    (buf.validate.field).string.max_len = 100,
+    (buf.validate.field).string.pattern = "^[a-z][a-z0-9_-]*$"
+  ];
+  string description = 2 [(buf.validate.field).string.max_len = 1000];
+  google.protobuf.Timestamp expires_at = 3;
+}
+message CreateAPITokenResponse {
+  APIToken token = 1;
+  string secret = 2;
+}
+
+message UpdateAPITokenRequest {
+  int64 id = 1;
+  string name = 2 [
+    (buf.validate.field).string.min_len = 1,
+    (buf.validate.field).string.max_len = 100,
+    (buf.validate.field).string.pattern = "^[a-z][a-z0-9_-]*$"
+  ];
+  string description = 3 [(buf.validate.field).string.max_len = 1000];
+  google.protobuf.Timestamp expires_at = 4;
+}
+message UpdateAPITokenResponse {
+  APIToken token = 1;
+}
+
+message DeleteAPITokenRequest {
+  int64 id = 1;
+}
+message DeleteAPITokenResponse {}

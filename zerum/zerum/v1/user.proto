@@ -1,0 +1,72 @@
+edition = "2023";
+
+package zerum.v1;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service UserService {
+  rpc Whoami(WhoamiRequest) returns (WhoamiResponse) {
+    option (google.api.http) = {get: "/v1/whoami"};
+  }
+  rpc UpdateProfile(UpdateProfileRequest) returns (UpdateProfileResponse) {
+    option (google.api.http) = {
+      patch: "/v1/profile"
+      body: "*"
+    };
+  }
+  rpc UpdatePassword(UpdatePasswordRequest) returns (UpdatePasswordResponse) {
+    option (google.api.http) = {
+      patch: "/v1/password"
+      body: "*"
+    };
+  }
+  rpc DeletePassword(DeletePasswordRequest) returns (DeletePasswordResponse) {
+    option (google.api.http) = {delete: "/v1/password"};
+  }
+  rpc DeleteAccount(DeleteAccountRequest) returns (DeleteAccountResponse) {
+    option (google.api.http) = {delete: "/v1/account"};
+  }
+}
+
+message User {
+  string id = 1;
+  string username = 2;
+  string email = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+}
+message WhoamiRequest {}
+message WhoamiResponse {
+  User user = 1;
+}
+
+message UpdateProfileRequest {
+  string email = 2 [(buf.validate.field).string = {
+    email: true
+    max_len: 255
+  }];
+  string username = 3 [(buf.validate.field).string = {
+    min_len: 3
+    max_len: 39 // GitHub's max
+    pattern: "^[a-zA-Z0-9]([a-zA-Z0-9-_])*[a-zA-Z0-9]$"
+  }];
+}
+message UpdateProfileResponse {
+  User user = 1;
+}
+
+message UpdatePasswordRequest {
+  string current_password = 1 [(buf.validate.field).string.min_len = 1];
+  string new_password = 2 [(buf.validate.field).string.min_len = 8];
+}
+message UpdatePasswordResponse {}
+
+message DeletePasswordRequest {
+  string current_password = 1 [(buf.validate.field).string.min_len = 1];
+}
+message DeletePasswordResponse {}
+
+message DeleteAccountRequest {}
+message DeleteAccountResponse {}
