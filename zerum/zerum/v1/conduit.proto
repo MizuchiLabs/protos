@@ -111,7 +111,7 @@ message CreateKeyRequest {
   ];
   Algorithm algorithm = 2 [(buf.validate.field).enum = {defined_only: true}];
   int64 rotation_period = 3 [(buf.validate.field).int64 = {
-    gte: 1
+    gte: 0
     lte: 87600
   }];
 }
@@ -127,7 +127,7 @@ message UpdateKeyRequest {
   ];
   bool is_active = 2;
   int64 rotation_period = 3 [(buf.validate.field).int64 = {
-    gte: 1
+    gte: 0
     lte: 87600
   }];
 }
