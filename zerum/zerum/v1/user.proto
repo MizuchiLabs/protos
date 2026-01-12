@@ -32,7 +32,7 @@ service UserService {
 
 message User {
   int64 id = 1;
-  string username = 2;
+  string name = 2;
   string email = 3;
   google.protobuf.Timestamp created_at = 4;
   google.protobuf.Timestamp updated_at = 5;
@@ -43,13 +43,13 @@ message WhoamiResponse {
 }
 
 message UpdateProfileRequest {
-  string email = 2 [(buf.validate.field).string = {
+  string email = 1 [(buf.validate.field).string = {
     email: true
     max_len: 255
   }];
-  string username = 3 [(buf.validate.field).string = {
+  string name = 2 [(buf.validate.field).string = {
     min_len: 3
-    max_len: 39 // GitHub's max
+    max_len: 255
     pattern: "^[a-zA-Z0-9]([a-zA-Z0-9-_])*[a-zA-Z0-9]$"
   }];
 }
