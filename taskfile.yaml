@@ -1,0 +1,18 @@
+version: "3"
+
+tasks:
+  # 󰚰 Update deps
+  update:
+    desc: Update dependencies
+    cmds:
+      - cd mantrae && buf dep update
+      - cd zerum && buf dep update
+      - cd zyphor && buf dep update
+
+  # 󰚰 Lint
+  lint:
+    desc: Lint
+    cmds:
+      - cd mantrae && buf lint
+      - cd zerum && buf lint
+      - cd zyphor && buf lint
