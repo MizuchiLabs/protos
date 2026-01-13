@@ -70,14 +70,14 @@ message RegisterRequest {
   string name = 1 [
     (buf.validate.field).string = {
       min_len: 3
-      max_len: 255
+      max_len: 256
     },
     (zyphor.v1.sensitive) = true
   ];
   string email = 2 [
     (buf.validate.field).string = {
       email: true
-      max_len: 255
+      max_len: 256
     },
     (zyphor.v1.sensitive) = true
   ];
@@ -142,7 +142,7 @@ message ForgotPasswordRequest {
   string email = 1 [
     (buf.validate.field).string = {
       email: true
-      max_len: 255
+      max_len: 256
     },
     (zyphor.v1.sensitive) = true
   ];
@@ -170,7 +170,7 @@ message ResendVerificationRequest {
   string email = 1 [
     (buf.validate.field).string = {
       email: true
-      max_len: 255
+      max_len: 256
     },
     (zyphor.v1.sensitive) = true
   ];

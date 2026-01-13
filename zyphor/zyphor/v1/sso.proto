@@ -66,7 +66,7 @@ message UpdateOIDCProviderRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   string name = 2 [(buf.validate.field).string = {
     min_len: 1
-    max_len: 255
+    max_len: 256
   }];
   string issuer_url = 3 [
     (buf.validate.field).string = {
@@ -141,7 +141,7 @@ message UpdateSAMLProviderRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   string name = 2 [(buf.validate.field).string = {
     min_len: 1
-    max_len: 255
+    max_len: 256
   }];
   string metadata_url = 3 [(buf.validate.field).string = {
     uri: true
@@ -175,7 +175,7 @@ message CheckSSORequest {
   string email = 1 [
     (buf.validate.field).string = {
       email: true
-      max_len: 255
+      max_len: 256
     },
     (zyphor.v1.sensitive) = true
   ];
