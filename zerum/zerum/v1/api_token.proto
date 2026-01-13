@@ -6,33 +6,33 @@ import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 
-service APITokenService {
-  rpc GetAPIToken(GetAPITokenRequest) returns (GetAPITokenResponse) {
+service TokenService {
+  rpc GetToken(GetTokenRequest) returns (GetTokenResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/api-token/{id}"};
+    option (google.api.http) = {get: "/v1/token/{id}"};
   }
-  rpc ListAPITokens(ListAPITokensRequest) returns (ListAPITokensResponse) {
+  rpc ListTokens(ListTokensRequest) returns (ListTokensResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/api-token"};
+    option (google.api.http) = {get: "/v1/token"};
   }
-  rpc CreateAPIToken(CreateAPITokenRequest) returns (CreateAPITokenResponse) {
+  rpc CreateToken(CreateTokenRequest) returns (CreateTokenResponse) {
     option (google.api.http) = {
-      post: "/v1/api-token"
+      post: "/v1/token"
       body: "*"
     };
   }
-  rpc UpdateAPIToken(UpdateAPITokenRequest) returns (UpdateAPITokenResponse) {
+  rpc UpdateToken(UpdateTokenRequest) returns (UpdateTokenResponse) {
     option (google.api.http) = {
-      patch: "/v1/api-token"
+      patch: "/v1/token"
       body: "*"
     };
   }
-  rpc DeleteAPIToken(DeleteAPITokenRequest) returns (DeleteAPITokenResponse) {
-    option (google.api.http) = {delete: "/v1/api-token"};
+  rpc DeleteToken(DeleteTokenRequest) returns (DeleteTokenResponse) {
+    option (google.api.http) = {delete: "/v1/token"};
   }
 }
 
-message APIToken {
+message Token {
   int64 id = 1;
   int64 user_id = 2;
   string name = 3;
@@ -42,19 +42,19 @@ message APIToken {
   google.protobuf.Timestamp created_at = 7;
 }
 
-message GetAPITokenRequest {
+message GetTokenRequest {
   int64 id = 1;
 }
-message GetAPITokenResponse {
-  APIToken token = 1;
+message GetTokenResponse {
+  Token token = 1;
 }
 
-message ListAPITokensRequest {}
-message ListAPITokensResponse {
-  repeated APIToken tokens = 1;
+message ListTokensRequest {}
+message ListTokensResponse {
+  repeated Token tokens = 1;
 }
 
-message CreateAPITokenRequest {
+message CreateTokenRequest {
   string name = 1 [
     (buf.validate.field).string.min_len = 1,
     (buf.validate.field).string.max_len = 100,
@@ -63,12 +63,12 @@ message CreateAPITokenRequest {
   string description = 2 [(buf.validate.field).string.max_len = 1000];
   google.protobuf.Timestamp expires_at = 3;
 }
-message CreateAPITokenResponse {
-  APIToken token = 1;
+message CreateTokenResponse {
+  Token token = 1;
   string secret = 2;
 }
 
-message UpdateAPITokenRequest {
+message UpdateTokenRequest {
   int64 id = 1;
   string name = 2 [
     (buf.validate.field).string.min_len = 1,
@@ -78,11 +78,11 @@ message UpdateAPITokenRequest {
   string description = 3 [(buf.validate.field).string.max_len = 1000];
   google.protobuf.Timestamp expires_at = 4;
 }
-message UpdateAPITokenResponse {
-  APIToken token = 1;
+message UpdateTokenResponse {
+  Token token = 1;
 }
 
-message DeleteAPITokenRequest {
+message DeleteTokenRequest {
   int64 id = 1;
 }
-message DeleteAPITokenResponse {}
+message DeleteTokenResponse {}
