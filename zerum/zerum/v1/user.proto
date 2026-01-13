@@ -110,5 +110,7 @@ message DeletePasswordRequest {
 }
 message DeletePasswordResponse {}
 
-message DeleteUserRequest {}
+message DeleteUserRequest {
+  int64 id = 1;
+}
 message DeleteUserResponse {}
