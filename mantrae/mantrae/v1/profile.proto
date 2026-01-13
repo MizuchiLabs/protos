@@ -1,4 +1,4 @@
-edition = "2023";
+syntax = "proto3";
 
 package mantrae.v1;
 
@@ -35,7 +35,7 @@ message GetProfileResponse {
 
 message CreateProfileRequest {
   string name = 1 [(buf.validate.field).string.min_len = 1];
-  string description = 2;
+  optional string description = 2;
 }
 message CreateProfileResponse {
   Profile profile = 1;
@@ -44,8 +44,8 @@ message CreateProfileResponse {
 message UpdateProfileRequest {
   int64 id = 1 [(buf.validate.field).int64.gt = 0];
   string name = 2 [(buf.validate.field).string.min_len = 1];
-  string description = 3;
-  bool regenerate_token = 4;
+  optional string description = 3;
+  optional bool regenerate_token = 4;
 }
 message UpdateProfileResponse {
   Profile profile = 1;
@@ -57,12 +57,12 @@ message DeleteProfileRequest {
 message DeleteProfileResponse {}
 
 message ListProfilesRequest {
-  int64 limit = 1 [(buf.validate.field).cel = {
+  optional int64 limit = 1 [(buf.validate.field).cel = {
     id: "limit.valid"
     message: "limit must be either -1 or greater than 0"
     expression: "this == -1 || this > 0"
   }];
-  int64 offset = 2 [(buf.validate.field).int64.gte = 0];
+  optional int64 offset = 2 [(buf.validate.field).int64.gte = 0];
 }
 message ListProfilesResponse {
   repeated Profile profiles = 1;

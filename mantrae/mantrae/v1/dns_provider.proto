@@ -1,4 +1,4 @@
-edition = "2023";
+syntax = "proto3";
 
 package mantrae.v1;
 
@@ -77,12 +77,12 @@ message DeleteDNSProviderRequest {
 message DeleteDNSProviderResponse {}
 
 message ListDNSProvidersRequest {
-  int64 limit = 1 [(buf.validate.field).cel = {
+  optional int64 limit = 1 [(buf.validate.field).cel = {
     id: "limit.valid"
     message: "limit must be either -1 or greater than 0"
     expression: "this == -1 || this > 0"
   }];
-  int64 offset = 2 [(buf.validate.field).int64.gte = 0];
+  optional int64 offset = 2 [(buf.validate.field).int64.gte = 0];
 }
 message ListDNSProvidersResponse {
   repeated DNSProvider dns_providers = 1;

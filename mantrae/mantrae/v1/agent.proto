@@ -1,4 +1,4 @@
-edition = "2023";
+syntax = "proto3";
 
 package mantrae.v1;
 
@@ -57,8 +57,8 @@ message CreateAgentResponse {
 
 message UpdateAgentRequest {
   string id = 1 [(buf.validate.field).string.min_len = 1];
-  string ip = 2 [(buf.validate.field).string.ip = true];
-  bool rotate_token = 3;
+  optional string ip = 2 [(buf.validate.field).string.ip = true];
+  optional bool rotate_token = 3;
 }
 message UpdateAgentResponse {
   Agent agent = 1;
@@ -71,12 +71,12 @@ message DeleteAgentResponse {}
 
 message ListAgentsRequest {
   int64 profile_id = 1 [(buf.validate.field).int64.gt = 0];
-  int64 limit = 2 [(buf.validate.field).cel = {
+  optional int64 limit = 2 [(buf.validate.field).cel = {
     id: "limit.valid"
     message: "limit must be either -1 or greater than 0"
     expression: "this == -1 || this > 0"
   }];
-  int64 offset = 3 [(buf.validate.field).int64.gte = 0];
+  optional int64 offset = 3 [(buf.validate.field).int64.gte = 0];
 }
 message ListAgentsResponse {
   repeated Agent agents = 1;
