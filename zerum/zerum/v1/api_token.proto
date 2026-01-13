@@ -6,7 +6,7 @@ import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 
-service TokenService {
+service APITokenService {
   rpc GetToken(GetTokenRequest) returns (GetTokenResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/token/{id}"};
@@ -32,7 +32,7 @@ service TokenService {
   }
 }
 
-message Token {
+message APIToken {
   int64 id = 1;
   int64 user_id = 2;
   string name = 3;
@@ -46,12 +46,12 @@ message GetTokenRequest {
   int64 id = 1;
 }
 message GetTokenResponse {
-  Token token = 1;
+  APIToken token = 1;
 }
 
 message ListTokensRequest {}
 message ListTokensResponse {
-  repeated Token tokens = 1;
+  repeated APIToken tokens = 1;
 }
 
 message CreateTokenRequest {
@@ -64,7 +64,7 @@ message CreateTokenRequest {
   google.protobuf.Timestamp expires_at = 3;
 }
 message CreateTokenResponse {
-  Token token = 1;
+  APIToken token = 1;
   string secret = 2;
 }
 
@@ -76,10 +76,9 @@ message UpdateTokenRequest {
     (buf.validate.field).string.pattern = "^[a-z][a-z0-9_-]*$"
   ];
   string description = 3 [(buf.validate.field).string.max_len = 1000];
-  google.protobuf.Timestamp expires_at = 4;
 }
 message UpdateTokenResponse {
-  Token token = 1;
+  APIToken token = 1;
 }
 
 message DeleteTokenRequest {
