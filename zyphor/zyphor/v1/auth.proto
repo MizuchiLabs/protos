@@ -51,6 +51,7 @@ service AuthService {
   rpc VerifyEmail(VerifyEmailRequest) returns (VerifyEmailResponse) {
     option (google.api.http) = {post: "/v1/verify-email"};
   }
+  rpc StreamCLILogin(StreamCLILoginRequest) returns (stream StreamCLILoginResponse) {}
   rpc StartCLILogin(StartCLILoginRequest) returns (StartCLILoginResponse) {
     option (google.api.http) = {
       post: "/v1/cli/login"
@@ -178,6 +179,15 @@ message ResendVerificationRequest {
 message ResendVerificationResponse {}
 
 // CLI login flow -------------------------------------------------------------
+message StreamCLILoginRequest {
+  string login_code = 1 [(zyphor.v1.sensitive) = true];
+}
+message StreamCLILoginResponse {
+  User user = 1;
+  string access_token = 2 [(zyphor.v1.sensitive) = true];
+  string refresh_token = 3 [(zyphor.v1.sensitive) = true];
+}
+
 message StartCLILoginRequest {}
 message StartCLILoginResponse {
   string login_code = 1 [(zyphor.v1.sensitive) = true];
