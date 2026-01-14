@@ -183,9 +183,10 @@ message StreamCLILoginRequest {
   string login_code = 1 [(zyphor.v1.sensitive) = true];
 }
 message StreamCLILoginResponse {
-  User user = 1;
+  User user = 1; // sent after success
   string access_token = 2 [(zyphor.v1.sensitive) = true];
   string refresh_token = 3 [(zyphor.v1.sensitive) = true];
+  string verification_url = 4; // sent first
 }
 
 message StartCLILoginRequest {}
