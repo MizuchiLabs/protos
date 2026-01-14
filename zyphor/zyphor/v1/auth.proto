@@ -175,7 +175,7 @@ message StreamCLILoginResponse {
   User user = 1; // sent after success
   string access_token = 2 [(zyphor.v1.sensitive) = true];
   string refresh_token = 3 [(zyphor.v1.sensitive) = true];
-  string verification_url = 4; // sent first
+  string verification_url = 4 [(zyphor.v1.sensitive) = true]; // sent first
 }
 
 message VerifyCLILoginRequest {
