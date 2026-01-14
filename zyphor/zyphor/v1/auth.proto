@@ -52,18 +52,7 @@ service AuthService {
     option (google.api.http) = {post: "/v1/verify-email"};
   }
   rpc StreamCLILogin(StreamCLILoginRequest) returns (stream StreamCLILoginResponse) {}
-  rpc StartCLILogin(StartCLILoginRequest) returns (StartCLILoginResponse) {
-    option (google.api.http) = {
-      post: "/v1/cli/login"
-      body: "*"
-    };
-  }
-  rpc PollCLILogin(PollCLILoginRequest) returns (PollCLILoginResponse) {
-    option (google.api.http) = {post: "/v1/cli/poll"};
-  }
-  rpc VerifyCLILogin(VerifyCLILoginRequest) returns (VerifyCLILoginResponse) {
-    option (google.api.http) = {post: "/v1/cli/verify"};
-  }
+  rpc VerifyCLILogin(VerifyCLILoginRequest) returns (VerifyCLILoginResponse) {}
 }
 
 // Authentication requests/responses
@@ -187,30 +176,6 @@ message StreamCLILoginResponse {
   string access_token = 2 [(zyphor.v1.sensitive) = true];
   string refresh_token = 3 [(zyphor.v1.sensitive) = true];
   string verification_url = 4; // sent first
-}
-
-message StartCLILoginRequest {}
-message StartCLILoginResponse {
-  string login_code = 1 [(zyphor.v1.sensitive) = true];
-  string verification_url = 2 [(zyphor.v1.sensitive) = true];
-  google.protobuf.Timestamp expires_at = 3;
-}
-
-message PollCLILoginRequest {
-  string login_code = 1 [
-    (buf.validate.field).string.min_len = 1,
-    (zyphor.v1.sensitive) = true
-  ];
-}
-message PollCLILoginResponse {
-  enum Status {
-    STATUS_UNSPECIFIED = 0;
-    STATUS_ACCEPTED = 1;
-  }
-  Status status = 1;
-  User user = 2;
-  string access_token = 3 [(zyphor.v1.sensitive) = true];
-  string refresh_token = 4 [(zyphor.v1.sensitive) = true];
 }
 
 message VerifyCLILoginRequest {
