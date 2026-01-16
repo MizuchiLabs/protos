@@ -1,0 +1,116 @@
+edition = "2023";
+
+package kuiper.v1;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service UserService {
+  rpc Whoami(WhoamiRequest) returns (WhoamiResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/users/me"};
+  }
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {
+    option (google.api.http) = {
+      post: "/v1/users"
+      body: "*"
+    };
+  }
+  rpc UpdateProfile(UpdateProfileRequest) returns (UpdateProfileResponse) {
+    option (google.api.http) = {
+      patch: "/v1/users/me"
+      body: "*"
+    };
+  }
+  rpc UpdatePassword(UpdatePasswordRequest) returns (UpdatePasswordResponse) {
+    option (google.api.http) = {
+      patch: "/v1/users/me/password"
+      body: "*"
+    };
+  }
+  rpc DeletePassword(DeletePasswordRequest) returns (DeletePasswordResponse) {
+    option (google.api.http) = {delete: "/v1/users/me/password"};
+  }
+  rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse) {
+    option (google.api.http) = {delete: "/v1/users"};
+  }
+}
+
+message User {
+  int64 id = 1;
+  string name = 2;
+  string email = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+}
+
+message WhoamiRequest {}
+message WhoamiResponse {
+  User user = 1;
+}
+
+message CreateUserRequest {
+  string name = 1 [(buf.validate.field).string = {
+    min_len: 3
+    max_len: 256
+    pattern: "^[a-zA-Z0-9]([a-zA-Z0-9-_])*[a-zA-Z0-9]$"
+  }];
+  string email = 2 [(buf.validate.field).string = {
+    email: true
+    max_len: 256
+  }];
+  string password = 3 [
+    (buf.validate.field).string = {
+      min_len: 8
+      max_len: 256
+    },
+    (buf.validate.field).cel = {
+      expression: "this.matches('.*[A-Z].*') && this.matches('.*[a-z].*') && this.matches('.*[0-9].*') && this.matches('.*[^A-Za-z0-9].*')"
+      message: "Password must contain upper, lower, digit, and symbol"
+    }
+  ];
+}
+message CreateUserResponse {
+  User user = 1;
+}
+
+message UpdateProfileRequest {
+  string email = 1 [(buf.validate.field).string = {
+    email: true
+    max_len: 256
+  }];
+  string name = 2 [(buf.validate.field).string = {
+    min_len: 3
+    max_len: 256
+    pattern: "^[a-zA-Z0-9]([a-zA-Z0-9-_])*[a-zA-Z0-9]$"
+  }];
+}
+message UpdateProfileResponse {
+  User user = 1;
+}
+
+message UpdatePasswordRequest {
+  string current_password = 1 [(buf.validate.field).string.min_len = 1];
+  string new_password = 2 [
+    (buf.validate.field).string = {
+      min_len: 8
+      max_len: 256
+    },
+    (buf.validate.field).cel = {
+      expression: "this.matches('.*[A-Z].*') && this.matches('.*[a-z].*') && this.matches('.*[0-9].*') && this.matches('.*[^A-Za-z0-9].*')"
+      message: "Password must contain upper, lower, digit, and symbol"
+    }
+  ];
+}
+message UpdatePasswordResponse {}
+
+message DeletePasswordRequest {
+  string current_password = 1 [(buf.validate.field).string.min_len = 1];
+}
+message DeletePasswordResponse {}
+
+message DeleteUserRequest {
+  int64 id = 1;
+}
+message DeleteUserResponse {}

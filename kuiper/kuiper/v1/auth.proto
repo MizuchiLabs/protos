@@ -1,0 +1,31 @@
+edition = "2023";
+
+package kuiper.v1;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+
+service AuthService {
+  rpc Login(LoginRequest) returns (LoginResponse) {
+    option (google.api.http) = {post: "/v1/login"};
+  }
+  rpc Logout(LogoutRequest) returns (LogoutResponse) {
+    option idempotency_level = IDEMPOTENT;
+    option (google.api.http) = {post: "/v1/logout"};
+  }
+  rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse) {
+    option (google.api.http) = {post: "/v1/refresh-token"};
+  }
+}
+
+message LoginRequest {
+  string email = 1 [(buf.validate.field).string.email = true];
+  string password = 2 [(buf.validate.field).string.min_len = 1];
+}
+message LoginResponse {}
+
+message RefreshTokenRequest {}
+message RefreshTokenResponse {}
+
+message LogoutRequest {}
+message LogoutResponse {}
