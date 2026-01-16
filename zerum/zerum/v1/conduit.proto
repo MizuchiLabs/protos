@@ -70,17 +70,18 @@ enum Algorithm {
 }
 
 message ConduitKey {
-  int64 id = 1;
-  string name = 2;
-  Algorithm algorithm = 3;
-  bool is_active = 4;
-  int64 rotation_period = 5;
-  google.protobuf.Timestamp created_at = 6;
-  google.protobuf.Timestamp updated_at = 7;
+  string id = 1;
+  string project_id = 2;
+  string name = 3;
+  Algorithm algorithm = 4;
+  bool is_active = 5;
+  int64 rotation_period = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
 }
 
 message ConduitKeyVersion {
-  int64 key_id = 1;
+  string key_id = 1;
   int64 version = 2;
   bool is_active = 3;
   google.protobuf.Timestamp created_at = 4;

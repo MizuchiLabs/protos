@@ -33,17 +33,17 @@ service APITokenService {
 }
 
 message APIToken {
-  int64 id = 1;
-  int64 user_id = 2;
-  string name = 3;
-  string description = 4;
+  string id = 1;
+  string project_id = 2;
+  string user_id = 3;
+  string name = 4;
   google.protobuf.Timestamp expires_at = 5;
   google.protobuf.Timestamp last_used_at = 6;
   google.protobuf.Timestamp created_at = 7;
 }
 
 message GetTokenRequest {
-  int64 id = 1;
+  string id = 1 [(buf.validate.field).string.uuid = true];
 }
 message GetTokenResponse {
   APIToken token = 1;
@@ -60,7 +60,6 @@ message CreateTokenRequest {
     (buf.validate.field).string.max_len = 100,
     (buf.validate.field).string.pattern = "^[a-z][a-z0-9_-]*$"
   ];
-  string description = 2 [(buf.validate.field).string.max_len = 1000];
   google.protobuf.Timestamp expires_at = 3;
 }
 message CreateTokenResponse {
@@ -69,19 +68,18 @@ message CreateTokenResponse {
 }
 
 message UpdateTokenRequest {
-  int64 id = 1;
+  string id = 1 [(buf.validate.field).string.uuid = true];
   string name = 2 [
     (buf.validate.field).string.min_len = 1,
     (buf.validate.field).string.max_len = 100,
     (buf.validate.field).string.pattern = "^[a-z][a-z0-9_-]*$"
   ];
-  string description = 3 [(buf.validate.field).string.max_len = 1000];
 }
 message UpdateTokenResponse {
   APIToken token = 1;
 }
 
 message DeleteTokenRequest {
-  int64 id = 1;
+  string id = 1 [(buf.validate.field).string.uuid = true];
 }
 message DeleteTokenResponse {}
