@@ -75,14 +75,14 @@ message ConduitKey {
   string name = 3;
   Algorithm algorithm = 4;
   bool is_active = 5;
-  int64 rotation_period = 6;
+  int32 rotation_period = 6;
   google.protobuf.Timestamp created_at = 7;
   google.protobuf.Timestamp updated_at = 8;
 }
 
 message ConduitKeyVersion {
   string key_id = 1;
-  int64 version = 2;
+  int32 version = 2;
   bool is_active = 3;
   google.protobuf.Timestamp created_at = 4;
 }
@@ -111,7 +111,7 @@ message CreateKeyRequest {
     (buf.validate.field).string.pattern = "^[a-z][a-z0-9_-]*$"
   ];
   Algorithm algorithm = 2 [(buf.validate.field).enum = {defined_only: true}];
-  int64 rotation_period = 3 [(buf.validate.field).int64 = {
+  int32 rotation_period = 3 [(buf.validate.field).int32 = {
     gte: 0
     lte: 87600
   }];
@@ -127,7 +127,7 @@ message UpdateKeyRequest {
     (buf.validate.field).string.pattern = "^[a-z][a-z0-9_-]*$"
   ];
   bool is_active = 2;
-  int64 rotation_period = 3 [(buf.validate.field).int64 = {
+  int32 rotation_period = 3 [(buf.validate.field).int32 = {
     gte: 0
     lte: 87600
   }];
@@ -142,7 +142,7 @@ message DeleteKeyRequest {
     (buf.validate.field).string.max_len = 100,
     (buf.validate.field).string.pattern = "^[a-z][a-z0-9_-]*$"
   ];
-  int64 version = 2; // optional delete specific version
+  int32 version = 2; // optional delete specific version
 }
 message DeleteKeyResponse {}
 
@@ -154,7 +154,7 @@ message RotateKeyRequest {
   ];
 }
 message RotateKeyResponse {
-  int64 version = 1;
+  int32 version = 1;
 }
 
 message EncryptRequest {
@@ -168,7 +168,7 @@ message EncryptRequest {
 }
 message EncryptResponse {
   bytes ciphertext = 1;
-  int64 version = 2;
+  int32 version = 2;
 }
 
 message DecryptRequest {
@@ -182,5 +182,5 @@ message DecryptRequest {
 }
 message DecryptResponse {
   bytes plaintext = 1;
-  int64 version = 2;
+  int32 version = 2;
 }
