@@ -43,19 +43,23 @@ message APIToken {
 }
 
 message GetTokenRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
+  string project_id = 1 [(buf.validate.field).string.uuid = true];
+  string id = 2 [(buf.validate.field).string.uuid = true];
 }
 message GetTokenResponse {
   APIToken token = 1;
 }
 
-message ListTokensRequest {}
+message ListTokensRequest {
+  string project_id = 1 [(buf.validate.field).string.uuid = true];
+}
 message ListTokensResponse {
   repeated APIToken tokens = 1;
 }
 
 message CreateTokenRequest {
-  string name = 1 [
+  string project_id = 1 [(buf.validate.field).string.uuid = true];
+  string name = 2 [
     (buf.validate.field).string.min_len = 1,
     (buf.validate.field).string.max_len = 100,
     (buf.validate.field).string.pattern = "^[a-z][a-z0-9_-]*$"
@@ -68,8 +72,9 @@ message CreateTokenResponse {
 }
 
 message UpdateTokenRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
-  string name = 2 [
+  string project_id = 1 [(buf.validate.field).string.uuid = true];
+  string id = 2 [(buf.validate.field).string.uuid = true];
+  string name = 3 [
     (buf.validate.field).string.min_len = 1,
     (buf.validate.field).string.max_len = 100,
     (buf.validate.field).string.pattern = "^[a-z][a-z0-9_-]*$"
@@ -80,6 +85,7 @@ message UpdateTokenResponse {
 }
 
 message DeleteTokenRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
+  string project_id = 1 [(buf.validate.field).string.uuid = true];
+  string id = 2 [(buf.validate.field).string.uuid = true];
 }
 message DeleteTokenResponse {}

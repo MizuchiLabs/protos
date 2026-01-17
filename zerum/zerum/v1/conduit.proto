@@ -88,7 +88,8 @@ message ConduitKeyVersion {
 }
 
 message GetKeyRequest {
-  string name = 1 [
+  string project_id = 1 [(buf.validate.field).string.uuid = true];
+  string name = 2 [
     (buf.validate.field).string.min_len = 1,
     (buf.validate.field).string.max_len = 100,
     (buf.validate.field).string.pattern = "^[a-z][a-z0-9_-]*$"
@@ -105,13 +106,14 @@ message ListKeysResponse {
 }
 
 message CreateKeyRequest {
-  string name = 1 [
+  string project_id = 1 [(buf.validate.field).string.uuid = true];
+  string name = 2 [
     (buf.validate.field).string.min_len = 1,
     (buf.validate.field).string.max_len = 100,
     (buf.validate.field).string.pattern = "^[a-z][a-z0-9_-]*$"
   ];
-  Algorithm algorithm = 2 [(buf.validate.field).enum = {defined_only: true}];
-  int32 rotation_period = 3 [(buf.validate.field).int32 = {
+  Algorithm algorithm = 3 [(buf.validate.field).enum = {defined_only: true}];
+  int32 rotation_period = 4 [(buf.validate.field).int32 = {
     gte: 0
     lte: 87600
   }];
@@ -121,13 +123,14 @@ message CreateKeyResponse {
 }
 
 message UpdateKeyRequest {
-  string name = 1 [
+  string project_id = 1 [(buf.validate.field).string.uuid = true];
+  string name = 2 [
     (buf.validate.field).string.min_len = 1,
     (buf.validate.field).string.max_len = 100,
     (buf.validate.field).string.pattern = "^[a-z][a-z0-9_-]*$"
   ];
-  bool is_active = 2;
-  int32 rotation_period = 3 [(buf.validate.field).int32 = {
+  bool is_active = 3;
+  int32 rotation_period = 4 [(buf.validate.field).int32 = {
     gte: 0
     lte: 87600
   }];
@@ -137,17 +140,19 @@ message UpdateKeyResponse {
 }
 
 message DeleteKeyRequest {
-  string name = 1 [
+  string project_id = 1 [(buf.validate.field).string.uuid = true];
+  string name = 2 [
     (buf.validate.field).string.min_len = 1,
     (buf.validate.field).string.max_len = 100,
     (buf.validate.field).string.pattern = "^[a-z][a-z0-9_-]*$"
   ];
-  int32 version = 2; // optional delete specific version
+  int32 version = 3; // optional delete specific version
 }
 message DeleteKeyResponse {}
 
 message RotateKeyRequest {
-  string name = 1 [
+  string project_id = 1 [(buf.validate.field).string.uuid = true];
+  string name = 2 [
     (buf.validate.field).string.min_len = 1,
     (buf.validate.field).string.max_len = 100,
     (buf.validate.field).string.pattern = "^[a-z][a-z0-9_-]*$"
@@ -158,13 +163,14 @@ message RotateKeyResponse {
 }
 
 message EncryptRequest {
-  string name = 1 [
+  string project_id = 1 [(buf.validate.field).string.uuid = true];
+  string name = 2 [
     (buf.validate.field).string.min_len = 1,
     (buf.validate.field).string.max_len = 100,
     (buf.validate.field).string.pattern = "^[a-z][a-z0-9_-]*$"
   ];
-  bytes plaintext = 2 [(buf.validate.field).bytes.min_len = 1];
-  bytes associated_data = 3; // optional AEAD context
+  bytes plaintext = 3 [(buf.validate.field).bytes.min_len = 1];
+  bytes associated_data = 4; // optional AEAD context
 }
 message EncryptResponse {
   bytes ciphertext = 1;
@@ -172,13 +178,14 @@ message EncryptResponse {
 }
 
 message DecryptRequest {
-  string name = 1 [
+  string project_id = 1 [(buf.validate.field).string.uuid = true];
+  string name = 2 [
     (buf.validate.field).string.min_len = 1,
     (buf.validate.field).string.max_len = 100,
     (buf.validate.field).string.pattern = "^[a-z][a-z0-9_-]*$"
   ];
-  bytes ciphertext = 2 [(buf.validate.field).bytes.min_len = 1];
-  bytes associated_data = 3;
+  bytes ciphertext = 3 [(buf.validate.field).bytes.min_len = 1];
+  bytes associated_data = 4;
 }
 message DecryptResponse {
   bytes plaintext = 1;
