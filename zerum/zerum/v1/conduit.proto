@@ -88,19 +88,16 @@ message ConduitKeyVersion {
 }
 
 message GetKeyRequest {
-  string project_id = 1 [(buf.validate.field).string.uuid = true];
-  string name = 2 [
-    (buf.validate.field).string.min_len = 1,
-    (buf.validate.field).string.max_len = 100,
-    (buf.validate.field).string.pattern = "^[a-z][a-z0-9_-]*$"
-  ];
+  string id = 1 [(buf.validate.field).string.uuid = true];
 }
 message GetKeyResponse {
   ConduitKey key = 1;
   repeated ConduitKeyVersion versions = 2;
 }
 
-message ListKeysRequest {}
+message ListKeysRequest {
+  string project_id = 1 [(buf.validate.field).string.uuid = true];
+}
 message ListKeysResponse {
   repeated ConduitKey keys = 1;
 }
@@ -123,7 +120,7 @@ message CreateKeyResponse {
 }
 
 message UpdateKeyRequest {
-  string project_id = 1 [(buf.validate.field).string.uuid = true];
+  string id = 1 [(buf.validate.field).string.uuid = true];
   string name = 2 [
     (buf.validate.field).string.min_len = 1,
     (buf.validate.field).string.max_len = 100,
@@ -140,23 +137,13 @@ message UpdateKeyResponse {
 }
 
 message DeleteKeyRequest {
-  string project_id = 1 [(buf.validate.field).string.uuid = true];
-  string name = 2 [
-    (buf.validate.field).string.min_len = 1,
-    (buf.validate.field).string.max_len = 100,
-    (buf.validate.field).string.pattern = "^[a-z][a-z0-9_-]*$"
-  ];
-  int32 version = 3; // optional delete specific version
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  int32 version = 2; // optional delete specific version
 }
 message DeleteKeyResponse {}
 
 message RotateKeyRequest {
-  string project_id = 1 [(buf.validate.field).string.uuid = true];
-  string name = 2 [
-    (buf.validate.field).string.min_len = 1,
-    (buf.validate.field).string.max_len = 100,
-    (buf.validate.field).string.pattern = "^[a-z][a-z0-9_-]*$"
-  ];
+  string id = 1 [(buf.validate.field).string.uuid = true];
 }
 message RotateKeyResponse {
   int32 version = 1;
