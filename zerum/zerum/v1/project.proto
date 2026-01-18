@@ -1,0 +1,105 @@
+edition = "2023";
+
+package zerum.v1;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "zerum/v1/user.proto";
+
+service ProjectService {
+  rpc GetProject(GetProjectRequest) returns (GetProjectResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/projects/{id}"};
+  }
+  rpc ListProjects(ListProjectsRequest) returns (ListProjectsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/projects"};
+  }
+  rpc CreateProject(CreateProjectRequest) returns (CreateProjectResponse) {
+    option (google.api.http) = {
+      post: "/v1/projects"
+      body: "*"
+    };
+  }
+  rpc UpdateProject(UpdateProjectRequest) returns (UpdateProjectResponse) {
+    option (google.api.http) = {
+      patch: "/v1/projects/{id}"
+      body: "*"
+    };
+  }
+  rpc DeleteProject(DeleteProjectRequest) returns (DeleteProjectResponse) {
+    option (google.api.http) = {delete: "/v1/projects/{id}"};
+  }
+  // Project Members
+  rpc AddProjectMember(AddProjectMemberRequest) returns (AddProjectMemberResponse) {
+    option (google.api.http) = {
+      post: "/v1/projects/{project_id}/members"
+      body: "*"
+    };
+  }
+  rpc RemoveProjectMember(RemoveProjectMemberRequest) returns (RemoveProjectMemberResponse) {
+    option (google.api.http) = {delete: "/v1/projects/{project_id}/members/{user_id}"};
+  }
+}
+
+message Project {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  repeated User members = 4;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp updated_at = 6;
+}
+
+message GetProjectRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+}
+message GetProjectResponse {
+  Project project = 1;
+}
+
+message ListProjectsRequest {}
+message ListProjectsResponse {
+  repeated Project projects = 1;
+}
+
+message CreateProjectRequest {
+  string name = 1 [
+    (buf.validate.field).string.min_len = 1,
+    (buf.validate.field).string.max_len = 100
+  ];
+  string description = 2 [(buf.validate.field).string.max_len = 1000];
+}
+message CreateProjectResponse {
+  Project project = 1;
+}
+
+message UpdateProjectRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+  string name = 2 [
+    (buf.validate.field).string.min_len = 1,
+    (buf.validate.field).string.max_len = 100
+  ];
+  string description = 3 [(buf.validate.field).string.max_len = 1000];
+}
+message UpdateProjectResponse {
+  Project project = 1;
+}
+
+message DeleteProjectRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+}
+message DeleteProjectResponse {}
+
+message AddProjectMemberRequest {
+  string project_id = 1 [(buf.validate.field).string.uuid = true];
+  string user_id = 2 [(buf.validate.field).string.uuid = true];
+}
+message AddProjectMemberResponse {}
+
+message RemoveProjectMemberRequest {
+  string project_id = 1 [(buf.validate.field).string.uuid = true];
+  string user_id = 2 [(buf.validate.field).string.uuid = true];
+}
+message RemoveProjectMemberResponse {}
