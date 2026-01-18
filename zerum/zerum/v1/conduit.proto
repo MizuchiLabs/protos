@@ -88,7 +88,12 @@ message ConduitKeyVersion {
 }
 
 message GetKeyRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
+  string project_id = 1 [(buf.validate.field).string.uuid = true];
+  string name = 2 [
+    (buf.validate.field).string.min_len = 1,
+    (buf.validate.field).string.max_len = 100,
+    (buf.validate.field).string.pattern = "^[a-z][a-z0-9_-]*$"
+  ];
 }
 message GetKeyResponse {
   ConduitKey key = 1;
@@ -120,7 +125,7 @@ message CreateKeyResponse {
 }
 
 message UpdateKeyRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
+  string project_id = 1 [(buf.validate.field).string.uuid = true];
   string name = 2 [
     (buf.validate.field).string.min_len = 1,
     (buf.validate.field).string.max_len = 100,
@@ -137,22 +142,37 @@ message UpdateKeyResponse {
 }
 
 message DeleteKeyRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
-  int32 version = 2; // optional delete specific version
+  string project_id = 1 [(buf.validate.field).string.uuid = true];
+  string name = 2 [
+    (buf.validate.field).string.min_len = 1,
+    (buf.validate.field).string.max_len = 100,
+    (buf.validate.field).string.pattern = "^[a-z][a-z0-9_-]*$"
+  ];
+  int32 version = 3; // optional delete specific version
 }
 message DeleteKeyResponse {}
 
 message RotateKeyRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
+  string project_id = 1 [(buf.validate.field).string.uuid = true];
+  string name = 2 [
+    (buf.validate.field).string.min_len = 1,
+    (buf.validate.field).string.max_len = 100,
+    (buf.validate.field).string.pattern = "^[a-z][a-z0-9_-]*$"
+  ];
 }
 message RotateKeyResponse {
   int32 version = 1;
 }
 
 message EncryptRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
-  bytes plaintext = 2 [(buf.validate.field).bytes.min_len = 1];
-  bytes associated_data = 3; // optional AEAD context
+  string project_id = 1 [(buf.validate.field).string.uuid = true];
+  string name = 2 [
+    (buf.validate.field).string.min_len = 1,
+    (buf.validate.field).string.max_len = 100,
+    (buf.validate.field).string.pattern = "^[a-z][a-z0-9_-]*$"
+  ];
+  bytes plaintext = 3 [(buf.validate.field).bytes.min_len = 1];
+  bytes associated_data = 4; // optional AEAD context
 }
 message EncryptResponse {
   bytes ciphertext = 1;
@@ -160,9 +180,14 @@ message EncryptResponse {
 }
 
 message DecryptRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
-  bytes ciphertext = 2 [(buf.validate.field).bytes.min_len = 1];
-  bytes associated_data = 3;
+  string project_id = 1 [(buf.validate.field).string.uuid = true];
+  string name = 2 [
+    (buf.validate.field).string.min_len = 1,
+    (buf.validate.field).string.max_len = 100,
+    (buf.validate.field).string.pattern = "^[a-z][a-z0-9_-]*$"
+  ];
+  bytes ciphertext = 3 [(buf.validate.field).bytes.min_len = 1];
+  bytes associated_data = 4;
 }
 message DecryptResponse {
   bytes plaintext = 1;
