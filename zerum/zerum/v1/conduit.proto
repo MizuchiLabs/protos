@@ -9,7 +9,7 @@ import "google/protobuf/timestamp.proto";
 service ConduitService {
   rpc GetKey(GetKeyRequest) returns (GetKeyResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/conduit/keys/{name}"};
+    option (google.api.http) = {get: "/v1/conduit/keys/{id}"};
   }
   rpc ListKeys(ListKeysRequest) returns (ListKeysResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
@@ -23,25 +23,25 @@ service ConduitService {
   }
   rpc UpdateKey(UpdateKeyRequest) returns (UpdateKeyResponse) {
     option (google.api.http) = {
-      patch: "/v1/conduit/keys/{name}"
+      patch: "/v1/conduit/keys/{id}"
       body: "*"
     };
   }
   rpc DeleteKey(DeleteKeyRequest) returns (DeleteKeyResponse) {
-    option (google.api.http) = {delete: "/v1/conduit/keys/{name}"};
+    option (google.api.http) = {delete: "/v1/conduit/keys/{id}"};
   }
   rpc RotateKey(RotateKeyRequest) returns (RotateKeyResponse) {
-    option (google.api.http) = {post: "/v1/conduit/keys/{name}:rotate"};
+    option (google.api.http) = {post: "/v1/conduit/keys/{id}:rotate"};
   }
   rpc Encrypt(EncryptRequest) returns (EncryptResponse) {
     option (google.api.http) = {
-      post: "/v1/conduit/keys/{name}:encrypt"
+      post: "/v1/conduit/keys/{id}:encrypt"
       body: "*"
     };
   }
   rpc Decrypt(DecryptRequest) returns (DecryptResponse) {
     option (google.api.http) = {
-      post: "/v1/conduit/keys/{name}:decrypt"
+      post: "/v1/conduit/keys/{id}:decrypt"
       body: "*"
     };
   }
