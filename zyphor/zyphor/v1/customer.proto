@@ -73,7 +73,7 @@ message CustomerLimit {
 
 message GetSubscriptionRequest {}
 message GetSubscriptionResponse {
-  Subscription state = 1 [(zyphor.v1.sensitive) = true];
+  Subscription subscription = 1 [(zyphor.v1.sensitive) = true];
   UsageSnapshot snapshot = 2;
 }
 
