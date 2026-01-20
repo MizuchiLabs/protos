@@ -8,9 +8,9 @@ import "google/protobuf/timestamp.proto";
 import "zyphor/v1/options.proto";
 
 service CustomerService {
-  rpc GetCustomer(GetCustomerRequest) returns (GetCustomerResponse) {
+  rpc GetSubscription(GetSubscriptionRequest) returns (GetSubscriptionResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/customers/me"};
+    option (google.api.http) = {get: "/v1/customers/subscription"};
   }
   rpc CreateCheckout(CreateCheckoutRequest) returns (CreateCheckoutResponse) {
     option (google.api.http) = {post: "/v1/customers/checkout"};
@@ -39,35 +39,19 @@ enum ResourceType {
   RESOURCE_TYPE_SA = 5;
   RESOURCE_TYPE_AGENT = 6;
   RESOURCE_TYPE_TARGET = 7;
-  RESOURCE_TYPE_PRINCIPAL = 8;
 }
 
-// External data from polar ---
-message CustomerState {
-  string id = 1;
-  string external_id = 2;
-  string email = 3 [(zyphor.v1.sensitive) = true];
-  string name = 4;
-  string avatar_url = 5;
-  SubscriptionSummary subscription = 6; // Current subscription summary
+message Subscription {
+  PlanType plan_type = 1;
+  string status = 2;
+  bool cancel_at_period_end = 3;
+  google.protobuf.Timestamp current_period_end = 4;
+  google.protobuf.Timestamp updated_at = 5;
 }
-message SubscriptionSummary {
-  string id = 1; // Subscription ID
-  string product_id = 2; // Product ID
-  string product_name = 3; // Name of the product
-  string status = 4; // "active", "trialing", "canceled", etc.
-  int64 amount_due = 5; // Current amount in cents
-  int64 predicted_amount_due = 6; // Predicted amount in cents
-  string currency = 7; // ISO 4217 currency code
-  string recurring_interval = 8; // "month", "year", etc.
-  bool cancel_at_period_end = 9;
-  PlanType plan_type = 10; // "team", "business", etc.
-  UsageSummary usage = 11; // Current usage snapshot
-  google.protobuf.Timestamp period_end = 12; // When current billing period ends
-}
-message UsageSummary {
-  float consumed_units = 1; // Units consumed this period
-  int64 amount_so_far = 2; // Billed amount so far this period
+message UsageSnapshot {
+  google.protobuf.Timestamp snapshot_date = 1;
+  int32 agent_count = 2;
+  int32 member_count = 3;
 }
 
 message LimitCount {
@@ -87,10 +71,10 @@ message CustomerLimit {
   repeated WorkspaceLimits limits = 3;
 }
 
-message GetCustomerRequest {}
-message GetCustomerResponse {
-  CustomerState state = 1 [(zyphor.v1.sensitive) = true];
-  CustomerLimit limit = 2;
+message GetSubscriptionRequest {}
+message GetSubscriptionResponse {
+  Subscription state = 1 [(zyphor.v1.sensitive) = true];
+  UsageSnapshot snapshot = 2;
 }
 
 message CreateCheckoutRequest {
