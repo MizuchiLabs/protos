@@ -41,9 +41,15 @@ enum ResourceType {
   RESOURCE_TYPE_TARGET = 7;
 }
 
+enum SubscriptionStatus {
+  SUBSCRIPTION_STATUS_UNSPECIFIED = 0;
+  SUBSCRIPTION_STATUS_ACTIVE = 1;
+  SUBSCRIPTION_STATUS_CANCELLED = 2;
+}
+
 message Subscription {
   PlanType plan_type = 1;
-  string status = 2;
+  SubscriptionStatus status = 2;
   bool cancel_at_period_end = 3;
   google.protobuf.Timestamp current_period_end = 4;
   google.protobuf.Timestamp updated_at = 5;
@@ -52,23 +58,6 @@ message UsageSnapshot {
   google.protobuf.Timestamp snapshot_date = 1;
   int32 agent_count = 2;
   int32 member_count = 3;
-}
-
-message LimitCount {
-  ResourceType resource = 1;
-  int32 current = 2;
-  int32 max = 3;
-  float usage_percent = 4; // Calculated: (current/max) * 100
-}
-message WorkspaceLimits {
-  string workspace_id = 1;
-  string workspace_name = 2;
-  repeated LimitCount limits = 3;
-}
-message CustomerLimit {
-  int32 current_workspaces = 1;
-  int32 max_workspaces = 2;
-  repeated WorkspaceLimits limits = 3;
 }
 
 message GetSubscriptionRequest {}
