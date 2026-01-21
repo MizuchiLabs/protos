@@ -42,12 +42,11 @@ enum AgentStatus {
 message Agent {
   string id = 1;
   string workspace_id = 2;
-  string target_id = 3;
-  string name = 4;
-  AgentStatus status = 5;
-  AgentMetadata metadata = 6;
-  google.protobuf.Timestamp updated_at = 7;
-  google.protobuf.Timestamp created_at = 8;
+  string name = 3;
+  AgentStatus status = 4;
+  AgentMetadata metadata = 5;
+  google.protobuf.Timestamp updated_at = 6;
+  google.protobuf.Timestamp created_at = 7;
 }
 message AgentMetadata {
   string version = 1;
@@ -120,8 +119,9 @@ message BootstrapAgentRequest {
   AgentMetadata metadata = 3;
 }
 message BootstrapAgentResponse {
-  Agent agent = 1;
-  string token = 2 [(zyphor.v1.sensitive) = true];
+  string id = 1;
+  string workspace_id = 2;
+  string token = 3 [(zyphor.v1.sensitive) = true];
 }
 
 message AgentHeartbeatRequest {

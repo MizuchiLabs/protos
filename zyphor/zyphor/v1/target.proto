@@ -44,13 +44,14 @@ message Target {
   string id = 1;
   string workspace_id = 2;
   string template_id = 3;
-  string name = 4;
-  string description = 5;
-  repeated string endpoints = 6 [(zyphor.v1.sensitive) = true];
-  repeated Principal principals = 7;
-  TargetMetadata metadata = 8;
-  google.protobuf.Timestamp created_at = 9;
-  google.protobuf.Timestamp updated_at = 10;
+  string agent_id = 4;
+  string name = 5;
+  string description = 6;
+  repeated string endpoints = 7 [(zyphor.v1.sensitive) = true];
+  repeated Principal principals = 8;
+  TargetMetadata metadata = 9;
+  google.protobuf.Timestamp created_at = 10;
+  google.protobuf.Timestamp updated_at = 11;
 }
 message TargetMetadata {
   // Basic system info
