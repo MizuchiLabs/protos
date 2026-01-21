@@ -54,16 +54,22 @@ message Subscription {
   google.protobuf.Timestamp current_period_end = 4;
   google.protobuf.Timestamp updated_at = 5;
 }
-message UsageSnapshot {
-  google.protobuf.Timestamp snapshot_date = 1;
-  int32 agent_count = 2;
-  int32 member_count = 3;
+message QuotaInfo {
+  repeated ResourceQuota resources = 1;
+}
+
+message ResourceQuota {
+  ResourceType resource_type = 1;
+  int32 current = 2;
+  int32 limit = 3;
+  int32 usage_percent = 4;
+  bool exceeded = 5;
 }
 
 message GetSubscriptionRequest {}
 message GetSubscriptionResponse {
   Subscription subscription = 1 [(zyphor.v1.sensitive) = true];
-  UsageSnapshot snapshot = 2;
+  QuotaInfo quota = 2 [(zyphor.v1.sensitive) = true];
 }
 
 message CreateCheckoutRequest {

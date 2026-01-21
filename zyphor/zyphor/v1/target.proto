@@ -32,12 +32,6 @@ service TargetService {
   rpc DeleteTarget(DeleteTargetRequest) returns (DeleteTargetResponse) {
     option (google.api.http) = {delete: "/v1/target/{id}"};
   }
-  // rpc AddTargetEndpoint(AddTargetEndpointRequest) returns (AddTargetEndpointResponse) {
-  //   option (google.api.http) = {post: "/v1/target/{target_id}/endpoint/{value}"};
-  // }
-  // rpc RemoveTargetEndpoint(RemoveTargetEndpointRequest) returns (RemoveTargetEndpointResponse) {
-  //   option (google.api.http) = {delete: "/v1/target/{target_id}/endpoint/{value}"};
-  // }
   rpc GetSubjectAccess(GetSubjectAccessRequest) returns (GetSubjectAccessResponse) {
     option (google.api.http) = {
       post: "/v1/targets/access"
@@ -128,32 +122,6 @@ message ListTargetsRequest {
 message ListTargetsResponse {
   repeated Target targets = 1;
 }
-
-// message AddTargetEndpointRequest {
-//   string target_id = 1 [(buf.validate.field).string.uuid = true];
-//   string value = 2 [
-//     (buf.validate.field).cel = {
-//       id: "value.ip_or_uri"
-//       message: "value must be either a valid IP or a valid URI"
-//       expression: "this.isIp() || this.isUri()"
-//     },
-//     (zyphor.v1.sensitive) = true
-//   ];
-// }
-// message AddTargetEndpointResponse {}
-
-// message RemoveTargetEndpointRequest {
-//   string target_id = 1 [(buf.validate.field).string.uuid = true];
-//   string value = 2 [
-//     (buf.validate.field).cel = {
-//       id: "value.ip_or_uri"
-//       message: "value must be either a valid IP or a valid URI"
-//       expression: "this.isIp() || this.isUri()"
-//     },
-//     (zyphor.v1.sensitive) = true
-//   ];
-// }
-// message RemoveTargetEndpointResponse {}
 
 message AccessibleTarget {
   string target_id = 1;
