@@ -122,6 +122,7 @@ message BootstrapAgentResponse {
   string id = 1;
   string workspace_id = 2;
   string token = 3 [(zyphor.v1.sensitive) = true];
+  AgentStatus status = 4;
 }
 
 message AgentHeartbeatRequest {
