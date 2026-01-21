@@ -10,7 +10,7 @@ import "zyphor/v1/options.proto";
 service PrincipalService {
   rpc SetPrincipals(SetPrincipalsRequest) returns (SetPrincipalsResponse) {
     option (google.api.http) = {
-      post: "/v1/principal"
+      post: "/v1/principals"
       body: "*"
     };
   }
@@ -58,7 +58,7 @@ message Principal {
 
 message SetPrincipalsRequest {
   string target_id = 1 [(buf.validate.field).string.uuid = true];
-  repeated string username = 2 [
+  repeated string usernames = 2 [
     (buf.validate.field).repeated = {
       items: {
         string: {
