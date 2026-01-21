@@ -8,7 +8,7 @@ import "google/protobuf/timestamp.proto";
 import "zyphor/v1/options.proto";
 
 service PrincipalService {
-  rpc CreatePrincipal(CreatePrincipalRequest) returns (CreatePrincipalResponse) {
+  rpc SetPrincipals(SetPrincipalsRequest) returns (SetPrincipalsResponse) {
     option (google.api.http) = {
       post: "/v1/principal"
       body: "*"
@@ -17,9 +17,6 @@ service PrincipalService {
   rpc ListPrincipals(ListPrincipalsRequest) returns (ListPrincipalsResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/principals/{workspace_id}"};
-  }
-  rpc DeletePrincipal(DeletePrincipalRequest) returns (DeletePrincipalResponse) {
-    option (google.api.http) = {delete: "/v1/principal/{target_id}/{username}"};
   }
   rpc AddSubjectsToPrincipal(AddSubjectsToPrincipalRequest) returns (AddSubjectsToPrincipalResponse) {
     option (google.api.http) = {
@@ -59,29 +56,22 @@ message Principal {
   google.protobuf.Timestamp created_at = 7;
 }
 
-message CreatePrincipalRequest {
+message SetPrincipalsRequest {
   string target_id = 1 [(buf.validate.field).string.uuid = true];
-  string username = 2 [
-    (buf.validate.field).string = {
-      min_len: 1
-      max_len: 32
-      pattern: "^[a-z_][a-z0-9-_]*\\$?$" // Valid Unix username
+  repeated string username = 2 [
+    (buf.validate.field).repeated = {
+      items: {
+        string: {
+          min_len: 1
+          max_len: 32
+          pattern: "^[a-z_][a-z0-9-_]*\\$?$" // Valid Unix username
+        }
+      }
     },
     (zyphor.v1.sensitive) = true
   ];
 }
-message CreatePrincipalResponse {
-  Principal principal = 1;
-}
-
-message DeletePrincipalRequest {
-  string target_id = 1 [(buf.validate.field).string.uuid = true];
-  string username = 2 [
-    (buf.validate.field).string.min_len = 1,
-    (zyphor.v1.sensitive) = true
-  ];
-}
-message DeletePrincipalResponse {}
+message SetPrincipalsResponse {}
 
 message ListPrincipalsRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
