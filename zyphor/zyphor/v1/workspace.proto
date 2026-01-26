@@ -41,16 +41,29 @@ service WorkspaceService {
   rpc SendTestNotification(SendTestNotificationRequest) returns (SendTestNotificationResponse) {}
 }
 
+enum PermissionLevel {
+  PERMISSION_LEVEL_UNSPECIFIED = 0;
+  PERMISSION_LEVEL_VIEW = 1;
+  PERMISSION_LEVEL_ADMIN = 2;
+  PERMISSION_LEVEL_OWNER = 3;
+}
+
 message Workspace {
   string id = 1;
   string name = 2;
   string description = 3;
   string created_by = 4;
-  repeated User members = 5;
-  WorkspaceSettings settings = 6;
-  NotificationSettings notifications = 7;
-  google.protobuf.Timestamp created_at = 8;
-  google.protobuf.Timestamp updated_at = 9;
+  WorkspaceSettings settings = 5;
+  NotificationSettings notifications = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
+}
+
+message WorkspaceMember {
+  User user = 1;
+  PermissionLevel level = 2;
+  google.protobuf.Timestamp created_at = 3;
+  google.protobuf.Timestamp updated_at = 4;
 }
 
 message WorkspaceSettings {
@@ -101,6 +114,7 @@ message GetWorkspaceRequest {
 }
 message GetWorkspaceResponse {
   Workspace workspace = 1;
+  repeated WorkspaceMember members = 2;
 }
 
 message CreateWorkspaceRequest {
