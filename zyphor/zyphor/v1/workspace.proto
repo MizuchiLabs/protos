@@ -39,7 +39,7 @@ service WorkspaceService {
     option (google.api.http) = {post: "/v1/workspace/{workspace_id}/members/{user_id}"};
   }
   rpc UpdateWorkspaceOwner(UpdateWorkspaceOwnerRequest) returns (UpdateWorkspaceOwnerResponse) {
-    option (google.api.http) = {post: "/v1/workspace/{workspace_id}/owner/{user_id}"};
+    option (google.api.http) = {post: "/v1/workspace/{workspace_id}/owner/{new_owner}"};
   }
   rpc SendTestNotification(SendTestNotificationRequest) returns (SendTestNotificationResponse) {}
 }
