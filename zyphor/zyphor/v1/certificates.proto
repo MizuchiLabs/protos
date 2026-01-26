@@ -215,7 +215,8 @@ message SSHConfigOptions {
 message SignPublicKeyRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   string ca_name = 2 [(buf.validate.field).string.max_len = 256];
-  repeated string public_keys = 3 [
+  uint32 certificate_type = 3;
+  repeated string public_keys = 4 [
     (buf.validate.field).repeated.items.string = {
       min_len: 1
       max_len: 10000
@@ -223,11 +224,11 @@ message SignPublicKeyRequest {
     },
     (zyphor.v1.sensitive) = true
   ];
-  google.protobuf.Duration ttl = 4 [(buf.validate.field).duration = {
+  google.protobuf.Duration ttl = 5 [(buf.validate.field).duration = {
     gte: {seconds: 60}
     lte: {seconds: 31536000}
   }];
-  SSHConfigOptions options = 5;
+  SSHConfigOptions options = 6;
 }
 message SignPublicKeyResponse {
   repeated Certificate certificates = 1;
