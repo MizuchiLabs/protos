@@ -38,6 +38,9 @@ service WorkspaceService {
   rpc UpdateWorkspaceMember(UpdateWorkspaceMemberRequest) returns (UpdateWorkspaceMemberResponse) {
     option (google.api.http) = {post: "/v1/workspace/{workspace_id}/members/{user_id}"};
   }
+  rpc UpdateWorkspaceOwner(UpdateWorkspaceOwnerRequest) returns (UpdateWorkspaceOwnerResponse) {
+    option (google.api.http) = {post: "/v1/workspace/{workspace_id}/owner/{user_id}"};
+  }
   rpc SendTestNotification(SendTestNotificationRequest) returns (SendTestNotificationResponse) {}
 }
 
@@ -164,6 +167,12 @@ message UpdateWorkspaceMemberRequest {
   PermissionLevel permission_level = 3;
 }
 message UpdateWorkspaceMemberResponse {}
+
+message UpdateWorkspaceOwnerRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string new_owner = 2 [(buf.validate.field).string.uuid = true];
+}
+message UpdateWorkspaceOwnerResponse {}
 
 message SendTestNotificationRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
