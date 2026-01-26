@@ -5,7 +5,7 @@ package zyphor.v1;
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
-import "zyphor/v1/user.proto";
+import "zyphor/v1/workspace.proto";
 
 service TeamService {
   rpc GetTeam(GetTeamRequest) returns (GetTeamResponse) {
@@ -44,7 +44,7 @@ message Team {
   string workspace_id = 2;
   string name = 3;
   string description = 4;
-  repeated User members = 5;
+  repeated WorkspaceMember members = 5;
   google.protobuf.Timestamp created_at = 6;
   google.protobuf.Timestamp updated_at = 7;
 }
