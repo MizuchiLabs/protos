@@ -35,6 +35,9 @@ service WorkspaceService {
   rpc RemoveWorkspaceMember(RemoveWorkspaceMemberRequest) returns (RemoveWorkspaceMemberResponse) {
     option (google.api.http) = {delete: "/v1/workspace/{workspace_id}/members/{user_id}"};
   }
+  rpc UpdateWorkspaceMember(UpdateWorkspaceMemberRequest) returns (UpdateWorkspaceMemberResponse) {
+    option (google.api.http) = {post: "/v1/workspace/{workspace_id}/members/{user_id}"};
+  }
   rpc SendTestNotification(SendTestNotificationRequest) returns (SendTestNotificationResponse) {}
 }
 
@@ -140,6 +143,13 @@ message RemoveWorkspaceMemberRequest {
   string user_id = 2 [(buf.validate.field).string.uuid = true];
 }
 message RemoveWorkspaceMemberResponse {}
+
+message UpdateWorkspaceMemberRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string user_id = 2 [(buf.validate.field).string.uuid = true];
+  int32 permission_level = 3;
+}
+message UpdateWorkspaceMemberResponse {}
 
 message SendTestNotificationRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
