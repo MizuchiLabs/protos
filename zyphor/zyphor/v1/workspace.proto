@@ -67,10 +67,12 @@ message Workspace {
 }
 
 message WorkspaceMember {
-  User user = 1;
-  PermissionLevel permission_level = 2;
-  google.protobuf.Timestamp created_at = 3;
-  google.protobuf.Timestamp updated_at = 4;
+  string id = 1;
+  string workspace_id = 2;
+  User user = 3;
+  PermissionLevel permission_level = 4;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp updated_at = 6;
 }
 
 message WorkspaceSettings {
