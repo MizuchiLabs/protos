@@ -61,7 +61,7 @@ message Workspace {
 
 message WorkspaceMember {
   User user = 1;
-  PermissionLevel level = 2;
+  PermissionLevel permission_level = 2;
   google.protobuf.Timestamp created_at = 3;
   google.protobuf.Timestamp updated_at = 4;
 }
@@ -161,7 +161,7 @@ message RemoveWorkspaceMemberResponse {}
 message UpdateWorkspaceMemberRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   string user_id = 2 [(buf.validate.field).string.uuid = true];
-  int32 permission_level = 3;
+  PermissionLevel permission_level = 3;
 }
 message UpdateWorkspaceMemberResponse {}
 
