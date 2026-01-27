@@ -91,11 +91,11 @@ message CreateCertificateAuthorityRequest {
     not_in: [0]
   }];
   int32 key_bits = 5;
-  int32 lifetime_months = 6 [(buf.validate.field).int32 = {
-    gte: 1
-    lte: 60 // Max 5 years
+  bool is_default = 6;
+  google.protobuf.Duration lifetime = 7 [(buf.validate.field).duration = {
+    gte: {seconds: 2629746} /* Min 1 month */
+    lte: {seconds: 157784760} /* Max 5 years */
   }];
-  bool is_default = 7;
   google.protobuf.Duration user_default_ttl = 8 [(buf.validate.field).duration = {
     gte: {seconds: 60} /* Min 1 minute */
     lte: {seconds: 31536000} /* Max 1 year */
