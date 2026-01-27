@@ -93,8 +93,8 @@ message CreateCertificateAuthorityRequest {
   int32 key_bits = 5;
   bool is_default = 6;
   google.protobuf.Duration lifetime = 7 [(buf.validate.field).duration = {
-    gte: {seconds: 2629746} /* Min 1 month */
-    lte: {seconds: 157784760} /* Max 5 years */
+    gte: {seconds: 2628000} /* Min 1 month */
+    lte: {seconds: 315360000} /* Max 10 years */
   }];
   google.protobuf.Duration user_default_ttl = 8 [(buf.validate.field).duration = {
     gte: {seconds: 60} /* Min 1 minute */
@@ -174,7 +174,10 @@ message RolloverCertificateAuthorityRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
   CertificateKeyType key_type = 2;
   int32 key_bits = 3;
-  int32 lifetime_months = 4;
+  google.protobuf.Duration lifetime = 4 [(buf.validate.field).duration = {
+    gte: {seconds: 2628000} /* Min 1 month */
+    lte: {seconds: 315360000} /* Max 10 years */
+  }];
   bool force = 5;
 }
 message RolloverCertificateAuthorityResponse {
