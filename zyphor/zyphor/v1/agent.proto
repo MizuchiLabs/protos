@@ -131,4 +131,6 @@ message AgentHeartbeatRequest {
   AgentMetadata agent_metadata = 3;
   TargetMetadata target_metadata = 4;
 }
-message AgentHeartbeatResponse {}
+message AgentHeartbeatResponse {
+  AgentStatus status = 1;
+}
