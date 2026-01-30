@@ -16,23 +16,23 @@ service PrincipalService {
   }
   rpc ListPrincipals(ListPrincipalsRequest) returns (ListPrincipalsResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/principals/{workspace_id}"};
+    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/principals"};
   }
   rpc AddSubjectsToPrincipal(AddSubjectsToPrincipalRequest) returns (AddSubjectsToPrincipalResponse) {
     option (google.api.http) = {
-      post: "/v1/principal/add"
+      post: "/v1/principals/add"
       body: "*"
     };
   }
   rpc RemoveSubjectsFromPrincipal(RemoveSubjectsFromPrincipalRequest) returns (RemoveSubjectsFromPrincipalResponse) {
     option (google.api.http) = {
-      post: "/v1/principal/remove"
+      post: "/v1/principals/remove"
       body: "*"
     };
   }
   rpc RevokeAllAccess(RevokeAllAccessRequest) returns (RevokeAllAccessResponse) {
     option (google.api.http) = {
-      post: "/v1/principal/revoke"
+      post: "/v1/principals/revoke"
       body: "*"
     };
   }

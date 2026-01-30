@@ -9,16 +9,13 @@ import "zyphor/v1/options.proto";
 
 service InvitationService {
   rpc GetInvitation(GetInvitationRequest) returns (GetInvitationResponse) {
-    option (google.api.http) = {get: "/v1/invite/{token}"};
+    option (google.api.http) = {get: "/v1/invites/{token}"};
   }
   rpc CreateInvitation(CreateInvitationRequest) returns (CreateInvitationResponse) {
-    option (google.api.http) = {
-      post: "/v1/invite"
-      body: "*"
-    };
+    option (google.api.http) = {post: "/v1/workspaces/{workspace_id}/invites/{expiry}"};
   }
   rpc AcceptInvitation(AcceptInvitationRequest) returns (AcceptInvitationResponse) {
-    option (google.api.http) = {post: "/v1/invite/claim/{token}"};
+    option (google.api.http) = {post: "/v1/invites/{token}"};
   }
 }
 
