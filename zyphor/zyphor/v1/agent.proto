@@ -126,7 +126,7 @@ message BootstrapAgentResponse {
 }
 
 message AgentHeartbeatRequest {
-  string ca_id = 1 [(buf.validate.field).string.uuid = true];
+  string ca_name = 1;
   repeated string users = 2;
   AgentMetadata agent_metadata = 3;
   TargetMetadata target_metadata = 4;
