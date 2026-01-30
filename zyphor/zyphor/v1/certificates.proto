@@ -226,9 +226,14 @@ message SSHConfigOptions {
 }
 
 message SignPublicKeyRequest {
+  enum CertificateType {
+    CERTIFICATE_TYPE_UNSPECIFIED = 0;
+    CERTIFICATE_TYPE_USER = 1;
+    CERTIFICATE_TYPE_HOST = 2;
+  }
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   string ca_name = 2 [(buf.validate.field).string.max_len = 256];
-  uint32 certificate_type = 3;
+  CertificateType type = 3;
   repeated string public_keys = 4 [
     (buf.validate.field).repeated.items.string = {
       min_len: 1
