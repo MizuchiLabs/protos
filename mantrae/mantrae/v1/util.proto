@@ -11,7 +11,6 @@ import "mantrae/v1/profile.proto";
 import "mantrae/v1/router.proto";
 import "mantrae/v1/servers_transport.proto";
 import "mantrae/v1/service.proto";
-import "mantrae/v1/traefik_instance.proto";
 import "mantrae/v1/user.proto";
 
 service UtilService {
@@ -48,11 +47,10 @@ message EventStreamResponse {
     User user = 3;
     Agent agent = 4;
     DNSProvider dns_provider = 5;
-    TraefikInstance traefik_instance = 6;
-    Router router = 7;
-    Service service = 8;
-    Middleware middleware = 9;
-    ServersTransport servers_transport = 10;
-    EntryPoint entry_point = 11;
+    Router router = 6;
+    Service service = 7;
+    Middleware middleware = 8;
+    ServersTransport servers_transport = 9;
+    EntryPoint entry_point = 10;
   }
 }
