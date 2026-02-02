@@ -8,8 +8,6 @@ import "google/protobuf/timestamp.proto";
 service UserService {
   rpc LoginUser(LoginUserRequest) returns (LoginUserResponse);
   rpc LogoutUser(LogoutUserRequest) returns (LogoutUserResponse);
-  rpc VerifyOTP(VerifyOTPRequest) returns (VerifyOTPResponse);
-  rpc SendOTP(SendOTPRequest) returns (SendOTPResponse);
   rpc GetUser(GetUserRequest) returns (GetUserResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
   }
@@ -51,27 +49,6 @@ message LoginUserResponse {
 
 message LogoutUserRequest {}
 message LogoutUserResponse {}
-
-message VerifyOTPRequest {
-  oneof identifier {
-    option (buf.validate.oneof).required = true;
-    string username = 1 [(buf.validate.field).string.min_len = 3];
-    string email = 2 [(buf.validate.field).string.email = true];
-  }
-  string otp = 3 [(buf.validate.field).string.len = 6];
-}
-message VerifyOTPResponse {
-  User user = 1;
-}
-
-message SendOTPRequest {
-  oneof identifier {
-    option (buf.validate.oneof).required = true;
-    string username = 1 [(buf.validate.field).string.min_len = 3];
-    string email = 2 [(buf.validate.field).string.email = true];
-  }
-}
-message SendOTPResponse {}
 
 message GetUserRequest {
   oneof identifier {
