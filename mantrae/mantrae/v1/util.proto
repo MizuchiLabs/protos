@@ -2,17 +2,6 @@ syntax = "proto3";
 
 package mantrae.v1;
 
-import "buf/validate/validate.proto";
-import "mantrae/v1/agent.proto";
-import "mantrae/v1/dns_provider.proto";
-import "mantrae/v1/entry_point.proto";
-import "mantrae/v1/middleware.proto";
-import "mantrae/v1/profile.proto";
-import "mantrae/v1/router.proto";
-import "mantrae/v1/servers_transport.proto";
-import "mantrae/v1/service.proto";
-import "mantrae/v1/user.proto";
-
 service UtilService {
   rpc GetVersion(GetVersionRequest) returns (GetVersionResponse);
   rpc GetDynamicConfig(GetDynamicConfigRequest) returns (GetDynamicConfigResponse);
