@@ -17,14 +17,6 @@ service UtilService {
   rpc GetVersion(GetVersionRequest) returns (GetVersionResponse);
   rpc GetDynamicConfig(GetDynamicConfigRequest) returns (GetDynamicConfigResponse);
   rpc GetPublicIP(GetPublicIPRequest) returns (GetPublicIPResponse);
-  rpc EventStream(EventStreamRequest) returns (stream EventStreamResponse);
-}
-
-enum EventAction {
-  EVENT_ACTION_UNSPECIFIED = 0;
-  EVENT_ACTION_CREATED = 1;
-  EVENT_ACTION_UPDATED = 2;
-  EVENT_ACTION_DELETED = 3;
 }
 
 message GetVersionRequest {}
@@ -43,22 +35,4 @@ message GetPublicIPRequest {}
 message GetPublicIPResponse {
   string ipv4 = 1;
   string ipv6 = 2;
-}
-
-message EventStreamRequest {
-  int64 profile_id = 1 [(buf.validate.field).int64.gt = 0];
-}
-message EventStreamResponse {
-  EventAction action = 1;
-  oneof data {
-    Profile profile = 2;
-    User user = 3;
-    Agent agent = 4;
-    DNSProvider dns_provider = 5;
-    Router router = 6;
-    Service service = 7;
-    Middleware middleware = 8;
-    ServersTransport servers_transport = 9;
-    EntryPoint entry_point = 10;
-  }
 }
