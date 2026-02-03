@@ -27,6 +27,7 @@ message CreateBackupResponse {}
 
 message RestoreBackupRequest {
   string name = 1 [(buf.validate.field).string.min_len = 1];
+  int64 profile_id = 2;
 }
 message RestoreBackupResponse {}
 
