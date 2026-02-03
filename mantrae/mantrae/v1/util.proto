@@ -15,6 +15,7 @@ import "mantrae/v1/user.proto";
 
 service UtilService {
   rpc GetVersion(GetVersionRequest) returns (GetVersionResponse);
+  rpc GetDynamicConfig(GetDynamicConfigRequest) returns (GetDynamicConfigResponse);
   rpc GetPublicIP(GetPublicIPRequest) returns (GetPublicIPResponse);
   rpc EventStream(EventStreamRequest) returns (stream EventStreamResponse);
 }
@@ -29,6 +30,13 @@ enum EventAction {
 message GetVersionRequest {}
 message GetVersionResponse {
   string version = 1;
+}
+
+message GetDynamicConfigRequest {
+  int64 profile_id = 1;
+}
+message GetDynamicConfigResponse {
+  string config = 1;
 }
 
 message GetPublicIPRequest {}
