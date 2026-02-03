@@ -12,7 +12,6 @@ service BackupService {
     option idempotency_level = NO_SIDE_EFFECTS;
   }
   rpc DeleteBackup(DeleteBackupRequest) returns (DeleteBackupResponse);
-  rpc DownloadBackup(DownloadBackupRequest) returns (stream DownloadBackupResponse);
   // See: https://github.com/connectrpc/connect-es/issues/669
   // rpc UploadBackup(stream UploadBackupRequest) returns (UploadBackupResponse); // stream doesn't work with connect-es
 }
@@ -40,10 +39,3 @@ message DeleteBackupRequest {
   string name = 1 [(buf.validate.field).string.min_len = 1];
 }
 message DeleteBackupResponse {}
-
-message DownloadBackupRequest {
-  string name = 1;
-}
-message DownloadBackupResponse {
-  bytes data = 1;
-}
