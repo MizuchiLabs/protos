@@ -31,6 +31,10 @@ service WorkspaceService {
   rpc DeleteWorkspace(DeleteWorkspaceRequest) returns (DeleteWorkspaceResponse) {
     option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}"};
   }
+  rpc GetWorkspaceMember(GetWorkspaceMemberRequest) returns (GetWorkspaceMemberResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/members/{user_id}"};
+  }
   rpc ListWorkspaceMembers(ListWorkspaceMembersRequest) returns (ListWorkspaceMembersResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/members"};
@@ -161,6 +165,14 @@ message DeleteWorkspaceResponse {}
 message ListWorkspacesRequest {}
 message ListWorkspacesResponse {
   repeated Workspace workspaces = 1;
+}
+
+message GetWorkspaceMemberRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  string user_id = 2 [(buf.validate.field).string.uuid = true];
+}
+message GetWorkspaceMemberResponse {
+  WorkspaceMember member = 1;
 }
 
 message ListWorkspaceMembersRequest {
