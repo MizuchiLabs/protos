@@ -67,8 +67,9 @@ message AgentNotification {
 }
 message AgentPTYRequest {
   string session_id = 1;
-  string username = 2;
-  string command = 3;
+  string user_id = 2;
+  string username = 3;
+  string command = 4;
 }
 
 message GetAgentRequest {
