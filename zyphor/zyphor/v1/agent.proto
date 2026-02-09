@@ -63,7 +63,6 @@ message AgentNotification {
   string agent_id = 1;
   AgentStatus status = 2;
   EventType event_type = 3;
-  google.protobuf.Timestamp timestamp = 4;
 }
 message AgentPTYRequest {
   string session_id = 1;
