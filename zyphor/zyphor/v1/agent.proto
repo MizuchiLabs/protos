@@ -65,6 +65,11 @@ message AgentNotification {
   EventType event_type = 3;
   google.protobuf.Timestamp timestamp = 4;
 }
+message AgentPTYRequest {
+  string session_id = 1;
+  string username = 2;
+  string command = 3;
+}
 
 message GetAgentRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
