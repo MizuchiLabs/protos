@@ -59,7 +59,6 @@ message AgentNotification {
     EVENT_TYPE_STATUS = 1;
     EVENT_TYPE_PRINCIPALS = 2;
     EVENT_TYPE_CERTIFICATES = 3;
-    EVENT_TYPE_PTY = 4;
   }
   string agent_id = 1;
   AgentStatus status = 2;
