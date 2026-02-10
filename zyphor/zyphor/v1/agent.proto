@@ -122,7 +122,10 @@ message CreateBootstrapTokenResponse {
 }
 
 message CreateSessionRequest {
-  string agent_id = 1 [(buf.validate.field).string.uuid = true];
+  string agent_id = 1 [
+    (buf.validate.field).string.uuid = true,
+    (buf.validate.field).required = true
+  ];
   string username = 2 [(buf.validate.field).string = {
     min_len: 1
     max_len: 32
@@ -134,15 +137,24 @@ message CreateSessionResponse {
 }
 
 message ListSessionsRequest {
-  string agent_id = 1 [(buf.validate.field).string.uuid = true];
+  string agent_id = 1 [
+    (buf.validate.field).string.uuid = true,
+    (buf.validate.field).required = true
+  ];
 }
 message ListSessionsResponse {
   repeated AgentSession sessions = 1;
 }
 
 message CloseSessionRequest {
-  string agent_id = 1 [(buf.validate.field).string.uuid = true];
-  string session_id = 2 [(buf.validate.field).string.uuid = true];
+  string agent_id = 1 [
+    (buf.validate.field).string.uuid = true,
+    (buf.validate.field).required = true
+  ];
+  string session_id = 2 [
+    (buf.validate.field).string.uuid = true,
+    (buf.validate.field).required = true
+  ];
 }
 message CloseSessionResponse {}
 
