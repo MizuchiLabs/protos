@@ -76,11 +76,10 @@ message AgentNotification {
   AgentStatus status = 2;
   EventType event_type = 3;
 }
-message AgentPTYRequest {
+message AgentSession {
   string session_id = 1;
   string user_id = 2;
   string username = 3;
-  string command = 4;
 }
 
 message GetAgentRequest {
@@ -131,14 +130,14 @@ message CreateSessionRequest {
   }];
 }
 message CreateSessionResponse {
-  string session_id = 1;
+  AgentSession session = 1;
 }
 
 message ListSessionsRequest {
   string agent_id = 1 [(buf.validate.field).string.uuid = true];
 }
 message ListSessionsResponse {
-  repeated string session_ids = 1;
+  repeated AgentSession sessions = 1;
 }
 
 message CloseSessionRequest {
