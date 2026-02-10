@@ -35,7 +35,7 @@ service AgentService {
   rpc CreateSession(CreateSessionRequest) returns (CreateSessionResponse) {
     option (google.api.http) = {post: "/v1/agents/{agent_id}/sessions"};
   }
-  rpc DeleteSession(DeleteSessionRequest) returns (DeleteSessionResponse) {
+  rpc CloseSession(CloseSessionRequest) returns (CloseSessionResponse) {
     option (google.api.http) = {delete: "/v1/agents/{agent_id}/sessions/{session_id}"};
   }
   // Agent only endpoints
@@ -141,11 +141,11 @@ message ListSessionsResponse {
   repeated string session_ids = 1;
 }
 
-message DeleteSessionRequest {
+message CloseSessionRequest {
   string agent_id = 1 [(buf.validate.field).string.uuid = true];
   string session_id = 2 [(buf.validate.field).string.uuid = true];
 }
-message DeleteSessionResponse {}
+message CloseSessionResponse {}
 
 message BootstrapAgentRequest {
   string bootstrap_token = 1 [
