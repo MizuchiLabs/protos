@@ -43,10 +43,11 @@ message Agent {
   string id = 1;
   string workspace_id = 2;
   string name = 3;
-  AgentStatus status = 4;
-  AgentMetadata metadata = 5;
-  google.protobuf.Timestamp updated_at = 6;
-  google.protobuf.Timestamp created_at = 7;
+  bool online = 4;
+  AgentStatus status = 5;
+  AgentMetadata metadata = 6;
+  google.protobuf.Timestamp updated_at = 7;
+  google.protobuf.Timestamp created_at = 8;
 }
 message AgentMetadata {
   string version = 1;
@@ -76,7 +77,6 @@ message GetAgentRequest {
 }
 message GetAgentResponse {
   Agent agent = 1;
-  bool online = 2;
 }
 
 message UpdateAgentRequest {
