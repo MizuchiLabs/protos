@@ -122,29 +122,23 @@ message CreateBootstrapTokenResponse {
   string token = 1 [(zyphor.v1.sensitive) = true];
 }
 
+message CreateSessionRequest {
+  string agent_id = 1 [(buf.validate.field).string.uuid = true];
+  string username = 2 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 32
+    pattern: "^[a-z_][a-z0-9-_]*\\$?$"
+  }];
+}
+message CreateSessionResponse {
+  string session_id = 1;
+}
+
 message ListSessionsRequest {
   string agent_id = 1 [(buf.validate.field).string.uuid = true];
 }
 message ListSessionsResponse {
   repeated string session_ids = 1;
-}
-
-message CreateSessionRequest {
-  string agent_id = 1 [(buf.validate.field).string.uuid = true];
-  string name = 2 [(buf.validate.field).string = {
-    min_len: 1
-    max_len: 256
-    pattern: "^[a-zA-Z0-9][a-zA-Z0-9-_]*$"
-  }];
-  string user_id = 3 [(buf.validate.field).string.uuid = true];
-  string username = 4 [(buf.validate.field).string = {
-    min_len: 1
-    max_len: 256
-    pattern: "^[a-zA-Z0-9][a-zA-Z0-9-_]*$"
-  }];
-}
-message CreateSessionResponse {
-  string session_id = 1;
 }
 
 message DeleteSessionRequest {
