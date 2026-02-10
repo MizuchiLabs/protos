@@ -134,6 +134,7 @@ message CreateSessionRequest {
 }
 message CreateSessionResponse {
   AgentSession session = 1;
+  string agent_name = 2;
 }
 
 message ListSessionsRequest {
