@@ -27,6 +27,17 @@ service AgentService {
   rpc CreateBootstrapToken(CreateBootstrapTokenRequest) returns (CreateBootstrapTokenResponse) {
     option (google.api.http) = {post: "/v1/workspaces/{workspace_id}/agents:bootstrap"};
   }
+  // Session management endpoints
+  rpc ListSessions(ListSessionsRequest) returns (ListSessionsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/agents/{agent_id}/sessions"};
+  }
+  rpc CreateSession(CreateSessionRequest) returns (CreateSessionResponse) {
+    option (google.api.http) = {post: "/v1/agents/{agent_id}/sessions"};
+  }
+  rpc DeleteSession(DeleteSessionRequest) returns (DeleteSessionResponse) {
+    option (google.api.http) = {delete: "/v1/agents/{agent_id}/sessions/{session_id}"};
+  }
   // Agent only endpoints
   rpc BootstrapAgent(BootstrapAgentRequest) returns (BootstrapAgentResponse);
   rpc AgentHeartbeat(AgentHeartbeatRequest) returns (AgentHeartbeatResponse);
@@ -110,6 +121,37 @@ message CreateBootstrapTokenRequest {
 message CreateBootstrapTokenResponse {
   string token = 1 [(zyphor.v1.sensitive) = true];
 }
+
+message ListSessionsRequest {
+  string agent_id = 1 [(buf.validate.field).string.uuid = true];
+}
+message ListSessionsResponse {
+  repeated string session_ids = 1;
+}
+
+message CreateSessionRequest {
+  string agent_id = 1 [(buf.validate.field).string.uuid = true];
+  string name = 2 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 256
+    pattern: "^[a-zA-Z0-9][a-zA-Z0-9-_]*$"
+  }];
+  string user_id = 3 [(buf.validate.field).string.uuid = true];
+  string username = 4 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 256
+    pattern: "^[a-zA-Z0-9][a-zA-Z0-9-_]*$"
+  }];
+}
+message CreateSessionResponse {
+  string session_id = 1;
+}
+
+message DeleteSessionRequest {
+  string agent_id = 1 [(buf.validate.field).string.uuid = true];
+  string session_id = 2 [(buf.validate.field).string.uuid = true];
+}
+message DeleteSessionResponse {}
 
 message BootstrapAgentRequest {
   string bootstrap_token = 1 [
