@@ -145,6 +145,7 @@ message ListSessionsRequest {
 }
 message ListSessionsResponse {
   repeated AgentSession sessions = 1;
+  string agent_name = 2;
 }
 
 message CloseSessionRequest {
