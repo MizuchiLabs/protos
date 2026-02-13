@@ -51,13 +51,6 @@ service WorkspaceService {
   rpc SendTestNotification(SendTestNotificationRequest) returns (SendTestNotificationResponse) {}
 }
 
-enum PermissionLevel {
-  PERMISSION_LEVEL_UNSPECIFIED = 0;
-  PERMISSION_LEVEL_MEMBER = 1;
-  PERMISSION_LEVEL_ADMIN = 2;
-  PERMISSION_LEVEL_OWNER = 99;
-}
-
 message Workspace {
   string id = 1;
   string name = 2;
@@ -77,9 +70,11 @@ message WorkspaceMember {
   string email = 5 [(zyphor.v1.sensitive) = true];
   bool email_verified = 6;
   string picture = 7;
-  PermissionLevel permission_level = 8;
-  google.protobuf.Timestamp created_at = 9;
-  google.protobuf.Timestamp updated_at = 10;
+  int32 role_id = 8;
+  string role_name = 9;
+  string role_description = 10;
+  google.protobuf.Timestamp created_at = 11;
+  google.protobuf.Timestamp updated_at = 12;
 }
 
 message WorkspaceSettings {
@@ -191,7 +186,7 @@ message RemoveWorkspaceMemberResponse {}
 message UpdateWorkspaceMemberRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   string user_id = 2 [(buf.validate.field).string.uuid = true];
-  PermissionLevel permission_level = 3;
+  int32 role_id = 3;
 }
 message UpdateWorkspaceMemberResponse {}
 
