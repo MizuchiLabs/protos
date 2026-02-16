@@ -27,8 +27,9 @@ message GetInvitationRequest {
   ];
 }
 message GetInvitationResponse {
-  string invited_by = 1;
-  string workspace_name = 2;
+  string workspace_name = 1;
+  string workspace_description = 2;
+  google.protobuf.Timestamp expires_at = 3;
 }
 
 message CreateInvitationRequest {
