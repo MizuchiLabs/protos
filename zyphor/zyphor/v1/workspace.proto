@@ -64,17 +64,26 @@ service WorkspaceService {
   rpc SendTestNotification(SendTestNotificationRequest) returns (SendTestNotificationResponse) {}
 }
 
+enum NotificationProvider {
+  NOTIFICATION_PROVIDER_UNSPECIFIED = 0;
+  NOTIFICATION_PROVIDER_EMAIL = 1;
+  NOTIFICATION_PROVIDER_WEBHOOK = 2;
+  NOTIFICATION_PROVIDER_SLACK = 3;
+  NOTIFICATION_PROVIDER_DISCORD = 4;
+  NOTIFICATION_PROVIDER_MS_TEAMS = 5;
+  NOTIFICATION_PROVIDER_MATTERMOST = 6;
+}
+
 message Workspace {
   string id = 1;
   string name = 2;
   string description = 3;
   string created_by = 4;
   WorkspaceSettings settings = 5;
-  NotificationSettings notifications = 6;
+  WorkspaceNotifications notifications = 6;
   google.protobuf.Timestamp created_at = 7;
   google.protobuf.Timestamp updated_at = 8;
 }
-
 message WorkspaceMember {
   string id = 1; // User ID
   string workspace_id = 2;
@@ -89,7 +98,6 @@ message WorkspaceMember {
   google.protobuf.Timestamp created_at = 11;
   google.protobuf.Timestamp updated_at = 12;
 }
-
 message WorkspaceSettings {
   bool bootstrap_enabled = 1;
   bool bootstrap_auto_approve = 2;
@@ -98,41 +106,11 @@ message WorkspaceSettings {
   string invite_token_hash = 5 [(zyphor.v1.sensitive) = true];
   google.protobuf.Timestamp invite_expires_at = 6;
 }
-
-message NotificationSettings {
-  enum Provider {
-    PROVIDER_UNSPECIFIED = 0;
-    PROVIDER_EMAIL = 1;
-    PROVIDER_WEBHOOK = 2;
-    PROVIDER_SLACK = 3;
-    PROVIDER_DISCORD = 4;
-    PROVIDER_TEAMS = 5;
-    PROVIDER_MATTERMOST = 6;
-  }
+message WorkspaceNotifications {
   bool enabled = 1;
-  Provider provider = 2;
+  NotificationProvider provider = 2;
   map<string, string> config = 3 [(zyphor.v1.sensitive) = true];
   google.protobuf.Timestamp updated_at = 4;
-}
-
-message SlackNotification {
-  string token = 1;
-  repeated string channel_ids = 2;
-}
-
-message DiscordNotification {
-  string token = 1;
-  repeated string channel_ids = 2;
-}
-
-message EmailNotification {
-  string host = 1;
-  int32 port = 2;
-  string from = 3;
-  repeated string to = 4;
-  string username = 5;
-  string password = 6;
-  bool use_tls = 7;
 }
 
 message GetWorkspaceRequest {
@@ -222,10 +200,12 @@ message UpdateWorkspaceSettingsResponse {
 
 message UpdateWorkspaceNotificationsRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  NotificationSettings notifications = 2;
+  bool enabled = 2;
+  NotificationProvider provider = 3;
+  map<string, string> config = 4 [(zyphor.v1.sensitive) = true];
 }
 message UpdateWorkspaceNotificationsResponse {
-  NotificationSettings notifications = 1;
+  WorkspaceNotifications notifications = 1;
 }
 
 // Various --------------------------------------------------------------------
