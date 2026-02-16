@@ -4,7 +4,7 @@ package zyphor.v1;
 
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
-import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
 import "zyphor/v1/options.proto";
 
 service InvitationService {
@@ -32,13 +32,10 @@ message GetInvitationResponse {
 
 message CreateInvitationRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  google.protobuf.Duration expiry = 2 [(buf.validate.field).duration = {
-    gte: {seconds: 300} /* Min 5 minutes */
-    lte: {seconds: 2592000} /* Max 30 days */
-  }];
 }
 message CreateInvitationResponse {
   string link = 1 [(zyphor.v1.sensitive) = true];
+  google.protobuf.Timestamp expires_at = 2;
 }
 
 message AcceptInvitationRequest {
