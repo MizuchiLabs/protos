@@ -95,6 +95,8 @@ message WorkspaceSettings {
   bool bootstrap_auto_approve = 2;
   int32 max_agents = 3;
   int32 max_members = 4;
+  string invite_token_hash = 5 [(zyphor.v1.sensitive) = true];
+  google.protobuf.Timestamp invite_expires_at = 6;
 }
 
 message NotificationSettings {
@@ -205,8 +207,11 @@ message UpdateWorkspaceMemberResponse {}
 // Settings -------------------------------------------------------------------
 message UpdateWorkspaceSettingsRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  WorkspaceSettings settings = 2;
-  google.protobuf.Duration invite_expiry = 3 [(buf.validate.field).duration = {
+  bool bootstrap_enabled = 2;
+  bool bootstrap_auto_approve = 3;
+  int32 max_agents = 4;
+  int32 max_members = 5;
+  google.protobuf.Duration invite_expiry = 6 [(buf.validate.field).duration = {
     gte: {seconds: 300} /* Min 5 minutes */
     lte: {seconds: 2592000} /* Max 30 days */
   }];
