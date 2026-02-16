@@ -72,14 +72,15 @@ message CertificateAuthority {
   int32 key_bits = 13;
   CertificateKeyType key_type = 14;
   repeated CertificateKeyType allowed_key_types = 15;
-  google.protobuf.Duration user_default_ttl = 16;
-  google.protobuf.Duration user_max_ttl = 17;
-  map<string, string> user_extensions = 18;
-  map<string, string> user_critical_options = 19;
-  google.protobuf.Duration host_default_ttl = 20;
-  google.protobuf.Duration host_max_ttl = 21;
-  google.protobuf.Timestamp created_at = 22;
-  google.protobuf.Timestamp updated_at = 23;
+  google.protobuf.Duration lifetime = 16;
+  google.protobuf.Duration user_default_ttl = 17;
+  google.protobuf.Duration user_max_ttl = 18;
+  map<string, string> user_extensions = 19;
+  map<string, string> user_critical_options = 20;
+  google.protobuf.Duration host_default_ttl = 21;
+  google.protobuf.Duration host_max_ttl = 22;
+  google.protobuf.Timestamp created_at = 23;
+  google.protobuf.Timestamp updated_at = 24;
 }
 
 message CreateCertificateAuthorityRequest {
@@ -155,24 +156,28 @@ message UpdateCertificateAuthorityRequest {
   bool is_active = 4;
   bool is_default = 5;
   repeated CertificateKeyType allowed_key_types = 6;
-  google.protobuf.Duration user_default_ttl = 7 [(buf.validate.field).duration = {
+  google.protobuf.Duration lifetime = 7 [(buf.validate.field).duration = {
+    gte: {seconds: 2628000} /* Min 1 month */
+    lte: {seconds: 315360000} /* Max 10 years */
+  }];
+  google.protobuf.Duration user_default_ttl = 8 [(buf.validate.field).duration = {
     gte: {seconds: 60}
     lte: {seconds: 31536000}
   }];
-  google.protobuf.Duration user_max_ttl = 8 [(buf.validate.field).duration = {
+  google.protobuf.Duration user_max_ttl = 9 [(buf.validate.field).duration = {
     gte: {seconds: 60}
     lte: {seconds: 31536000}
   }];
-  google.protobuf.Duration host_default_ttl = 9 [(buf.validate.field).duration = {
+  google.protobuf.Duration host_default_ttl = 10 [(buf.validate.field).duration = {
     gte: {seconds: 60}
     lte: {seconds: 31536000}
   }];
-  google.protobuf.Duration host_max_ttl = 10 [(buf.validate.field).duration = {
+  google.protobuf.Duration host_max_ttl = 11 [(buf.validate.field).duration = {
     gte: {seconds: 60}
     lte: {seconds: 31536000}
   }];
-  map<string, string> user_extensions = 11;
-  map<string, string> user_critical_options = 12;
+  map<string, string> user_extensions = 12;
+  map<string, string> user_critical_options = 13;
 }
 message UpdateCertificateAuthorityResponse {
   CertificateAuthority certificate_authority = 1;
@@ -187,10 +192,6 @@ message RolloverCertificateAuthorityRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
   int32 key_bits = 2;
   CertificateKeyType key_type = 3;
-  google.protobuf.Duration lifetime = 4 [(buf.validate.field).duration = {
-    gte: {seconds: 2628000} /* Min 1 month */
-    lte: {seconds: 315360000} /* Max 10 years */
-  }];
 }
 message RolloverCertificateAuthorityResponse {
   CertificateAuthority certificate_authority = 1;
