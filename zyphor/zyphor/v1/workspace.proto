@@ -4,6 +4,7 @@ package zyphor.v1;
 
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
 import "zyphor/v1/options.proto";
 
@@ -25,6 +26,18 @@ service WorkspaceService {
   rpc UpdateWorkspace(UpdateWorkspaceRequest) returns (UpdateWorkspaceResponse) {
     option (google.api.http) = {
       patch: "/v1/workspaces/{workspace_id}"
+      body: "*"
+    };
+  }
+  rpc UpdateWorkspaceSettings(UpdateWorkspaceSettingsRequest) returns (UpdateWorkspaceSettingsResponse) {
+    option (google.api.http) = {
+      patch: "/v1/workspaces/{workspace_id}/settings"
+      body: "*"
+    };
+  }
+  rpc UpdateWorkspaceNotifications(UpdateWorkspaceNotificationsRequest) returns (UpdateWorkspaceNotificationsResponse) {
+    option (google.api.http) = {
+      patch: "/v1/workspaces/{workspace_id}/notifications"
       body: "*"
     };
   }
@@ -145,8 +158,6 @@ message UpdateWorkspaceRequest {
     max_len: 256
   }];
   string description = 3 [(buf.validate.field).string.max_len = 1000];
-  WorkspaceSettings settings = 4;
-  NotificationSettings notifications = 5;
 }
 message UpdateWorkspaceResponse {
   Workspace workspace = 1;
@@ -162,6 +173,7 @@ message ListWorkspacesResponse {
   repeated Workspace workspaces = 1;
 }
 
+// Members --------------------------------------------------------------------
 message GetWorkspaceMemberRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   string user_id = 2 [(buf.validate.field).string.uuid = true];
@@ -190,6 +202,28 @@ message UpdateWorkspaceMemberRequest {
 }
 message UpdateWorkspaceMemberResponse {}
 
+// Settings -------------------------------------------------------------------
+message UpdateWorkspaceSettingsRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  WorkspaceSettings settings = 2;
+  google.protobuf.Duration invite_expiry = 3 [(buf.validate.field).duration = {
+    gte: {seconds: 300} /* Min 5 minutes */
+    lte: {seconds: 2592000} /* Max 30 days */
+  }];
+}
+message UpdateWorkspaceSettingsResponse {
+  WorkspaceSettings settings = 1;
+}
+
+message UpdateWorkspaceNotificationsRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  NotificationSettings notifications = 2;
+}
+message UpdateWorkspaceNotificationsResponse {
+  NotificationSettings notifications = 1;
+}
+
+// Various --------------------------------------------------------------------
 message UpdateWorkspaceOwnerRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   string new_owner = 2 [(buf.validate.field).string.uuid = true];
