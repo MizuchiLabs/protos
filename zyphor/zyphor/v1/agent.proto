@@ -58,6 +58,7 @@ message Agent {
   string name = 3;
   bool online = 4;
   AgentStatus status = 5;
+  map<string, string> metadata = 6;
   google.protobuf.Timestamp updated_at = 7;
   google.protobuf.Timestamp created_at = 8;
 }
