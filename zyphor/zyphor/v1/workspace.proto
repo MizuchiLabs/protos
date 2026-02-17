@@ -99,13 +99,11 @@ message WorkspaceMember {
   google.protobuf.Timestamp updated_at = 12;
 }
 message WorkspaceSettings {
-  bool bootstrap_enabled = 1;
-  bool bootstrap_auto_approve = 2;
-  int32 max_agents = 3;
-  int32 max_members = 4;
-  bool enroll_auto_approve = 5;
-  google.protobuf.Timestamp enroll_expires_at = 6;
-  google.protobuf.Timestamp invite_expires_at = 7;
+  int32 max_agents = 1;
+  int32 max_members = 2;
+  bool enroll_auto_approve = 3;
+  google.protobuf.Timestamp enroll_expires_at = 4;
+  google.protobuf.Timestamp invite_expires_at = 5;
 }
 message WorkspaceNotifications {
   bool enabled = 1;

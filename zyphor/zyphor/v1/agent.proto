@@ -41,7 +41,7 @@ service AgentService {
     option (google.api.http) = {delete: "/v1/agents/{agent_id}/sessions/{session_id}"};
   }
   // Agent only endpoints
-  rpc BootstrapAgent(BootstrapAgentRequest) returns (BootstrapAgentResponse);
+  rpc EnrollAgent(EnrollAgentRequest) returns (EnrollAgentResponse);
   rpc AgentHeartbeat(AgentHeartbeatRequest) returns (AgentHeartbeatResponse);
 }
 
@@ -164,7 +164,7 @@ message CloseSessionRequest {
 }
 message CloseSessionResponse {}
 
-message BootstrapAgentRequest {
+message EnrollAgentRequest {
   string token = 1 [
     (buf.validate.field).string.min_len = 1,
     (zyphor.v1.sensitive) = true
@@ -176,7 +176,7 @@ message BootstrapAgentRequest {
   }];
   AgentMetadata metadata = 3;
 }
-message BootstrapAgentResponse {
+message EnrollAgentResponse {
   string id = 1;
   string workspace_id = 2;
   string token = 3 [(zyphor.v1.sensitive) = true];
