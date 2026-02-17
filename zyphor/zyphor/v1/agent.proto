@@ -4,7 +4,6 @@ package zyphor.v1;
 
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
-import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
 import "zyphor/v1/options.proto";
 import "zyphor/v1/target.proto";
@@ -24,8 +23,11 @@ service AgentService {
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/agents"};
   }
-  rpc CreateBootstrapToken(CreateBootstrapTokenRequest) returns (CreateBootstrapTokenResponse) {
-    option (google.api.http) = {post: "/v1/workspaces/{workspace_id}/agents:bootstrap"};
+  rpc RefreshEnrollToken(RefreshEnrollTokenRequest) returns (RefreshEnrollTokenResponse) {
+    option (google.api.http) = {post: "/v1/workspaces/{workspace_id}/enroll:refresh"};
+  }
+  rpc RevokeEnrollToken(RevokeEnrollTokenRequest) returns (RevokeEnrollTokenResponse) {
+    option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}/enroll:revoke"};
   }
   // Session management endpoints
   rpc ListSessions(ListSessionsRequest) returns (ListSessionsResponse) {
@@ -110,16 +112,18 @@ message ListAgentsResponse {
   repeated Agent agents = 1;
 }
 
-message CreateBootstrapTokenRequest {
+message RefreshEnrollTokenRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  google.protobuf.Duration expiry = 2 [(buf.validate.field).duration = {
-    gte: {seconds: 300} /* Min 5 minutes */
-    lte: {seconds: 604800} /* Max 7 days */
-  }];
 }
-message CreateBootstrapTokenResponse {
+message RefreshEnrollTokenResponse {
   string token = 1 [(zyphor.v1.sensitive) = true];
+  google.protobuf.Timestamp expires_at = 2;
 }
+
+message RevokeEnrollTokenRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+}
+message RevokeEnrollTokenResponse {}
 
 message CreateSessionRequest {
   string agent_id = 1 [
