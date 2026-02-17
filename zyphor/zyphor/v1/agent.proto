@@ -165,7 +165,7 @@ message CloseSessionRequest {
 message CloseSessionResponse {}
 
 message BootstrapAgentRequest {
-  string bootstrap_token = 1 [
+  string token = 1 [
     (buf.validate.field).string.min_len = 1,
     (zyphor.v1.sensitive) = true
   ];
