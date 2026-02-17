@@ -58,12 +58,8 @@ message Agent {
   string name = 3;
   bool online = 4;
   AgentStatus status = 5;
-  AgentMetadata metadata = 6;
   google.protobuf.Timestamp updated_at = 7;
   google.protobuf.Timestamp created_at = 8;
-}
-message AgentMetadata {
-  string version = 1;
 }
 
 // For NATS
@@ -174,7 +170,6 @@ message EnrollAgentRequest {
     max_len: 253
     pattern: "^[a-zA-Z0-9]([a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9])?(\\.[a-zA-Z0-9]([a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9])?)*$"
   }];
-  AgentMetadata metadata = 3;
 }
 message EnrollAgentResponse {
   string id = 1;
@@ -186,8 +181,7 @@ message EnrollAgentResponse {
 message AgentHeartbeatRequest {
   string ca_name = 1;
   repeated string users = 2;
-  AgentMetadata agent_metadata = 3;
-  TargetMetadata target_metadata = 4;
+  TargetMetadata target_metadata = 3;
 }
 message AgentHeartbeatResponse {
   AgentStatus status = 1;
