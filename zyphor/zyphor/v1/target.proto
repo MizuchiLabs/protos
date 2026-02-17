@@ -49,29 +49,9 @@ message Target {
   string description = 6;
   repeated string endpoints = 7 [(zyphor.v1.sensitive) = true];
   repeated Principal principals = 8;
-  TargetMetadata metadata = 9;
+  map<string, string> metadata = 9;
   google.protobuf.Timestamp created_at = 10;
   google.protobuf.Timestamp updated_at = 11;
-}
-message TargetMetadata {
-  // Basic system info
-  string hostname = 1;
-  string host_id = 2;
-  string os = 3;
-  string platform = 4;
-  string platform_version = 5;
-  string architecture = 6;
-
-  // Networking
-  repeated string ip_addresses = 7 [(zyphor.v1.sensitive) = true];
-
-  // SSH-specific metadata
-  string ssh_version = 8;
-  bool ssh_service_running = 9;
-  repeated string ssh_ports = 10;
-
-  // Extras
-  repeated string tags = 11;
 }
 
 message GetTargetRequest {
@@ -90,7 +70,6 @@ message CreateTargetRequest {
     pattern: "^[a-zA-Z0-9][a-zA-Z0-9-_]*$"
   }];
   string description = 4 [(buf.validate.field).string.max_len = 1000];
-  TargetMetadata metadata = 5;
 }
 message CreateTargetResponse {
   Target target = 1;
@@ -106,7 +85,6 @@ message UpdateTargetRequest {
   }];
   string description = 4 [(buf.validate.field).string.max_len = 1000];
   repeated string endpoints = 5 [(zyphor.v1.sensitive) = true];
-  TargetMetadata metadata = 6;
 }
 message UpdateTargetResponse {
   Target target = 1;
@@ -130,7 +108,7 @@ message AccessibleTarget {
   string target_name = 3;
   string target_description = 4;
   bool online = 5;
-  TargetMetadata metadata = 6;
+  map<string, string> metadata = 6;
   repeated string endpoints = 7 [(zyphor.v1.sensitive) = true];
   repeated string usernames = 8 [(zyphor.v1.sensitive) = true];
   repeated string principal_ids = 9;

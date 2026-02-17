@@ -6,7 +6,6 @@ import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "zyphor/v1/options.proto";
-import "zyphor/v1/target.proto";
 
 service AgentService {
   rpc GetAgent(GetAgentRequest) returns (GetAgentResponse) {
@@ -182,7 +181,7 @@ message EnrollAgentResponse {
 message AgentHeartbeatRequest {
   string ca_name = 1;
   repeated string users = 2;
-  TargetMetadata target_metadata = 3;
+  map<string, string> target_metadata = 3;
 }
 message AgentHeartbeatResponse {
   AgentStatus status = 1;
