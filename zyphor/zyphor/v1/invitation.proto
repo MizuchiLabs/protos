@@ -9,19 +9,18 @@ import "zyphor/v1/options.proto";
 
 service InvitationService {
   rpc GetInvitation(GetInvitationRequest) returns (GetInvitationResponse) {
-    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/invites/{token}"};
+    option (google.api.http) = {get: "/v1/invites/{token}"};
   }
   rpc CreateInvitation(CreateInvitationRequest) returns (CreateInvitationResponse) {
     option (google.api.http) = {post: "/v1/workspaces/{workspace_id}/invites"};
   }
   rpc AcceptInvitation(AcceptInvitationRequest) returns (AcceptInvitationResponse) {
-    option (google.api.http) = {post: "/v1/workspaces/{workspace_id}/invites/{token}"};
+    option (google.api.http) = {post: "/v1/invites/{token}"};
   }
 }
 
 message GetInvitationRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string token = 2 [
+  string token = 1 [
     (buf.validate.field).string.min_len = 1,
     (zyphor.v1.sensitive) = true
   ];
@@ -41,8 +40,7 @@ message CreateInvitationResponse {
 }
 
 message AcceptInvitationRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string token = 2 [
+  string token = 1 [
     (buf.validate.field).string.min_len = 1,
     (zyphor.v1.sensitive) = true
   ];
