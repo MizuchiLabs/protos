@@ -170,6 +170,7 @@ message EnrollAgentRequest {
     max_len: 253
     pattern: "^[a-zA-Z0-9]([a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9])?(\\.[a-zA-Z0-9]([a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9])?)*$"
   }];
+  string ca_name = 3;
 }
 message EnrollAgentResponse {
   string id = 1;
@@ -179,7 +180,6 @@ message EnrollAgentResponse {
 }
 
 message AgentHeartbeatRequest {
-  string ca_name = 1;
   repeated string users = 2;
   map<string, string> target_metadata = 3;
 }
