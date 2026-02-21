@@ -184,11 +184,10 @@ message UpdateWorkspaceMemberResponse {}
 // Settings -------------------------------------------------------------------
 message UpdateWorkspaceSettingsRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  bool bootstrap_enabled = 2;
-  bool bootstrap_auto_approve = 3;
-  int32 max_agents = 4;
-  int32 max_members = 5;
-  google.protobuf.Duration invite_expiry = 6 [(buf.validate.field).duration = {
+  bool enroll_auto_approve = 2;
+  int32 max_agents = 3;
+  int32 max_members = 4;
+  google.protobuf.Duration invite_expiry = 5 [(buf.validate.field).duration = {
     gte: {seconds: 300} /* Min 5 minutes */
     lte: {seconds: 2592000} /* Max 30 days */
   }];
