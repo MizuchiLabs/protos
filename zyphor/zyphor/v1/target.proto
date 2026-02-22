@@ -5,6 +5,7 @@ package zyphor.v1;
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
+import "zyphor/v1/certificates.proto";
 import "zyphor/v1/options.proto";
 import "zyphor/v1/principal.proto";
 
@@ -127,5 +128,6 @@ message GetSubjectAccessRequest {
   }];
 }
 message GetSubjectAccessResponse {
-  repeated AccessibleTarget targets = 1;
+  repeated Target targets = 1;
+  repeated CertificateAuthority certificate_authorities = 2;
 }
