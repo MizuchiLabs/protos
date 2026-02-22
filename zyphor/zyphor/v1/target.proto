@@ -103,29 +103,9 @@ message ListTargetsResponse {
   repeated Target targets = 1;
 }
 
-message AccessibleTarget {
-  string agent_id = 1;
-  string target_id = 2;
-  string target_name = 3;
-  string target_description = 4;
-  bool online = 5;
-  map<string, string> metadata = 6;
-  repeated string endpoints = 7 [(zyphor.v1.sensitive) = true];
-  repeated string usernames = 8 [(zyphor.v1.sensitive) = true];
-  repeated string principal_ids = 9;
-  string ca_id = 10;
-  string ca_name = 11;
-  google.protobuf.Timestamp created_at = 12;
-  google.protobuf.Timestamp updated_at = 13;
-}
-
 message GetSubjectAccessRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   string subject_id = 2 [(buf.validate.field).string.uuid = true];
-  PrincipalType type = 3 [(buf.validate.field).enum = {
-    defined_only: true
-    not_in: [0]
-  }];
 }
 message GetSubjectAccessResponse {
   repeated Target targets = 1;
