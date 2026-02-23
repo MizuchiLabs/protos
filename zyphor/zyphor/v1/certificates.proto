@@ -212,7 +212,9 @@ message SignPublicKeyRequest {
   }];
 }
 message SignPublicKeyResponse {
-  string signed_certificate = 1;
-  string ca_public_key = 2;
-  google.protobuf.Timestamp expires_at = 3;
+  string ca_id = 1;
+  string ca_name = 2;
+  string ca_public_key = 3;
+  string signed_certificate = 4;
+  google.protobuf.Timestamp expires_at = 5;
 }
