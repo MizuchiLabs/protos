@@ -11,11 +11,10 @@ import "zyphor/v1/options.proto";
 service CertificateService {
   rpc GetCertificateAuthority(GetCertificateAuthorityRequest) returns (GetCertificateAuthorityResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/certificate_authorities/{id}"};
-  }
-  rpc GetCertificateAuthorityByName(GetCertificateAuthorityByNameRequest) returns (GetCertificateAuthorityByNameResponse) {
-    option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/certificate_authorities/{name}"};
+    option (google.api.http) = {
+      get: "/v1/certificate_authorities"
+      body: "*"
+    };
   }
   rpc CreateCertificateAuthority(CreateCertificateAuthorityRequest) returns (CreateCertificateAuthorityResponse) {
     option (google.api.http) = {
@@ -126,16 +125,10 @@ message CreateCertificateAuthorityResponse {
 
 message GetCertificateAuthorityRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
+  string workspace_id = 2 [(buf.validate.field).string.uuid = true];
+  string name = 3 [(buf.validate.field).string.min_len = 1];
 }
 message GetCertificateAuthorityResponse {
-  CertificateAuthority certificate_authority = 1;
-}
-
-message GetCertificateAuthorityByNameRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  string name = 2 [(buf.validate.field).string.min_len = 1];
-}
-message GetCertificateAuthorityByNameResponse {
   CertificateAuthority certificate_authority = 1;
 }
 
