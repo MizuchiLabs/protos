@@ -198,35 +198,6 @@ message RolloverCertificateAuthorityResponse {
 }
 
 // Certificate messages -------------------------------------------------------
-message Certificate {
-  string ca_id = 1;
-  string ca_name = 2;
-  bytes ca_public_key = 3 [(zyphor.v1.sensitive) = true];
-  bytes ssh_certificate = 4 [(zyphor.v1.sensitive) = true];
-  google.protobuf.Timestamp expires_at = 5;
-}
-message SSHConfigOptions {
-  string key_name = 1 [(buf.validate.field).string = {
-    pattern: "^[a-zA-Z0-9_-]+$"
-    max_len: 100
-  }];
-  string strict_host_key_checking = 2 [
-    (buf.validate.field).string.in = "yes",
-    (buf.validate.field).string.in = "no",
-    (buf.validate.field).string.in = "accept-new"
-  ];
-  int32 keep_alive_interval = 3 [(buf.validate.field).int32 = {
-    gte: 0
-    lte: 3600
-  }];
-  int32 connect_timeout = 4 [(buf.validate.field).int32 = {
-    gte: 1
-    lte: 300
-  }];
-  bool add_hash_known_hosts = 5; // add HashKnownHosts yes
-  string user_known_hosts_file = 6; // custom known_hosts file
-  bool compression = 7; // enable compression
-}
 
 message SignPublicKeyRequest {
   enum CertificateType {
@@ -237,20 +208,18 @@ message SignPublicKeyRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   string ca_name = 2 [(buf.validate.field).string.max_len = 256];
   CertificateType type = 3;
-  repeated string public_keys = 4 [
-    (buf.validate.field).repeated.items.string = {
-      min_len: 1
-      max_len: 10000
-      pattern: "^[a-z0-9][a-z0-9.-]*[a-z0-9][ \t]+[A-Za-z0-9+/]+=*[ \t]*.*$"
-    },
-    (zyphor.v1.sensitive) = true
-  ];
+  string public_key = 4 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 10000
+    pattern: "^[a-z0-9][a-z0-9.-]*[a-z0-9][ \t]+[A-Za-z0-9+/]+=*[ \t]*.*$"
+  }];
   google.protobuf.Duration ttl = 5 [(buf.validate.field).duration = {
     gte: {seconds: 60}
     lte: {seconds: 31536000}
   }];
-  SSHConfigOptions options = 6;
 }
 message SignPublicKeyResponse {
-  repeated Certificate certificates = 1;
+  string signed_certificate = 1;
+  string ca_public_key = 2;
+  google.protobuf.Timestamp expires_at = 3;
 }
