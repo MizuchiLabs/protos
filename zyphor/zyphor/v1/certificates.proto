@@ -41,7 +41,7 @@ service CertificateService {
 
   rpc SignPublicKey(SignPublicKeyRequest) returns (SignPublicKeyResponse) {
     option (google.api.http) = {
-      post: "/v1/workspaces/{workspace_id}/certificate_authorities/{ca_name}:sign"
+      post: "/v1/workspaces/{workspace_id}/sign"
       body: "*"
     };
   }
