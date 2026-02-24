@@ -170,7 +170,7 @@ message EnrollAgentRequest {
     max_len: 253
     pattern: "^[a-zA-Z0-9]([a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9])?(\\.[a-zA-Z0-9]([a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9])?)*$"
   }];
-  string ca_name = 3;
+  string ca_id = 3 [(buf.validate.field).string.uuid = true];
 }
 message EnrollAgentResponse {
   string id = 1;
