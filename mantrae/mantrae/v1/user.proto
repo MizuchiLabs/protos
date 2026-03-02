@@ -23,13 +23,10 @@ service UserService {
 message User {
   string id = 1;
   string username = 2;
-  string password = 3;
-  string email = 4;
-  string otp = 6;
-  google.protobuf.Timestamp otp_expiry = 7;
-  google.protobuf.Timestamp last_login = 8;
-  google.protobuf.Timestamp created_at = 9;
-  google.protobuf.Timestamp updated_at = 10;
+  string email = 3;
+  google.protobuf.Timestamp last_login = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
 }
 
 message LoginUserRequest {
