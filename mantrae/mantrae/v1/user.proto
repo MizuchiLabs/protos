@@ -41,7 +41,7 @@ message LoginUserRequest {
   ];
 }
 message LoginUserResponse {
-  User user = 1;
+  string token = 1;
 }
 
 message LogoutUserRequest {}
