@@ -165,7 +165,7 @@ message EnrollAgentRequest {
     (buf.validate.field).string.min_len = 1,
     (zyphor.v1.sensitive) = true
   ];
-  string ca_id = 2 [(buf.validate.field).string.uuid = true];
+  string ca_id = 2;
 }
 message EnrollAgentResponse {
   string id = 1;
