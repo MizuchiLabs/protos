@@ -23,13 +23,6 @@ service CustomerService {
   }
 }
 
-enum PlanType {
-  PLAN_TYPE_UNSPECIFIED = 0;
-  PLAN_TYPE_TEAM = 1;
-  PLAN_TYPE_BUSINESS = 2;
-  PLAN_TYPE_ENTERPRISE = 3;
-}
-
 enum ResourceType {
   RESOURCE_TYPE_UNSPECIFIED = 0;
   RESOURCE_TYPE_WORKSPACE = 1;
@@ -41,18 +34,14 @@ enum ResourceType {
   RESOURCE_TYPE_TARGET = 7;
 }
 
-enum SubscriptionStatus {
-  SUBSCRIPTION_STATUS_UNSPECIFIED = 0;
-  SUBSCRIPTION_STATUS_ACTIVE = 1;
-  SUBSCRIPTION_STATUS_CANCELLED = 2;
-}
-
 message Subscription {
-  PlanType plan_type = 1;
-  SubscriptionStatus status = 2;
-  bool cancel_at_period_end = 3;
-  google.protobuf.Timestamp current_period_end = 4;
-  google.protobuf.Timestamp updated_at = 5;
+  string customer_id = 1;
+  string product_id = 2;
+  string product_name = 3;
+  string status = 4;
+  bool cancel_at_period_end = 5;
+  google.protobuf.Timestamp current_period_end = 6;
+  google.protobuf.Timestamp updated_at = 7;
 }
 message QuotaInfo {
   repeated ResourceQuota resources = 1;
@@ -72,7 +61,7 @@ message GetSubscriptionResponse {
 }
 
 message CreateCheckoutRequest {
-  PlanType plan_type = 1;
+  string product_id = 1;
 }
 message CreateCheckoutResponse {
   string checkout_url = 1 [(zyphor.v1.sensitive) = true];
