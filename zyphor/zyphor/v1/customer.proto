@@ -80,7 +80,8 @@ message CreateCheckoutResponse {
 
 message CancelSubscriptionRequest {
   bool immediate = 1;
-  string reason = 2 [
+  bool cancel_at_period_end = 2;
+  string reason = 3 [
     (buf.validate.field).string.max_len = 1000,
     (zyphor.v1.sensitive) = true
   ];
