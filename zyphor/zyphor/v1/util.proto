@@ -37,14 +37,10 @@ message EventLog {
   string actor_id = 3;
   string actor_type = 4;
   string action = 5;
-  string resource_id = 6;
-  string resource_type = 7;
-  string error_message = 8;
-  string ip_address = 9;
-  string user_agent = 10;
-  string auth_method = 11;
-  map<string, string> metadata = 12;
-  google.protobuf.Timestamp timestamp = 13;
+  string ip_address = 6;
+  string user_agent = 7;
+  string status_code = 8;
+  google.protobuf.Timestamp timestamp = 9;
 }
 
 message ListAuditLogsRequest {
@@ -60,9 +56,8 @@ message ListAuditLogsRequest {
   repeated string actor_ids = 5 [(buf.validate.field).repeated.items.string.uuid = true];
   repeated string actor_types = 6;
   repeated string actions = 7;
-  repeated string resource_types = 8;
-  google.protobuf.Timestamp start_date = 9;
-  google.protobuf.Timestamp end_date = 10;
+  google.protobuf.Timestamp start_date = 8;
+  google.protobuf.Timestamp end_date = 9;
 }
 message ListAuditLogsResponse {
   repeated EventLog logs = 1;
