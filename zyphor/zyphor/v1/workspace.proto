@@ -35,12 +35,6 @@ service WorkspaceService {
       body: "*"
     };
   }
-  rpc UpdateWorkspaceNotifications(UpdateWorkspaceNotificationsRequest) returns (UpdateWorkspaceNotificationsResponse) {
-    option (google.api.http) = {
-      patch: "/v1/workspaces/{workspace_id}/notifications"
-      body: "*"
-    };
-  }
   rpc DeleteWorkspace(DeleteWorkspaceRequest) returns (DeleteWorkspaceResponse) {
     option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}"};
   }
@@ -66,25 +60,14 @@ service WorkspaceService {
   }
 }
 
-enum NotificationProvider {
-  NOTIFICATION_PROVIDER_UNSPECIFIED = 0;
-  NOTIFICATION_PROVIDER_EMAIL = 1;
-  NOTIFICATION_PROVIDER_WEBHOOK = 2;
-  NOTIFICATION_PROVIDER_SLACK = 3;
-  NOTIFICATION_PROVIDER_DISCORD = 4;
-  NOTIFICATION_PROVIDER_MS_TEAMS = 5;
-  NOTIFICATION_PROVIDER_MATTERMOST = 6;
-}
-
 message Workspace {
   string id = 1;
   string name = 2;
   string description = 3;
   string created_by = 4;
   WorkspaceSettings settings = 5;
-  WorkspaceNotifications notifications = 6;
-  google.protobuf.Timestamp created_at = 7;
-  google.protobuf.Timestamp updated_at = 8;
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp updated_at = 7;
 }
 message WorkspaceMember {
   string id = 1; // User ID
@@ -106,12 +89,6 @@ message WorkspaceSettings {
   bool enroll_auto_approve = 3;
   google.protobuf.Timestamp enroll_expires_at = 4;
   google.protobuf.Timestamp invite_expires_at = 5;
-}
-message WorkspaceNotifications {
-  bool enabled = 1;
-  NotificationProvider provider = 2;
-  map<string, string> config = 3 [(zyphor.v1.sensitive) = true];
-  google.protobuf.Timestamp updated_at = 4;
 }
 
 message GetWorkspaceRequest {
@@ -196,16 +173,6 @@ message UpdateWorkspaceSettingsRequest {
 }
 message UpdateWorkspaceSettingsResponse {
   WorkspaceSettings settings = 1;
-}
-
-message UpdateWorkspaceNotificationsRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-  bool enabled = 2;
-  NotificationProvider provider = 3;
-  map<string, string> config = 4 [(zyphor.v1.sensitive) = true];
-}
-message UpdateWorkspaceNotificationsResponse {
-  WorkspaceNotifications notifications = 1;
 }
 
 // Various --------------------------------------------------------------------
