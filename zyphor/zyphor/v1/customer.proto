@@ -11,6 +11,10 @@ service CustomerService {
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/customers/subscription"};
   }
+  rpc GetCustomerPortal(GetCustomerPortalRequest) returns (GetCustomerPortalResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/customers/portal"};
+  }
   rpc CreateCheckout(CreateCheckoutRequest) returns (CreateCheckoutResponse) {
     option (google.api.http) = {post: "/v1/customers/checkout"};
   }
@@ -59,11 +63,16 @@ message GetSubscriptionResponse {
   QuotaInfo quota = 2;
 }
 
+message GetCustomerPortalRequest {}
+message GetCustomerPortalResponse {
+  string url = 1;
+}
+
 message CreateCheckoutRequest {
   string product_id = 1;
 }
 message CreateCheckoutResponse {
-  string checkout_url = 1;
+  string url = 1;
 }
 
 message CancelSubscriptionRequest {
