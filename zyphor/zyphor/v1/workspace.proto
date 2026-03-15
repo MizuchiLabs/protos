@@ -62,6 +62,9 @@ service WorkspaceService {
     option (google.api.http) = {post: "/v1/workspaces/{workspace_id}/owner/{new_owner}"};
   }
   rpc SendTestNotification(SendTestNotificationRequest) returns (SendTestNotificationResponse) {}
+  rpc SubscribeWorkspaceEvents(SubscribeWorkspaceEventsRequest) returns (stream SubscribeWorkspaceEventsResponse) {
+    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/events:subscribe"};
+  }
 }
 
 enum NotificationProvider {
@@ -217,3 +220,15 @@ message SendTestNotificationRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
 }
 message SendTestNotificationResponse {}
+
+message SubscribeWorkspaceEventsRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  repeated string event_types = 2;
+}
+message SubscribeWorkspaceEventsResponse {
+  string id = 1;
+  string type = 2;
+  string workspace_id = 3;
+  google.protobuf.Timestamp created_at = 4;
+  string payload_json = 5 [json_name = "payload"];
+}
