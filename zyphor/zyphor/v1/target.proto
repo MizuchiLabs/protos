@@ -7,7 +7,6 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "zyphor/v1/agent.proto";
 import "zyphor/v1/certificates.proto";
-import "zyphor/v1/options.proto";
 import "zyphor/v1/principal.proto";
 
 service TargetService {
@@ -49,7 +48,7 @@ message Target {
   string agent_id = 4;
   string name = 5;
   string description = 6;
-  repeated string endpoints = 7 [(zyphor.v1.sensitive) = true];
+  repeated string endpoints = 7;
   repeated Principal principals = 8;
   map<string, string> metadata = 9;
   google.protobuf.Timestamp created_at = 10;
@@ -86,7 +85,7 @@ message UpdateTargetRequest {
     pattern: "^[a-zA-Z0-9][a-zA-Z0-9-_]*$"
   }];
   string description = 4 [(buf.validate.field).string.max_len = 1000];
-  repeated string endpoints = 5 [(zyphor.v1.sensitive) = true];
+  repeated string endpoints = 5;
 }
 message UpdateTargetResponse {
   Target target = 1;

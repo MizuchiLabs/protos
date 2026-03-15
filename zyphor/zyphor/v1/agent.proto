@@ -5,7 +5,6 @@ package zyphor.v1;
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
-import "zyphor/v1/options.proto";
 
 service AgentService {
   rpc GetAgent(GetAgentRequest) returns (GetAgentResponse) {
@@ -112,7 +111,7 @@ message RefreshEnrollTokenRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
 }
 message RefreshEnrollTokenResponse {
-  string token = 1 [(zyphor.v1.sensitive) = true];
+  string token = 1;
   google.protobuf.Timestamp expires_at = 2;
 }
 
@@ -161,23 +160,20 @@ message CloseSessionRequest {
 message CloseSessionResponse {}
 
 message EnrollAgentRequest {
-  string token = 1 [
-    (buf.validate.field).string.min_len = 1,
-    (zyphor.v1.sensitive) = true
-  ];
+  string token = 1 [(buf.validate.field).string.min_len = 1];
   string ca_id = 2;
 }
 message EnrollAgentResponse {
   string id = 1;
   string workspace_id = 2;
-  string token = 3 [(zyphor.v1.sensitive) = true];
+  string token = 3;
   AgentStatus status = 4;
 }
 
 message AgentHeartbeatRequest {
   repeated string users = 1;
-  repeated string private_ips = 2 [(zyphor.v1.sensitive) = true];
-  map<string, string> target_metadata = 3 [(zyphor.v1.sensitive) = true];
+  repeated string private_ips = 2;
+  map<string, string> target_metadata = 3;
 }
 message AgentHeartbeatResponse {
   AgentStatus status = 1;

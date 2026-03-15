@@ -6,7 +6,6 @@ import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
-import "zyphor/v1/options.proto";
 
 service WorkspaceService {
   rpc GetWorkspace(GetWorkspaceRequest) returns (GetWorkspaceResponse) {
@@ -74,7 +73,7 @@ message WorkspaceMember {
   string workspace_id = 2;
   string name = 3;
   string username = 4;
-  string email = 5 [(zyphor.v1.sensitive) = true];
+  string email = 5;
   bool email_verified = 6;
   string picture = 7;
   int32 role_id = 8;

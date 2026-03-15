@@ -5,7 +5,6 @@ package zyphor.v1;
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
-import "zyphor/v1/options.proto";
 
 service CustomerService {
   rpc GetSubscription(GetSubscriptionRequest) returns (GetSubscriptionResponse) {
@@ -56,23 +55,20 @@ message ResourceQuota {
 
 message GetSubscriptionRequest {}
 message GetSubscriptionResponse {
-  Subscription subscription = 1 [(zyphor.v1.sensitive) = true];
-  QuotaInfo quota = 2 [(zyphor.v1.sensitive) = true];
+  Subscription subscription = 1;
+  QuotaInfo quota = 2;
 }
 
 message CreateCheckoutRequest {
   string product_id = 1;
 }
 message CreateCheckoutResponse {
-  string checkout_url = 1 [(zyphor.v1.sensitive) = true];
+  string checkout_url = 1;
 }
 
 message CancelSubscriptionRequest {
   bool immediate = 1;
   bool cancel_at_period_end = 2;
-  string reason = 3 [
-    (buf.validate.field).string.max_len = 1000,
-    (zyphor.v1.sensitive) = true
-  ];
+  string reason = 3 [(buf.validate.field).string.max_len = 1000];
 }
 message CancelSubscriptionResponse {}

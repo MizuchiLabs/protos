@@ -5,7 +5,6 @@ package zyphor.v1;
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
-import "zyphor/v1/options.proto";
 
 service UserService {
   rpc Whoami(WhoamiRequest) returns (WhoamiResponse) {
@@ -26,7 +25,7 @@ message User {
   string id = 1;
   string name = 2;
   string username = 3;
-  string email = 4 [(zyphor.v1.sensitive) = true];
+  string email = 4;
   bool email_verified = 5;
   string picture = 6;
   google.protobuf.Timestamp created_at = 7;
@@ -42,13 +41,10 @@ message UpdateProfileRequest {
     min_len: 3
     max_len: 256
   }];
-  string email = 2 [
-    (buf.validate.field).string = {
-      email: true
-      max_len: 256
-    },
-    (zyphor.v1.sensitive) = true
-  ];
+  string email = 2 [(buf.validate.field).string = {
+    email: true
+    max_len: 256
+  }];
   string username = 3 [(buf.validate.field).string = {
     min_len: 3
     max_len: 39 // GitHub's max
