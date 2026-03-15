@@ -61,7 +61,6 @@ service WorkspaceService {
   rpc UpdateWorkspaceOwner(UpdateWorkspaceOwnerRequest) returns (UpdateWorkspaceOwnerResponse) {
     option (google.api.http) = {post: "/v1/workspaces/{workspace_id}/owner/{new_owner}"};
   }
-  rpc SendTestNotification(SendTestNotificationRequest) returns (SendTestNotificationResponse) {}
   rpc SubscribeWorkspaceEvents(SubscribeWorkspaceEventsRequest) returns (stream SubscribeWorkspaceEventsResponse) {
     option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/events:subscribe"};
   }
@@ -215,11 +214,6 @@ message UpdateWorkspaceOwnerRequest {
   string new_owner = 2 [(buf.validate.field).string.uuid = true];
 }
 message UpdateWorkspaceOwnerResponse {}
-
-message SendTestNotificationRequest {
-  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
-}
-message SendTestNotificationResponse {}
 
 message SubscribeWorkspaceEventsRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
