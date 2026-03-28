@@ -83,11 +83,9 @@ message WorkspaceMember {
   google.protobuf.Timestamp updated_at = 12;
 }
 message WorkspaceSettings {
-  int32 max_agents = 1;
-  int32 max_members = 2;
-  bool enroll_auto_approve = 3;
-  google.protobuf.Timestamp enroll_expires_at = 4;
-  google.protobuf.Timestamp invite_expires_at = 5;
+  bool enroll_auto_approve = 1;
+  google.protobuf.Timestamp enroll_expires_at = 2;
+  google.protobuf.Timestamp invite_expires_at = 3;
 }
 
 message GetWorkspaceRequest {
@@ -163,8 +161,6 @@ message UpdateWorkspaceMemberResponse {}
 message UpdateWorkspaceSettingsRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   bool enroll_auto_approve = 2;
-  int32 max_agents = 3;
-  int32 max_members = 4;
   google.protobuf.Duration invite_expiry = 5 [(buf.validate.field).duration = {
     gte: {seconds: 300} /* Min 5 minutes */
     lte: {seconds: 2592000} /* Max 30 days */
