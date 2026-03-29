@@ -102,9 +102,15 @@ message DeleteAgentResponse {}
 
 message ListAgentsRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  int32 limit = 2 [(buf.validate.field).int32 = {
+    gte: 1
+    lte: 100
+  }];
+  int32 offset = 3;
 }
 message ListAgentsResponse {
   repeated Agent agents = 1;
+  int32 total = 2;
 }
 
 message RefreshEnrollTokenRequest {
