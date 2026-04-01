@@ -71,6 +71,7 @@ message CreateTargetRequest {
     pattern: "^[a-zA-Z0-9][a-zA-Z0-9-_]*$"
   }];
   string description = 4 [(buf.validate.field).string.max_len = 1000];
+  repeated string endpoints = 5;
 }
 message CreateTargetResponse {
   Target target = 1;
