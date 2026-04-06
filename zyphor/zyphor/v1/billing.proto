@@ -25,6 +25,15 @@ service BillingService {
   }
 }
 
+message WorkspaceBenefit {
+  int32 max_members = 1;
+  int32 max_service_accounts = 2;
+  int32 max_agents = 3;
+  int32 max_targets = 4;
+  int32 max_cas = 5;
+  bool sso_enabled = 6;
+}
+
 message GetBillingRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
 }
@@ -34,7 +43,7 @@ message GetBillingResponse {
   string product_name = 3;
   string status = 4;
   bool cancel_at_period_end = 5;
-  map<string, string> benefits = 6;
+  WorkspaceBenefit benefits = 6;
   google.protobuf.Timestamp current_period_end = 7;
 }
 
