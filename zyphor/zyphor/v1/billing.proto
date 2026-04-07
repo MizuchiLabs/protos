@@ -35,6 +35,15 @@ message WorkspaceBenefit {
   bool sso_enabled = 7;
 }
 
+message WorkspaceCounts {
+  int64 members = 1;
+  int64 teams = 2;
+  int64 service_accounts = 3;
+  int64 agents = 4;
+  int64 targets = 5;
+  int64 cas = 6;
+}
+
 message GetBillingRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
 }
@@ -45,7 +54,8 @@ message GetBillingResponse {
   string status = 4;
   bool cancel_at_period_end = 5;
   WorkspaceBenefit benefits = 6;
-  google.protobuf.Timestamp current_period_end = 7;
+  WorkspaceCounts counts = 7;
+  google.protobuf.Timestamp current_period_end = 8;
 }
 
 message CreateCustomerPortalRequest {
