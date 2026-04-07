@@ -176,6 +176,11 @@ message EnrollAgentResponse {
   AgentStatus status = 4;
 }
 
+message PrincipalUsers {
+  string username = 1;
+  repeated string ids = 2;
+}
+
 message AgentHeartbeatRequest {
   repeated string users = 1;
   repeated string private_ips = 2;
@@ -183,4 +188,5 @@ message AgentHeartbeatRequest {
 }
 message AgentHeartbeatResponse {
   AgentStatus status = 1;
+  repeated PrincipalUsers principals = 2;
 }

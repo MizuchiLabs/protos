@@ -32,7 +32,6 @@ service PrincipalService {
       body: "*"
     };
   }
-  rpc GetAgentPrincipals(GetAgentPrincipalsRequest) returns (GetAgentPrincipalsResponse);
 }
 
 enum PrincipalType {
@@ -107,13 +106,3 @@ message RevokeAllAccessRequest {
   }];
 }
 message RevokeAllAccessResponse {}
-
-// For agents
-message PrincipalUsers {
-  string username = 1;
-  repeated string ids = 2;
-}
-message GetAgentPrincipalsRequest {}
-message GetAgentPrincipalsResponse {
-  repeated PrincipalUsers principals = 1;
-}
