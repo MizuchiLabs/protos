@@ -74,8 +74,9 @@ message CreateCheckoutResponse {
 }
 
 message CancelSubscriptionRequest {
-  bool immediate = 1;
-  bool cancel_at_period_end = 2;
-  string reason = 3 [(buf.validate.field).string.max_len = 1000];
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+  bool immediate = 2;
+  bool cancel_at_period_end = 3;
+  string reason = 4 [(buf.validate.field).string.max_len = 1000];
 }
 message CancelSubscriptionResponse {}
