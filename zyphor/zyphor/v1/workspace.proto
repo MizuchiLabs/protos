@@ -76,11 +76,10 @@ message WorkspaceMember {
   string email = 5;
   bool email_verified = 6;
   string picture = 7;
-  int32 role_id = 8;
-  string role_name = 9;
-  string role_description = 10;
-  google.protobuf.Timestamp created_at = 11;
-  google.protobuf.Timestamp updated_at = 12;
+  string role_name = 8;
+  string role_description = 9;
+  google.protobuf.Timestamp created_at = 10;
+  google.protobuf.Timestamp updated_at = 11;
 }
 message WorkspaceSettings {
   bool enroll_auto_approve = 1;
@@ -159,7 +158,7 @@ message RemoveWorkspaceMemberResponse {}
 message UpdateWorkspaceMemberRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   string user_id = 2 [(buf.validate.field).string.uuid = true];
-  int32 role_id = 3;
+  string role_name = 3;
 }
 message UpdateWorkspaceMemberResponse {}
 
