@@ -57,19 +57,21 @@ message CreateServiceResponse {
 }
 
 message UpdateServiceRequest {
-  string id = 1 [(buf.validate.field).string.min_len = 1];
-  string name = 2 [(buf.validate.field).string.min_len = 1];
-  bool enabled = 3;
-  google.protobuf.Struct config = 4;
-  ProtocolType type = 5 [(buf.validate.field).enum.defined_only = true];
+  int64 profile_id = 1 [(buf.validate.field).int64.gt = 0];
+  string id = 2 [(buf.validate.field).string.min_len = 1];
+  string name = 3 [(buf.validate.field).string.min_len = 1];
+  bool enabled = 4;
+  google.protobuf.Struct config = 5;
+  ProtocolType type = 6 [(buf.validate.field).enum.defined_only = true];
 }
 message UpdateServiceResponse {
   Service service = 1;
 }
 
 message DeleteServiceRequest {
-  string id = 1 [(buf.validate.field).string.min_len = 1];
-  ProtocolType type = 2 [(buf.validate.field).enum.defined_only = true];
+  int64 profile_id = 1 [(buf.validate.field).int64.gt = 0];
+  string id = 2 [(buf.validate.field).string.min_len = 1];
+  ProtocolType type = 3 [(buf.validate.field).enum.defined_only = true];
 }
 message DeleteServiceResponse {}
 

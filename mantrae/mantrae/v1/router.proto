@@ -34,8 +34,9 @@ message Router {
 }
 
 message GetRouterRequest {
-  string id = 1 [(buf.validate.field).string.min_len = 1];
-  ProtocolType type = 2 [(buf.validate.field).enum.defined_only = true];
+  int64 profile_id = 1 [(buf.validate.field).int64.gt = 0];
+  string id = 2 [(buf.validate.field).string.min_len = 1];
+  ProtocolType type = 3 [(buf.validate.field).enum.defined_only = true];
 }
 message GetRouterResponse {
   Router router = 1;
@@ -54,20 +55,22 @@ message CreateRouterResponse {
 }
 
 message UpdateRouterRequest {
-  string id = 1 [(buf.validate.field).string.min_len = 1];
-  string name = 2 [(buf.validate.field).string.min_len = 1];
-  ProtocolType type = 3 [(buf.validate.field).enum.defined_only = true];
-  google.protobuf.Struct config = 4;
-  bool enabled = 5;
-  repeated DNSProvider dns_providers = 6;
+  int64 profile_id = 1 [(buf.validate.field).int64.gt = 0];
+  string id = 2 [(buf.validate.field).string.min_len = 1];
+  string name = 3 [(buf.validate.field).string.min_len = 1];
+  ProtocolType type = 4 [(buf.validate.field).enum.defined_only = true];
+  google.protobuf.Struct config = 5;
+  bool enabled = 6;
+  repeated DNSProvider dns_providers = 7;
 }
 message UpdateRouterResponse {
   Router router = 1;
 }
 
 message DeleteRouterRequest {
-  string id = 1 [(buf.validate.field).string.min_len = 1];
-  ProtocolType type = 2 [(buf.validate.field).enum.defined_only = true];
+  int64 profile_id = 1 [(buf.validate.field).int64.gt = 0];
+  string id = 2 [(buf.validate.field).string.min_len = 1];
+  ProtocolType type = 3 [(buf.validate.field).enum.defined_only = true];
 }
 message DeleteRouterResponse {}
 
