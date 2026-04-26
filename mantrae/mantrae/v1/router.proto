@@ -69,8 +69,8 @@ message UpdateRouterResponse {
 
 message DeleteRouterRequest {
   int64 profile_id = 1 [(buf.validate.field).int64.gt = 0];
-  string id = 2 [(buf.validate.field).string.min_len = 1];
-  ProtocolType type = 3 [(buf.validate.field).enum.defined_only = true];
+  ProtocolType type = 2 [(buf.validate.field).enum.defined_only = true];
+  string name = 3 [(buf.validate.field).string.min_len = 1];
 }
 message DeleteRouterResponse {}
 
