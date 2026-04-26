@@ -87,7 +87,7 @@ message HealthCheckRequest {
   string hostname = 1 [(buf.validate.field).string.min_len = 1];
   string public_ip = 2 [(buf.validate.field).string.min_len = 1];
   string private_ip = 3 [(buf.validate.field).string.min_len = 1];
-  repeated Container containers = 4;
+  bytes config = 4;
 }
 message HealthCheckResponse {
   Agent agent = 1;
