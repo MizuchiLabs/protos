@@ -48,6 +48,7 @@ message DeleteAgentResponse {}
 
 message AgentHeartbeatRequest {
   string name = 1 [(buf.validate.field).string.min_len = 1];
-  bytes config = 2;
+  string env = 2;
+  bytes config = 3;
 }
 message AgentHeartbeatResponse {}
