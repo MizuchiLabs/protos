@@ -35,11 +35,12 @@ message Router {
 
 message GetRouterRequest {
   int64 profile_id = 1 [(buf.validate.field).int64.gt = 0];
-  string id = 2 [(buf.validate.field).string.min_len = 1];
-  ProtocolType type = 3 [(buf.validate.field).enum.defined_only = true];
+  ProtocolType type = 2 [(buf.validate.field).enum.defined_only = true];
+  string name = 3 [(buf.validate.field).string.min_len = 1];
 }
 message GetRouterResponse {
   Router router = 1;
+  bytes data = 2;
 }
 
 message CreateRouterRequest {
@@ -49,9 +50,11 @@ message CreateRouterRequest {
   google.protobuf.Struct config = 4;
   bool enabled = 5;
   ProtocolType type = 6 [(buf.validate.field).enum.defined_only = true];
+  bytes router = 7;
 }
 message CreateRouterResponse {
   Router router = 1;
+  bytes data = 2;
 }
 
 message UpdateRouterRequest {
@@ -61,10 +64,12 @@ message UpdateRouterRequest {
   ProtocolType type = 4 [(buf.validate.field).enum.defined_only = true];
   google.protobuf.Struct config = 5;
   bool enabled = 6;
-  repeated DNSProvider dns_providers = 7;
+  bytes router = 7;
+  repeated DNSProvider dns_providers = 8;
 }
 message UpdateRouterResponse {
   Router router = 1;
+  bytes data = 2;
 }
 
 message DeleteRouterRequest {
