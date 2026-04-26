@@ -26,20 +26,20 @@ message Agent {
   string private_ip = 5;
   string active_ip = 6;
   string token = 7;
-  repeated Container containers = 8;
+  bytes config = 8;
   google.protobuf.Timestamp created_at = 9;
   google.protobuf.Timestamp updated_at = 10;
 }
 
-message Container {
-  string id = 1;
-  string name = 2;
-  map<string, string> labels = 3;
-  string image = 4;
-  map<int32, int32> portmap = 5;
-  string status = 6;
-  google.protobuf.Timestamp created = 7;
-}
+// message Container {
+//   string id = 1;
+//   string name = 2;
+//   map<string, string> labels = 3;
+//   string image = 4;
+//   map<int32, int32> portmap = 5;
+//   string status = 6;
+//   google.protobuf.Timestamp created = 7;
+// }
 
 message GetAgentRequest {
   string id = 1 [(buf.validate.field).string.min_len = 1];
