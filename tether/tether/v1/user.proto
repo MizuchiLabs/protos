@@ -1,6 +1,6 @@
 edition = "2023";
 
-package kuiper.v1;
+package tether.v1;
 
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
