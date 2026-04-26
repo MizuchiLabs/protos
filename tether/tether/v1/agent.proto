@@ -9,14 +9,14 @@ import "google/protobuf/timestamp.proto";
 service AgentService {
   rpc GetAgent(GetAgentRequest) returns (GetAgentResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/agents/{id}"};
+    option (google.api.http) = {get: "/v1/agents/{name}"};
   }
   rpc ListAgents(ListAgentsRequest) returns (ListAgentsResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/agents"};
   }
   rpc DeleteAgent(DeleteAgentRequest) returns (DeleteAgentResponse) {
-    option (google.api.http) = {delete: "/v1/agents/{id}"};
+    option (google.api.http) = {delete: "/v1/agents/{name}"};
   }
   rpc AgentHeartbeat(AgentHeartbeatRequest) returns (AgentHeartbeatResponse);
 }
