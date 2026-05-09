@@ -9,7 +9,7 @@ import "google/protobuf/timestamp.proto";
 service WorkspaceDomainService {
   rpc GetWorkspaceDomain(GetWorkspaceDomainRequest) returns (GetWorkspaceDomainResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/domains/{id}"};
+    option (google.api.http) = {get: "/v1/domains/{domain}"};
   }
   rpc ListWorkspaceDomains(ListWorkspaceDomainsRequest) returns (ListWorkspaceDomainsResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
@@ -22,31 +22,30 @@ service WorkspaceDomainService {
     };
   }
   rpc DeleteWorkspaceDomain(DeleteWorkspaceDomainRequest) returns (DeleteWorkspaceDomainResponse) {
-    option (google.api.http) = {delete: "/v1/domains/{id}"};
+    option (google.api.http) = {delete: "/v1/domains/{domain}"};
   }
   rpc VerifyWorkspaceDomain(VerifyWorkspaceDomainRequest) returns (VerifyWorkspaceDomainResponse) {
-    option (google.api.http) = {post: "/v1/domains/{id}:verify"};
+    option (google.api.http) = {post: "/v1/domains/{domain}:verify"};
   }
   rpc RegenerateWorkspaceDomainToken(RegenerateWorkspaceDomainTokenRequest) returns (RegenerateWorkspaceDomainTokenResponse) {
-    option (google.api.http) = {post: "/v1/domains/{id}:generate"};
+    option (google.api.http) = {post: "/v1/domains/{domain}:generate"};
   }
 }
 
 message WorkspaceDomain {
-  string id = 1;
+  string domain = 1;
   string workspace_id = 2;
-  string domain = 3;
-  string verification_token = 4;
-  google.protobuf.Timestamp verified_at = 5;
-  google.protobuf.Timestamp created_at = 6;
-  google.protobuf.Timestamp updated_at = 7;
+  string verification_token = 3;
+  google.protobuf.Timestamp verified_at = 4;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp updated_at = 6;
 }
 
 message GetWorkspaceDomainRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
+  string domain = 1 [(buf.validate.field).string.hostname = true];
 }
 message GetWorkspaceDomainResponse {
-  WorkspaceDomain workspace_domain = 1;
+  WorkspaceDomain domain = 1;
 }
 message CreateWorkspaceDomainRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
@@ -58,31 +57,31 @@ message CreateWorkspaceDomainRequest {
   }];
 }
 message CreateWorkspaceDomainResponse {
-  WorkspaceDomain workspace_domain = 1;
+  WorkspaceDomain domain = 1;
 }
 
 message ListWorkspaceDomainsRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
 }
 message ListWorkspaceDomainsResponse {
-  repeated WorkspaceDomain workspace_domains = 1;
+  repeated WorkspaceDomain domains = 1;
 }
 
 message DeleteWorkspaceDomainRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
+  string domain = 1 [(buf.validate.field).string.hostname = true];
 }
 message DeleteWorkspaceDomainResponse {}
 
 message VerifyWorkspaceDomainRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
+  string domain = 1 [(buf.validate.field).string.hostname = true];
 }
 message VerifyWorkspaceDomainResponse {
-  WorkspaceDomain workspace_domain = 1;
+  WorkspaceDomain domain = 1;
 }
 
 message RegenerateWorkspaceDomainTokenRequest {
-  string id = 1 [(buf.validate.field).string.uuid = true];
+  string domain = 1 [(buf.validate.field).string.hostname = true];
 }
 message RegenerateWorkspaceDomainTokenResponse {
-  WorkspaceDomain workspace_domain = 1;
+  WorkspaceDomain domain = 1;
 }
