@@ -19,6 +19,18 @@ service UserService {
   rpc DeleteAccount(DeleteAccountRequest) returns (DeleteAccountResponse) {
     option (google.api.http) = {delete: "/v1/account"};
   }
+  rpc ListDeviceTokens(ListDeviceTokensRequest) returns (ListDeviceTokensResponse) {
+    option (google.api.http) = {
+      get: "/v1/devices"
+      body: "*"
+    };
+  }
+  rpc DeleteDeviceToken(DeleteDeviceTokenRequest) returns (DeleteDeviceTokenResponse) {
+    option (google.api.http) = {
+      delete: "/v1/devices/{token}"
+      body: "*"
+    };
+  }
 }
 
 message User {
@@ -31,6 +43,15 @@ message User {
   google.protobuf.Timestamp created_at = 7;
   google.protobuf.Timestamp updated_at = 8;
 }
+message DeviceToken {
+  string id = 1;
+  string name = 2;
+  string last_ip = 3;
+  google.protobuf.Timestamp expires_at = 4;
+  google.protobuf.Timestamp last_used_at = 5;
+  google.protobuf.Timestamp created_at = 6;
+}
+
 message WhoamiRequest {}
 message WhoamiResponse {
   User user = 1;
@@ -59,3 +80,14 @@ message UpdateProfileResponse {
 
 message DeleteAccountRequest {}
 message DeleteAccountResponse {}
+
+// Device tokens --------------------------------------------------------------
+message ListDeviceTokensRequest {}
+message ListDeviceTokensResponse {
+  repeated DeviceToken tokens = 1;
+}
+
+message DeleteDeviceTokenRequest {
+  string id = 1 [(buf.validate.field).string.uuid = true];
+}
+message DeleteDeviceTokenResponse {}
