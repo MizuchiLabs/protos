@@ -27,7 +27,7 @@ service UserService {
   }
   rpc DeleteDeviceToken(DeleteDeviceTokenRequest) returns (DeleteDeviceTokenResponse) {
     option (google.api.http) = {
-      delete: "/v1/devices/{token}"
+      delete: "/v1/devices/{id}"
       body: "*"
     };
   }
