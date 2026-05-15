@@ -84,7 +84,7 @@ message DeleteAccountResponse {}
 // Device tokens --------------------------------------------------------------
 message ListUserDevicesRequest {}
 message ListUserDevicesResponse {
-  repeated UserDevice tokens = 1;
+  repeated UserDevice devices = 1;
 }
 
 message DeleteUserDeviceRequest {
