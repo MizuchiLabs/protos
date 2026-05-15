@@ -138,9 +138,8 @@ message StreamCLILoginRequest {
 }
 message StreamCLILoginResponse {
   User user = 1; // sent after success
-  string access_token = 2;
-  string refresh_token = 3;
-  string verification_url = 4; // sent first
+  string token = 2;
+  string verification_url = 3; // sent first
 }
 
 message VerifyCLILoginRequest {
