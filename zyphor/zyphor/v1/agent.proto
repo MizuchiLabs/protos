@@ -107,6 +107,9 @@ message ListAgentsRequest {
     lte: 100
   }];
   int32 offset = 3;
+  string query = 4;
+  bool online = 5;
+  AgentStatus status = 6;
 }
 message ListAgentsResponse {
   repeated Agent agents = 1;
