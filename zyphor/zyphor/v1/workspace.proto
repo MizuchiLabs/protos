@@ -143,6 +143,7 @@ message ListWorkspaceMembersRequest {
     lte: 100
   }];
   int32 offset = 3;
+  string query = 4;
 }
 message ListWorkspaceMembersResponse {
   repeated WorkspaceMember members = 1;
