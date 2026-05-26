@@ -48,11 +48,12 @@ message Target {
   string agent_id = 4;
   string name = 5;
   string description = 6;
-  repeated string endpoints = 7;
-  repeated Principal principals = 8;
-  map<string, string> metadata = 9;
-  google.protobuf.Timestamp created_at = 10;
-  google.protobuf.Timestamp updated_at = 11;
+  repeated string tags = 7;
+  repeated string endpoints = 8;
+  repeated Principal principals = 9;
+  map<string, string> metadata = 10;
+  google.protobuf.Timestamp created_at = 11;
+  google.protobuf.Timestamp updated_at = 12;
 }
 
 message GetTargetRequest {
@@ -72,6 +73,7 @@ message CreateTargetRequest {
   }];
   string description = 4 [(buf.validate.field).string.max_len = 1000];
   repeated string endpoints = 5;
+  repeated string tags = 6;
 }
 message CreateTargetResponse {
   Target target = 1;
@@ -87,6 +89,7 @@ message UpdateTargetRequest {
   }];
   string description = 4 [(buf.validate.field).string.max_len = 1000];
   repeated string endpoints = 5;
+  repeated string tags = 6;
 }
 message UpdateTargetResponse {
   Target target = 1;
