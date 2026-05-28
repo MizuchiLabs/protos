@@ -1,11 +1,11 @@
 edition = "2023";
 
-package zyphor.v1;
+package nokku.v1;
 
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
-import "zyphor/v1/workspace.proto";
+import "nokku/v1/workspace.proto";
 
 service TeamService {
   rpc GetTeam(GetTeamRequest) returns (GetTeamResponse) {

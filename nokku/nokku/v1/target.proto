@@ -1,13 +1,13 @@
 edition = "2023";
 
-package zyphor.v1;
+package nokku.v1;
 
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
-import "zyphor/v1/agent.proto";
-import "zyphor/v1/certificates.proto";
-import "zyphor/v1/principal.proto";
+import "nokku/v1/agent.proto";
+import "nokku/v1/certificates.proto";
+import "nokku/v1/principal.proto";
 
 service TargetService {
   rpc GetTarget(GetTargetRequest) returns (GetTargetResponse) {

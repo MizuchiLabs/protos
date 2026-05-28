@@ -1,6 +1,6 @@
 edition = "2023";
 
-package zyphor.v1;
+package nokku.v1;
 
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";

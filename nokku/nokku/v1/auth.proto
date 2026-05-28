@@ -1,10 +1,10 @@
 edition = "2023";
 
-package zyphor.v1;
+package nokku.v1;
 
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
-import "zyphor/v1/user.proto";
+import "nokku/v1/user.proto";
 
 service AuthService {
   rpc Login(LoginRequest) returns (LoginResponse) {
