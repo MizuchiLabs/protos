@@ -109,8 +109,9 @@ message ListTargetsRequest {
   int32 offset = 3;
   string query = 4;
   string agent_id = 5;
-  repeated string principals = 6;
-  repeated string tags = 7;
+  string ca_id = 6;
+  repeated string principals = 7;
+  repeated string tags = 8;
 }
 message ListTargetsResponse {
   repeated Target targets = 1;
