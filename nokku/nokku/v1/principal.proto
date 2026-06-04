@@ -13,7 +13,10 @@ service PrincipalService {
       body: "*"
     };
   }
-
+  rpc ListPrincipals(ListPrincipalsRequest) returns (ListPrincipalsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/principals"};
+  }
   rpc AddSubjectsToPrincipal(AddSubjectsToPrincipalRequest) returns (AddSubjectsToPrincipalResponse) {
     option (google.api.http) = {
       post: "/v1/principals/add"
@@ -64,6 +67,24 @@ message SetPrincipalsRequest {
   }];
 }
 message SetPrincipalsResponse {}
+
+message ListPrincipalsRequest {
+  string target_id = 1 [(buf.validate.field).string.uuid = true];
+  int32 limit = 2 [(buf.validate.field).int32 = {
+    gte: 1
+    lte: 100
+  }];
+  int32 offset = 3;
+  string query = 4;
+  PrincipalType type = 5 [(buf.validate.field).enum = {
+    defined_only: true
+    not_in: [0]
+  }];
+}
+message ListPrincipalsResponse {
+  repeated Principal principals = 1;
+  int32 total = 2;
+}
 
 message AddSubjectsToPrincipalRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
