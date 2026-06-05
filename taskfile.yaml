@@ -1,7 +1,6 @@
 version: "3"
 
 tasks:
-  # 󰚰 Update deps
   update:
     desc: Update dependencies
     cmds:
@@ -9,7 +8,6 @@ tasks:
       - cd zerum && buf dep update
       - cd nokku && buf dep update
 
-  # 󰚰 Lint
   lint:
     desc: Lint
     cmds:
