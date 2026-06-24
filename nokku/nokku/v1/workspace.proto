@@ -144,6 +144,8 @@ message ListWorkspaceMembersRequest {
   }];
   int32 offset = 3;
   string query = 4;
+  repeated string role_names = 5;
+  repeated string team_ids = 6 [(buf.validate.field).repeated.items.string.uuid = true];
 }
 message ListWorkspaceMembersResponse {
   repeated WorkspaceMember members = 1;
