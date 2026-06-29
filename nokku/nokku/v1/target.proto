@@ -39,6 +39,10 @@ service TargetService {
       body: "*"
     };
   }
+  rpc GetTargetFilters(GetTargetFiltersRequest) returns (GetTargetFiltersResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/targets/filters"};
+  }
 }
 
 message Target {
@@ -126,4 +130,12 @@ message GetSubjectAccessResponse {
   repeated Target targets = 1;
   repeated Agent agents = 2;
   repeated CertificateAuthority certificate_authorities = 3;
+}
+
+message GetTargetFiltersRequest {
+  string workspace_id = 1 [(buf.validate.field).string.uuid = true];
+}
+message GetTargetFiltersResponse {
+  repeated string tags = 1;
+  repeated string principals = 2;
 }
