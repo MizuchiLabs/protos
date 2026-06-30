@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        module: [zyphor]
+        module: [nokku]
     steps:
       - uses: actions/checkout@v6
 
