@@ -135,16 +135,15 @@ message UpdateSAMLProviderRequest {
   }];
   string metadata_url = 3 [(buf.validate.field).string = {
     uri: true
-    // prefix: "https://" // Must be HTTPS
+    // prefix: "https://" // TODO: Must be HTTPS
   }];
   string email_attribute = 4;
   string name_attribute = 5;
   string username_attribute = 6;
   string picture_attribute = 7;
-  bool rotate_certificate = 8;
-  bool enforce_sso = 9;
-  bool allow_jit_provisioning = 10;
-  bool is_active = 11;
+  bool enforce_sso = 8;
+  bool allow_jit_provisioning = 9;
+  bool is_active = 10;
 }
 message UpdateSAMLProviderResponse {
   SAMLProvider saml_provider = 1;
