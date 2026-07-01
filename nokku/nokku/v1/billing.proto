@@ -33,6 +33,12 @@ message WorkspaceBenefit {
   int64 max_targets = 5;
   int64 max_cas = 6;
   bool sso_enabled = 7;
+  int64 hardcap_members = 8;
+  int64 hardcap_teams = 9;
+  int64 hardcap_service_accounts = 10;
+  int64 hardcap_agents = 11;
+  int64 hardcap_targets = 12;
+  int64 hardcap_cas = 13;
 }
 
 message WorkspaceCounts {
