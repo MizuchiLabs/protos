@@ -21,7 +21,7 @@ jobs:
 
       - name: Buf Format Check
         working-directory: ${{ matrix.module }}
-        run: buf format --diff --exit-code
+        run: buf format --exit-code
 
       - name: Buf Lint
         working-directory: ${{ matrix.module }}
