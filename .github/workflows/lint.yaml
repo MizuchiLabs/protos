@@ -13,7 +13,7 @@ jobs:
       matrix:
         module: [nokku]
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: bufbuild/buf-action@v1
         with:
