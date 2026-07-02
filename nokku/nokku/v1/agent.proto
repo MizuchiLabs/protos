@@ -40,9 +40,11 @@ service AgentService {
   }
   // Agent only endpoints
   rpc EnrollAgent(EnrollAgentRequest) returns (EnrollAgentResponse);
-  rpc AgentHeartbeat(AgentHeartbeatRequest) returns (AgentHeartbeatResponse);
+  rpc SyncAgent(SyncAgentRequest) returns (SyncAgentResponse);
   // PTY stream - bidirectional for live terminal sessions
   rpc OpenPTYStream(stream PTYFrame) returns (stream PTYFrame);
+  // Agent control - backend pushes commands to agent
+  rpc WatchAgentControl(WatchAgentControlRequest) returns (stream AgentControlCommand);
 }
 
 enum AgentStatus {
@@ -91,52 +93,6 @@ message AgentSession {
   string session_id = 1;
   string user_id = 2;
   string username = 3;
-}
-
-// PTY stream frames for bidirectional terminal sessions
-message PTYFrame {
-  oneof frame {
-    PTYOpen open = 1;
-    PTYData data = 2;
-    PTYResize resize = 3;
-    PTYClose close = 4;
-    PTYAttach attach = 5;
-  }
-}
-
-message PTYOpen {
-  string session_id = 1;
-  string user_id = 2;
-  string username = 3;
-  int32 width = 4;
-  int32 height = 5;
-}
-
-message PTYData {
-  bytes data = 1;
-  PTYDataDirection direction = 2;
-  string session_id = 3;
-}
-
-enum PTYDataDirection {
-  PTY_DATA_DIRECTION_UNSPECIFIED = 0;
-  PTY_DATA_DIRECTION_STDIN = 1;
-  PTY_DATA_DIRECTION_STDOUT = 2;
-}
-
-message PTYResize {
-  int32 width = 1;
-  int32 height = 2;
-  string session_id = 3;
-}
-
-message PTYClose {
-  string reason = 1;
-  string session_id = 2;
-}
-
-message PTYAttach {
-  string session_id = 1;
 }
 
 message GetAgentRequest {
@@ -244,13 +200,69 @@ message PrincipalUsers {
   repeated string ids = 2;
 }
 
-message AgentHeartbeatRequest {
+message SyncAgentRequest {
   repeated string users = 1;
   repeated string private_ips = 2;
   map<string, string> target_metadata = 3;
 }
-message AgentHeartbeatResponse {
+message SyncAgentResponse {
   AgentStatus status = 1;
   repeated PrincipalUsers principals = 2;
   AgentConfig config = 3;
+}
+
+// Agent control - backend-initiated commands
+message WatchAgentControlRequest {
+  string agent_id = 1;
+}
+
+message AgentControlCommand {
+  string command = 1;
+  map<string, string> params = 2;
+}
+
+// PTY stream frames for bidirectional terminal sessions
+message PTYFrame {
+  oneof frame {
+    PTYOpen open = 1;
+    PTYData data = 2;
+    PTYResize resize = 3;
+    PTYClose close = 4;
+    PTYAttach attach = 5;
+  }
+}
+
+message PTYOpen {
+  string session_id = 1;
+  string user_id = 2;
+  string username = 3;
+  int32 width = 4;
+  int32 height = 5;
+}
+
+message PTYData {
+  bytes data = 1;
+  PTYDataDirection direction = 2;
+  string session_id = 3;
+}
+
+enum PTYDataDirection {
+  PTY_DATA_DIRECTION_UNSPECIFIED = 0;
+  PTY_DATA_DIRECTION_STDIN = 1;
+  PTY_DATA_DIRECTION_STDOUT = 2;
+}
+
+message PTYResize {
+  int32 width = 1;
+  int32 height = 2;
+  string session_id = 3;
+}
+
+message PTYClose {
+  string reason = 1;
+  string session_id = 2;
+}
+
+message PTYAttach {
+  string session_id = 1;
 }
