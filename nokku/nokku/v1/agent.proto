@@ -1,6 +1,6 @@
 edition = "2023";
 
-package nokku.v1;
+package zyphor.v1;
 
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
@@ -41,8 +41,6 @@ service AgentService {
   // Agent only endpoints
   rpc EnrollAgent(EnrollAgentRequest) returns (EnrollAgentResponse);
   rpc SyncAgent(SyncAgentRequest) returns (SyncAgentResponse);
-  rpc ControlAgent(ControlAgentRequest) returns (ControlAgentResponse);
-  rpc StreamPTY(stream StreamPTYRequest) returns (stream StreamPTYResponse);
 }
 
 enum AgentStatus {
@@ -62,31 +60,19 @@ message Agent {
   google.protobuf.Timestamp updated_at = 7;
   google.protobuf.Timestamp created_at = 8;
 }
-// Agent configuration pushed to agents on heartbeat
-message AgentConfig {
-  bool record_sessions = 1;
-  StorageConfig storage = 2;
-}
 
-message StorageConfig {
-  enum StorageType {
-    STORAGE_TYPE_UNSPECIFIED = 0;
-    STORAGE_TYPE_LOCAL = 1;
-    STORAGE_TYPE_S3 = 2;
+// For NATS
+message AgentNotification {
+  enum EventType {
+    EVENT_TYPE_UNSPECIFIED = 0;
+    EVENT_TYPE_STATUS = 1;
+    EVENT_TYPE_PRINCIPALS = 2;
+    EVENT_TYPE_CERTIFICATES = 3;
   }
-  StorageType type = 1;
-  S3Config s3 = 2;
+  string agent_id = 1;
+  AgentStatus status = 2;
+  EventType event_type = 3;
 }
-
-message S3Config {
-  string bucket = 1;
-  string region = 2;
-  string endpoint = 3;
-  string prefix = 4;
-  string access_key_id = 5;
-  string secret_access_key = 6;
-}
-
 message AgentSession {
   string session_id = 1;
   string user_id = 2;
@@ -206,60 +192,4 @@ message SyncAgentRequest {
 message SyncAgentResponse {
   AgentStatus status = 1;
   repeated PrincipalUsers principals = 2;
-  AgentConfig config = 3;
-}
-
-message ControlAgentRequest {
-  string agent_id = 1;
-  string command = 2;
-  map<string, string> params = 3;
-}
-message ControlAgentResponse {
-  string status = 1;
-  string message = 2;
-}
-
-// --- Stream Definitions ---
-
-message StreamPTYRequest {
-  oneof payload {
-    SessionReady ready = 1; // Sent first: acknowledges start
-    bytes stdout = 2; // Terminal output stream
-    SessionEnded exited = 3; // Process terminated natively
-  }
-}
-
-message StreamPTYResponse {
-  oneof payload {
-    SessionStart start = 1; // Sent first: who to log in as
-    bytes stdin = 2; // User keystrokes
-    ResizeRequest resize = 3; // Terminal dimension changes
-    CloseRequest close = 4; // Force termination
-  }
-}
-
-// --- Payload Definitions ---
-
-message SessionStart {
-  string session_id = 1;
-  string username = 2;
-  string user_id = 3;
-}
-
-message SessionReady {
-  bytes replay_buffer = 1;
-}
-
-message ResizeRequest {
-  uint32 width = 1;
-  uint32 height = 2;
-}
-
-message SessionEnded {
-  int32 exit_code = 1;
-  string error_message = 2;
-}
-
-message CloseRequest {
-  string reason = 1;
 }
