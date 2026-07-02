@@ -41,10 +41,8 @@ service AgentService {
   // Agent only endpoints
   rpc EnrollAgent(EnrollAgentRequest) returns (EnrollAgentResponse);
   rpc SyncAgent(SyncAgentRequest) returns (SyncAgentResponse);
-  // PTY stream - bidirectional for live terminal sessions
-  rpc OpenPTYStream(stream PTYFrame) returns (stream PTYFrame);
-  // Agent control - backend sends commands to agent
   rpc ControlAgent(ControlAgentRequest) returns (ControlAgentResponse);
+  rpc StreamPTY(stream StreamPTYRequest) returns (stream StreamPTYResponse);
 }
 
 enum AgentStatus {
@@ -211,7 +209,6 @@ message SyncAgentResponse {
   AgentConfig config = 3;
 }
 
-// Agent control - backend sends commands to agent
 message ControlAgentRequest {
   string agent_id = 1;
   string command = 2;
@@ -222,48 +219,46 @@ message ControlAgentResponse {
   string message = 2;
 }
 
-// PTY stream frames for bidirectional terminal sessions
-message PTYFrame {
-  oneof frame {
-    PTYOpen open = 1;
-    PTYData data = 2;
-    PTYResize resize = 3;
-    PTYClose close = 4;
-    PTYAttach attach = 5;
+// --- Stream Definitions ---
+
+message StreamPTYRequest {
+  oneof payload {
+    SessionReady ready = 1; // Sent first: acknowledges start
+    bytes stdout = 2; // Terminal output stream
+    SessionEnded exited = 3; // Process terminated natively
   }
 }
 
-message PTYOpen {
+message StreamPTYResponse {
+  oneof payload {
+    SessionStart start = 1; // Sent first: who to log in as
+    bytes stdin = 2; // User keystrokes
+    ResizeRequest resize = 3; // Terminal dimension changes
+    CloseRequest close = 4; // Force termination
+  }
+}
+
+// --- Payload Definitions ---
+
+message SessionStart {
   string session_id = 1;
-  string user_id = 2;
-  string username = 3;
-  int32 width = 4;
-  int32 height = 5;
+  string username = 2;
 }
 
-message PTYData {
-  bytes data = 1;
-  PTYDataDirection direction = 2;
-  string session_id = 3;
+message SessionReady {
+  bytes replay_buffer = 1;
 }
 
-enum PTYDataDirection {
-  PTY_DATA_DIRECTION_UNSPECIFIED = 0;
-  PTY_DATA_DIRECTION_STDIN = 1;
-  PTY_DATA_DIRECTION_STDOUT = 2;
+message ResizeRequest {
+  uint32 width = 1;
+  uint32 height = 2;
 }
 
-message PTYResize {
-  int32 width = 1;
-  int32 height = 2;
-  string session_id = 3;
+message SessionEnded {
+  int32 exit_code = 1;
+  string error_message = 2;
 }
 
-message PTYClose {
+message CloseRequest {
   string reason = 1;
-  string session_id = 2;
-}
-
-message PTYAttach {
-  string session_id = 1;
 }
