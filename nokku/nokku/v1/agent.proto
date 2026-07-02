@@ -56,9 +56,10 @@ message Agent {
   string name = 3;
   bool online = 4;
   AgentStatus status = 5;
-  map<string, string> metadata = 6;
-  google.protobuf.Timestamp updated_at = 7;
-  google.protobuf.Timestamp created_at = 8;
+  AgentConfig config = 6;
+  map<string, string> metadata = 7;
+  google.protobuf.Timestamp updated_at = 8;
+  google.protobuf.Timestamp created_at = 9;
 }
 
 // For NATS
@@ -77,6 +78,9 @@ message AgentSession {
   string session_id = 1;
   string user_id = 2;
   string username = 3;
+}
+message AgentConfig {
+  bool record_sessions = 1;
 }
 
 message GetAgentRequest {
