@@ -181,6 +181,7 @@ message EnrollAgentResponse {
   string workspace_id = 2;
   string token = 3;
   AgentStatus status = 4;
+  AgentConfig config = 5;
 }
 
 message PrincipalUsers {
@@ -195,5 +196,6 @@ message SyncAgentRequest {
 }
 message SyncAgentResponse {
   AgentStatus status = 1;
-  repeated PrincipalUsers principals = 2;
+  AgentConfig config = 2;
+  repeated PrincipalUsers principals = 3;
 }
