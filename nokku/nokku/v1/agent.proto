@@ -43,8 +43,8 @@ service AgentService {
   rpc SyncAgent(SyncAgentRequest) returns (SyncAgentResponse);
   // PTY stream - bidirectional for live terminal sessions
   rpc OpenPTYStream(stream PTYFrame) returns (stream PTYFrame);
-  // Agent control - backend pushes commands to agent
-  rpc WatchAgentControl(WatchAgentControlRequest) returns (stream AgentControlCommand);
+  // Agent control - backend sends commands to agent
+  rpc ControlAgent(ControlAgentRequest) returns (ControlAgentResponse);
 }
 
 enum AgentStatus {
@@ -211,14 +211,15 @@ message SyncAgentResponse {
   AgentConfig config = 3;
 }
 
-// Agent control - backend-initiated commands
-message WatchAgentControlRequest {
+// Agent control - backend sends commands to agent
+message ControlAgentRequest {
   string agent_id = 1;
+  string command = 2;
+  map<string, string> params = 3;
 }
-
-message AgentControlCommand {
-  string command = 1;
-  map<string, string> params = 2;
+message ControlAgentResponse {
+  string status = 1;
+  string message = 2;
 }
 
 // PTY stream frames for bidirectional terminal sessions
