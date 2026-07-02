@@ -243,6 +243,7 @@ message StreamPTYResponse {
 message SessionStart {
   string session_id = 1;
   string username = 2;
+  string user_id = 3;
 }
 
 message SessionReady {
