@@ -284,7 +284,8 @@ message SessionStart {
 }
 
 message SessionReady {
-  bytes replay_buffer = 1;
+  string session_id = 1;
+  bytes replay_buffer = 2;
 }
 
 message ResizeRequest {
