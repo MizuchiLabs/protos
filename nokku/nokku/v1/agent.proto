@@ -43,6 +43,18 @@ service AgentService {
   rpc SyncAgent(SyncAgentRequest) returns (SyncAgentResponse);
 }
 
+// Real-time control stream: one bidirectional stream per agent, long-lived.
+// Carries heartbeats and server-to-agent notifications.
+service AgentControlService {
+  rpc Connect(stream AgentToServer) returns (stream ServerToAgent);
+}
+
+// Real-time PTY session stream: one bidirectional stream per active session.
+// Opened by the agent after receiving a SessionRequest on the Connect stream.
+service AgentSessionService {
+  rpc StreamSession(stream SessionToServer) returns (stream SessionToAgent);
+}
+
 enum AgentStatus {
   AGENT_STATUS_UNSPECIFIED = 0;
   AGENT_STATUS_PENDING = 1;
@@ -198,4 +210,93 @@ message SyncAgentResponse {
   AgentStatus status = 1;
   AgentConfig config = 2;
   repeated PrincipalUsers principals = 3;
+}
+
+// ── Agent Control Stream (AgentControlService.Connect) ─────────────
+
+message AgentToServer {
+  oneof msg {
+    Heartbeat heartbeat = 1;
+    SyncReport sync = 2;
+  }
+}
+
+message ServerToAgent {
+  oneof msg {
+    HeartbeatAck heartbeat_ack = 1;
+    Notification notification = 2;
+    SessionRequest session_request = 3;
+  }
+}
+
+message Heartbeat {}
+
+message HeartbeatAck {}
+
+message SyncReport {
+  repeated string users = 1;
+  repeated string private_ips = 2;
+  map<string, string> metadata = 3;
+}
+
+message Notification {
+  enum EventType {
+    EVENT_TYPE_UNSPECIFIED = 0;
+    EVENT_TYPE_STATUS = 1;
+    EVENT_TYPE_PRINCIPALS = 2;
+    EVENT_TYPE_CERTIFICATES = 3;
+    EVENT_TYPE_SYNC_REQUEST = 4;
+  }
+  EventType event_type = 1;
+  string agent_id = 2;
+  AgentStatus status = 3;
+}
+
+message SessionRequest {
+  string session_id = 1;
+  string username = 2;
+  string user_id = 3;
+}
+
+// ── Agent Session Stream (AgentSessionService.StreamSession) ───────
+
+message SessionToServer {
+  oneof msg {
+    SessionReady ready = 1;
+    bytes stdout = 2;
+    SessionEnded exited = 3;
+  }
+}
+
+message SessionToAgent {
+  oneof msg {
+    SessionStart start = 1;
+    bytes stdin = 2;
+    ResizeRequest resize = 3;
+    CloseRequest close = 4;
+  }
+}
+
+message SessionStart {
+  string session_id = 1;
+  string username = 2;
+  string user_id = 3;
+}
+
+message SessionReady {
+  bytes replay_buffer = 1;
+}
+
+message ResizeRequest {
+  uint32 width = 1;
+  uint32 height = 2;
+}
+
+message SessionEnded {
+  int32 exit_code = 1;
+  string error_message = 2;
+}
+
+message CloseRequest {
+  string reason = 1;
 }
