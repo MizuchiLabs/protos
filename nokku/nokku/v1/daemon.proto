@@ -6,20 +6,20 @@ import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 
-service AgentService {
-  rpc GetAgent(GetAgentRequest) returns (GetAgentResponse) {
+service DaemonService {
+  rpc GetDaemon(GetDaemonRequest) returns (GetDaemonResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/agents/{id}"};
+    option (google.api.http) = {get: "/v1/daemons/{id}"};
   }
-  rpc UpdateAgent(UpdateAgentRequest) returns (UpdateAgentResponse) {
-    option (google.api.http) = {patch: "/v1/agents/{id}"};
+  rpc UpdateDaemon(UpdateDaemonRequest) returns (UpdateDaemonResponse) {
+    option (google.api.http) = {patch: "/v1/daemons/{id}"};
   }
-  rpc DeleteAgent(DeleteAgentRequest) returns (DeleteAgentResponse) {
-    option (google.api.http) = {delete: "/v1/agents/{id}"};
+  rpc DeleteDaemon(DeleteDaemonRequest) returns (DeleteDaemonResponse) {
+    option (google.api.http) = {delete: "/v1/daemons/{id}"};
   }
-  rpc ListAgents(ListAgentsRequest) returns (ListAgentsResponse) {
+  rpc ListDaemons(ListDaemonsRequest) returns (ListDaemonsResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/agents"};
+    option (google.api.http) = {get: "/v1/workspaces/{workspace_id}/daemons"};
   }
   rpc RefreshEnrollToken(RefreshEnrollTokenRequest) returns (RefreshEnrollTokenResponse) {
     option (google.api.http) = {post: "/v1/workspaces/{workspace_id}/enroll:refresh"};
@@ -29,71 +29,71 @@ service AgentService {
   }
   rpc ListSessions(ListSessionsRequest) returns (ListSessionsResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
-    option (google.api.http) = {get: "/v1/agents/{agent_id}/sessions"};
+    option (google.api.http) = {get: "/v1/daemons/{daemon_id}/sessions"};
   }
   rpc CreateSession(CreateSessionRequest) returns (CreateSessionResponse) {
-    option (google.api.http) = {post: "/v1/agents/{agent_id}/sessions"};
+    option (google.api.http) = {post: "/v1/daemons/{daemon_id}/sessions"};
   }
   rpc CloseSession(CloseSessionRequest) returns (CloseSessionResponse) {
-    option (google.api.http) = {delete: "/v1/agents/{agent_id}/sessions/{session_id}"};
+    option (google.api.http) = {delete: "/v1/daemons/{daemon_id}/sessions/{session_id}"};
   }
-  rpc EnrollAgent(EnrollAgentRequest) returns (EnrollAgentResponse);
-  rpc SyncAgent(SyncAgentRequest) returns (SyncAgentResponse);
+  rpc EnrollDaemon(EnrollDaemonRequest) returns (EnrollDaemonResponse);
+  rpc SyncDaemon(SyncDaemonRequest) returns (SyncDaemonResponse);
 }
 
-service AgentControlService {
+service DaemonControlService {
   rpc Connect(stream ConnectRequest) returns (stream ConnectResponse);
 }
 
-service AgentSessionService {
+service DaemonSessionService {
   rpc Session(stream SessionRequest) returns (stream SessionResponse);
 }
 
-enum AgentStatus {
-  AGENT_STATUS_UNSPECIFIED = 0;
-  AGENT_STATUS_PENDING = 1;
-  AGENT_STATUS_ACCEPTED = 2;
-  AGENT_STATUS_REJECTED = 3;
+enum DaemonStatus {
+  DAEMON_STATUS_UNSPECIFIED = 0;
+  DAEMON_STATUS_PENDING = 1;
+  DAEMON_STATUS_ACCEPTED = 2;
+  DAEMON_STATUS_REJECTED = 3;
 }
 
-message Agent {
+message Daemon {
   string id = 1;
   string workspace_id = 2;
   string name = 3;
   bool online = 4;
-  AgentStatus status = 5;
-  AgentConfig config = 6;
+  DaemonStatus status = 5;
+  DaemonConfig config = 6;
   map<string, string> metadata = 7;
   google.protobuf.Timestamp updated_at = 8;
   google.protobuf.Timestamp created_at = 9;
 }
 
-message AgentConfig {
+message DaemonConfig {
   bool record_sessions = 1;
 }
 
-message GetAgentRequest {
+message GetDaemonRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
 }
-message GetAgentResponse {
-  Agent agent = 1;
+message GetDaemonResponse {
+  Daemon daemon = 1;
 }
 
-message UpdateAgentRequest {
+message UpdateDaemonRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
-  AgentStatus status = 2 [(buf.validate.field).enum = {
+  DaemonStatus status = 2 [(buf.validate.field).enum = {
     defined_only: true
     not_in: [0] /* Prevent UNSPECIFIED */
   }];
 }
-message UpdateAgentResponse {}
+message UpdateDaemonResponse {}
 
-message DeleteAgentRequest {
+message DeleteDaemonRequest {
   string id = 1 [(buf.validate.field).string.uuid = true];
 }
-message DeleteAgentResponse {}
+message DeleteDaemonResponse {}
 
-message ListAgentsRequest {
+message ListDaemonsRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   int32 limit = 2 [(buf.validate.field).int32 = {
     gte: 1
@@ -102,10 +102,10 @@ message ListAgentsRequest {
   int32 offset = 3;
   string query = 4;
   bool online = 5;
-  AgentStatus status = 6;
+  DaemonStatus status = 6;
 }
-message ListAgentsResponse {
-  repeated Agent agents = 1;
+message ListDaemonsResponse {
+  repeated Daemon daemons = 1;
   int32 total = 2;
 }
 
@@ -123,7 +123,7 @@ message RevokeEnrollTokenRequest {
 message RevokeEnrollTokenResponse {}
 
 message CreateSessionRequest {
-  string agent_id = 1 [
+  string daemon_id = 1 [
     (buf.validate.field).string.uuid = true,
     (buf.validate.field).required = true
   ];
@@ -135,22 +135,22 @@ message CreateSessionRequest {
 }
 message CreateSessionResponse {
   Session session = 1;
-  string agent_name = 2;
+  string daemon_name = 2;
 }
 
 message ListSessionsRequest {
-  string agent_id = 1 [
+  string daemon_id = 1 [
     (buf.validate.field).string.uuid = true,
     (buf.validate.field).required = true
   ];
 }
 message ListSessionsResponse {
   repeated Session sessions = 1;
-  string agent_name = 2;
+  string daemon_name = 2;
 }
 
 message CloseSessionRequest {
-  string agent_id = 1 [
+  string daemon_id = 1 [
     (buf.validate.field).string.uuid = true,
     (buf.validate.field).required = true
   ];
@@ -161,16 +161,16 @@ message CloseSessionRequest {
 }
 message CloseSessionResponse {}
 
-message EnrollAgentRequest {
+message EnrollDaemonRequest {
   string token = 1 [(buf.validate.field).string.min_len = 1];
   string ca_id = 2;
 }
-message EnrollAgentResponse {
+message EnrollDaemonResponse {
   string id = 1;
   string workspace_id = 2;
   string token = 3;
-  AgentStatus status = 4;
-  AgentConfig config = 5;
+  DaemonStatus status = 4;
+  DaemonConfig config = 5;
 }
 
 message PrincipalUsers {
@@ -178,14 +178,14 @@ message PrincipalUsers {
   repeated string ids = 2;
 }
 
-message SyncAgentRequest {
+message SyncDaemonRequest {
   repeated string users = 1;
   repeated string private_ips = 2;
   map<string, string> target_metadata = 3;
 }
-message SyncAgentResponse {
-  AgentStatus status = 1;
-  AgentConfig config = 2;
+message SyncDaemonResponse {
+  DaemonStatus status = 1;
+  DaemonConfig config = 2;
   repeated PrincipalUsers principals = 3;
 }
 
@@ -225,8 +225,8 @@ message Notification {
     EVENT_TYPE_SYNC_REQUEST = 4;
   }
   EventType event_type = 1;
-  string agent_id = 2;
-  AgentStatus status = 3;
+  string daemon_id = 2;
+  DaemonStatus status = 3;
 }
 
 message Session {

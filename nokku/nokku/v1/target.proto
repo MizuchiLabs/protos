@@ -5,7 +5,7 @@ package nokku.v1;
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
-import "nokku/v1/agent.proto";
+import "nokku/v1/daemon.proto";
 import "nokku/v1/certificates.proto";
 import "nokku/v1/principal.proto";
 
@@ -49,7 +49,7 @@ message Target {
   string id = 1;
   string workspace_id = 2;
   string ca_id = 3;
-  string agent_id = 4;
+  string daemon_id = 4;
   string name = 5;
   string description = 6;
   repeated string tags = 7;
@@ -112,7 +112,7 @@ message ListTargetsRequest {
   }];
   int32 offset = 3;
   string query = 4;
-  string agent_id = 5;
+  string daemon_id = 5;
   string ca_id = 6;
   repeated string principals = 7;
   repeated string tags = 8;
@@ -128,7 +128,7 @@ message GetSubjectAccessRequest {
 }
 message GetSubjectAccessResponse {
   repeated Target targets = 1;
-  repeated Agent agents = 2;
+  repeated Daemon daemons = 2;
   repeated CertificateAuthority certificate_authorities = 3;
 }
 
