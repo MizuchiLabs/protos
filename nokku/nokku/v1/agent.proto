@@ -27,7 +27,6 @@ service AgentService {
   rpc RevokeEnrollToken(RevokeEnrollTokenRequest) returns (RevokeEnrollTokenResponse) {
     option (google.api.http) = {delete: "/v1/workspaces/{workspace_id}/enroll:revoke"};
   }
-  // Session management endpoints
   rpc ListSessions(ListSessionsRequest) returns (ListSessionsResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
     option (google.api.http) = {get: "/v1/agents/{agent_id}/sessions"};
@@ -38,7 +37,6 @@ service AgentService {
   rpc CloseSession(CloseSessionRequest) returns (CloseSessionResponse) {
     option (google.api.http) = {delete: "/v1/agents/{agent_id}/sessions/{session_id}"};
   }
-  // Agent only endpoints
   rpc EnrollAgent(EnrollAgentRequest) returns (EnrollAgentResponse);
   rpc SyncAgent(SyncAgentRequest) returns (SyncAgentResponse);
 }
@@ -70,23 +68,6 @@ message Agent {
   google.protobuf.Timestamp created_at = 9;
 }
 
-// For NATS
-message AgentNotification {
-  enum EventType {
-    EVENT_TYPE_UNSPECIFIED = 0;
-    EVENT_TYPE_STATUS = 1;
-    EVENT_TYPE_PRINCIPALS = 2;
-    EVENT_TYPE_CERTIFICATES = 3;
-  }
-  string agent_id = 1;
-  AgentStatus status = 2;
-  EventType event_type = 3;
-}
-message AgentSession {
-  string session_id = 1;
-  string user_id = 2;
-  string username = 3;
-}
 message AgentConfig {
   bool record_sessions = 1;
 }
@@ -153,7 +134,7 @@ message CreateSessionRequest {
   }];
 }
 message CreateSessionResponse {
-  AgentSession session = 1;
+  Session session = 1;
   string agent_name = 2;
 }
 
@@ -164,7 +145,7 @@ message ListSessionsRequest {
   ];
 }
 message ListSessionsResponse {
-  repeated AgentSession sessions = 1;
+  repeated Session sessions = 1;
   string agent_name = 2;
 }
 
@@ -208,7 +189,7 @@ message SyncAgentResponse {
   repeated PrincipalUsers principals = 3;
 }
 
-// ── Agent Control Stream (AgentControlService.Connect) ─────────────
+// Control Stream -------------------------------------------------------------
 
 message ConnectRequest {
   oneof msg {
@@ -254,7 +235,7 @@ message Session {
   string user_id = 3;
 }
 
-// ── Agent Session Stream (AgentSessionService.StreamSession) ───────
+// Session Stream -------------------------------------------------------------
 
 message SessionRequest {
   oneof msg {
