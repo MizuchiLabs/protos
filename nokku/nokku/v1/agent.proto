@@ -43,16 +43,12 @@ service AgentService {
   rpc SyncAgent(SyncAgentRequest) returns (SyncAgentResponse);
 }
 
-// Real-time control stream: one bidirectional stream per agent, long-lived.
-// Carries heartbeats and server-to-agent notifications.
 service AgentControlService {
-  rpc Connect(stream AgentToServer) returns (stream ServerToAgent);
+  rpc Connect(stream ConnectRequest) returns (stream ConnectResponse);
 }
 
-// Real-time PTY session stream: one bidirectional stream per active session.
-// Opened by the agent after receiving a SessionRequest on the Connect stream.
 service AgentSessionService {
-  rpc StreamSession(stream SessionToServer) returns (stream SessionToAgent);
+  rpc Session(stream SessionRequest) returns (stream SessionResponse);
 }
 
 enum AgentStatus {
@@ -214,18 +210,18 @@ message SyncAgentResponse {
 
 // ── Agent Control Stream (AgentControlService.Connect) ─────────────
 
-message AgentToServer {
+message ConnectRequest {
   oneof msg {
     Heartbeat heartbeat = 1;
     SyncReport sync = 2;
   }
 }
 
-message ServerToAgent {
+message ConnectResponse {
   oneof msg {
     HeartbeatAck heartbeat_ack = 1;
     Notification notification = 2;
-    SessionRequest session_request = 3;
+    Session session = 3;
   }
 }
 
@@ -252,7 +248,7 @@ message Notification {
   AgentStatus status = 3;
 }
 
-message SessionRequest {
+message Session {
   string session_id = 1;
   string username = 2;
   string user_id = 3;
@@ -260,7 +256,7 @@ message SessionRequest {
 
 // ── Agent Session Stream (AgentSessionService.StreamSession) ───────
 
-message SessionToServer {
+message SessionRequest {
   oneof msg {
     SessionReady ready = 1;
     bytes stdout = 2;
@@ -268,19 +264,12 @@ message SessionToServer {
   }
 }
 
-message SessionToAgent {
+message SessionResponse {
   oneof msg {
-    SessionStart start = 1;
-    bytes stdin = 2;
-    ResizeRequest resize = 3;
-    CloseRequest close = 4;
+    bytes stdin = 1;
+    ResizeRequest resize = 2;
+    CloseRequest close = 3;
   }
-}
-
-message SessionStart {
-  string session_id = 1;
-  string username = 2;
-  string user_id = 3;
 }
 
 message SessionReady {
