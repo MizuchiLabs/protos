@@ -181,7 +181,7 @@ message PrincipalUsers {
 message SyncDaemonRequest {
   repeated string users = 1;
   repeated string private_ips = 2;
-  map<string, string> target_metadata = 3;
+  map<string, string> metadata = 3;
 }
 message SyncDaemonResponse {
   DaemonStatus status = 1;

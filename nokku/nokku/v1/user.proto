@@ -20,16 +20,10 @@ service UserService {
     option (google.api.http) = {delete: "/v1/account"};
   }
   rpc ListUserDevices(ListUserDevicesRequest) returns (ListUserDevicesResponse) {
-    option (google.api.http) = {
-      get: "/v1/devices"
-      body: "*"
-    };
+    option (google.api.http) = {get: "/v1/devices"};
   }
   rpc DeleteUserDevice(DeleteUserDeviceRequest) returns (DeleteUserDeviceResponse) {
-    option (google.api.http) = {
-      delete: "/v1/devices/{id}"
-      body: "*"
-    };
+    option (google.api.http) = {delete: "/v1/devices/{id}"};
   }
 }
 

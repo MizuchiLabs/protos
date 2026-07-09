@@ -18,7 +18,7 @@ service TeamService {
   }
   rpc CreateTeam(CreateTeamRequest) returns (CreateTeamResponse) {
     option (google.api.http) = {
-      post: "/v1/workspace/{workspace_id}/teams"
+      post: "/v1/workspaces/{workspace_id}/teams"
       body: "*"
     };
   }

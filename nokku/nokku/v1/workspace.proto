@@ -169,7 +169,11 @@ message UpdateWorkspaceMemberResponse {}
 message UpdateWorkspaceSettingsRequest {
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   bool enroll_auto_approve = 2;
-  google.protobuf.Duration invite_expiry = 5 [(buf.validate.field).duration = {
+  google.protobuf.Duration enroll_expiry = 3 [(buf.validate.field).duration = {
+    gte: {seconds: 300} /* Min 5 minutes */
+    lte: {seconds: 2592000} /* Max 30 days */
+  }];
+  google.protobuf.Duration invite_expiry = 4 [(buf.validate.field).duration = {
     gte: {seconds: 300} /* Min 5 minutes */
     lte: {seconds: 2592000} /* Max 30 days */
   }];
