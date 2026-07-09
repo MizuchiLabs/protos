@@ -70,8 +70,8 @@ message CertificateAuthority {
   google.protobuf.Duration lifetime = 16;
   google.protobuf.Duration user_default_ttl = 17;
   google.protobuf.Duration user_max_ttl = 18;
-  map<string, string> extensions = 19;
-  map<string, string> critical_options = 20;
+  map<string, string> user_extensions = 19;
+  map<string, string> user_critical_options = 20;
   google.protobuf.Duration host_default_ttl = 21;
   google.protobuf.Duration host_max_ttl = 22;
   google.protobuf.Timestamp created_at = 23;
@@ -112,8 +112,8 @@ message CreateCertificateAuthorityRequest {
     gte: {seconds: 60}
     lte: {seconds: 31536000}
   }];
-  map<string, string> extensions = 13;
-  map<string, string> critical_options = 14;
+  map<string, string> user_extensions = 13;
+  map<string, string> user_critical_options = 14;
 }
 message CreateCertificateAuthorityResponse {
   CertificateAuthority certificate_authority = 1;
@@ -163,8 +163,8 @@ message UpdateCertificateAuthorityRequest {
     gte: {seconds: 60}
     lte: {seconds: 31536000}
   }];
-  map<string, string> extensions = 12;
-  map<string, string> critical_options = 13;
+  map<string, string> user_extensions = 12;
+  map<string, string> user_critical_options = 13;
 }
 message UpdateCertificateAuthorityResponse {
   CertificateAuthority certificate_authority = 1;
