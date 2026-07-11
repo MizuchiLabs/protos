@@ -39,6 +39,7 @@ message WorkspaceBenefit {
   int64 hardcap_daemons = 11;
   int64 hardcap_targets = 12;
   int64 hardcap_cas = 13;
+  int64 audit_log_retention_days = 14;
 }
 
 message WorkspaceCounts {
