@@ -32,14 +32,14 @@ message WorkspaceBenefit {
   int64 max_daemons = 4;
   int64 max_targets = 5;
   int64 max_cas = 6;
-  bool sso_enabled = 7;
-  int64 hardcap_members = 8;
-  int64 hardcap_teams = 9;
-  int64 hardcap_service_accounts = 10;
-  int64 hardcap_daemons = 11;
-  int64 hardcap_targets = 12;
-  int64 hardcap_cas = 13;
-  int64 audit_log_retention_days = 14;
+  int64 hardcap_members = 7;
+  int64 hardcap_teams = 8;
+  int64 hardcap_service_accounts = 9;
+  int64 hardcap_daemons = 10;
+  int64 hardcap_targets = 11;
+  int64 hardcap_cas = 12;
+  int64 audit_log_retention_days = 13;
+  bool enforce_sso = 14;
 }
 
 message WorkspaceCounts {
