@@ -135,7 +135,6 @@ message ResendVerificationResponse {}
 // CLI login flow -------------------------------------------------------------
 message StreamCLILoginRequest {
   string login_code = 1;
-  string hostname = 2;
 }
 message StreamCLILoginResponse {
   User user = 1; // sent after success
