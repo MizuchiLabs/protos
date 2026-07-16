@@ -194,18 +194,12 @@ message SignPublicKeyRequest {
   }
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   string ca_id = 2 [(buf.validate.field).string.uuid = true];
-  string target_id = 3 [(buf.validate.field).string.uuid = true];
-  string username = 4 [(buf.validate.field).string = {
-    min_len: 1
-    max_len: 32
-    pattern: "^[a-z_][a-z0-9-_]*\\$?$" // Valid Unix username
-  }];
-  CertificateType type = 5;
-  string public_key = 6 [(buf.validate.field).string = {
+  CertificateType type = 3;
+  string public_key = 4 [(buf.validate.field).string = {
     min_len: 1
     max_len: 10000
   }];
-  google.protobuf.Duration ttl = 7 [(buf.validate.field).duration = {
+  google.protobuf.Duration ttl = 5 [(buf.validate.field).duration = {
     gte: {seconds: 60}
     lte: {seconds: 31536000}
   }];
