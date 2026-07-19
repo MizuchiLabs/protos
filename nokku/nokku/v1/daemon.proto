@@ -168,9 +168,10 @@ message EnrollDaemonRequest {
 message EnrollDaemonResponse {
   string id = 1;
   string workspace_id = 2;
-  string token = 3;
-  DaemonStatus status = 4;
-  DaemonConfig config = 5;
+  string target_id = 3;
+  string token = 4;
+  DaemonStatus status = 5;
+  DaemonConfig config = 6;
 }
 
 message PrincipalUsers {
