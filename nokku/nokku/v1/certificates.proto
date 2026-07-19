@@ -194,12 +194,13 @@ message SignPublicKeyRequest {
   }
   string workspace_id = 1 [(buf.validate.field).string.uuid = true];
   string ca_id = 2 [(buf.validate.field).string.uuid = true];
-  CertificateType type = 3;
-  string public_key = 4 [(buf.validate.field).string = {
+  string target_id = 3 [(buf.validate.field).string.uuid = true];
+  CertificateType type = 4;
+  string public_key = 5 [(buf.validate.field).string = {
     min_len: 1
     max_len: 10000
   }];
-  google.protobuf.Duration ttl = 5 [(buf.validate.field).duration = {
+  google.protobuf.Duration ttl = 6 [(buf.validate.field).duration = {
     gte: {seconds: 60}
     lte: {seconds: 31536000}
   }];
