@@ -61,7 +61,7 @@ message OAuthIdentity {
 message UserDevice {
   string id = 1;
   string name = 2;
-  string last_ip = 3;
+  string kind = 3; // 'cli' | 'web'
   google.protobuf.Timestamp expires_at = 4;
   google.protobuf.Timestamp last_used_at = 5;
   google.protobuf.Timestamp created_at = 6;
