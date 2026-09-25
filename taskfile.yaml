@@ -5,10 +5,8 @@ tasks:
     desc: Update dependencies
     cmds:
       - cd mantrae && buf dep update
-      - cd zerum && buf dep update
 
   lint:
     desc: Lint
     cmds:
       - cd mantrae && buf lint
-      - cd zerum && buf lint
